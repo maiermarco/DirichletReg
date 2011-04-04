@@ -1,0 +1,66 @@
+DR.data <- function(data,            
+                    trafo = FALSE,   
+                    base  = 1        
+                   ){
+
+  state.norm <- FALSE
+  state.tran <- FALSE
+
+  if(!is.matrix(data) & !is.data.frame(data)) stop('"data" must be either a matrix or a data.frame')
+  if(ncol(data) <= 1) stop('"data" must at least have two columns')
+  
+  if((base < 1) | (base > ncol(data))) stop('"base" must be in the range of variables')
+  
+  if(any(is.na(data))){
+    exclude <- as.logical(apply(is.na(data), 1, any))
+    warning("missing values are not allowed. the following observation(s) will be excluded:\n",
+            paste(which(exclude), collapse=", "))
+  } else {
+    exclude <- NULL
+  }
+  
+  
+  
+  row.sums <- na.exclude(rowSums(data))
+  
+  if( !isTRUE( all.equal(row.sums, rep(1, length(row.sums)) ) ) ){
+    data <- data/rowSums(data)
+    state.norm <- TRUE
+    warning("not all rows sum up to 1 => normalization forced")
+  }
+  
+  
+  data.original <- data
+  
+  if(trafo | any(data == 0, na.rm=TRUE)){
+    n.obs <- ifelse(is.null(exclude), nrow(data), sum(!exclude))
+    data <- (data * (n.obs - 1) + 1/ncol(data)) / n.obs
+    state.tran <- TRUE
+    warning("some entries are 0 or 1 => transformation forced")
+  }
+  
+  if(is.null(colnames(data))){
+    colnames(data) <- paste("v", 1:ncol(data), sep="")
+  }
+  
+  res <- list(Y = data,
+              Y.orig = data.original,
+              dims = ncol(data),
+              dim.names = colnames(data),
+              obs = nrow(data),
+              exclude = exclude,
+              normalized = state.norm,
+              transformed = state.tran,
+              base = base)
+  
+  class(res) <- "DirichletRegData"
+  
+  return(res)
+  
+}
+
+
+
+
+
+
