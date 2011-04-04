@@ -1,0 +1,41 @@
+
+
+
+export(DR.data)
+export(getdata)
+export(print.DirichletRegData)
+export(plot.DirichletRegData)
+export(lines.DirichletRegData)
+
+export(DirichReg)
+
+export(print.DirichletRegModel)
+export(summary.DirichletRegModel)
+export(fitted.DirichletRegModel)
+export(predict.DirichletRegModel)
+export(residuals.DirichletRegModel)
+export(anova.DirichletRegModel)
+
+export(rdirichlet)
+export(ddirichlet)
+
+S3method(print, DirichletRegData)
+S3method(plot, DirichletRegData)
+S3method(lines, DirichletRegData)
+
+S3method(print, DirichletRegModel)
+S3method(summary, DirichletRegModel)
+S3method(fitted, DirichletRegModel)
+S3method(predict, DirichletRegModel)
+S3method(residuals, DirichletRegModel)
+S3method(anova, DirichletRegModel)
+
+
+
+
+
+
+
+
+
+
