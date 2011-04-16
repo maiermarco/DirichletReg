@@ -1,0 +1,11 @@
+plot.DirichletRegModel <- function(){
+
+
+
+
+
+
+
+
+
+}

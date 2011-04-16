@@ -3,5 +3,11 @@
 \docType{package}
 \alias{DirichletReg}
 \title{The \code{DirichletReg} Package}
-\description{some txt.}
+\description{
+  This package provides a functions to analyze compositional data using Dirichlet
+  regression methods.
+}
+\author{
+  Marco Maier
+}
 \keyword{package}

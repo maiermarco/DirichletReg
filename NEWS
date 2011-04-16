@@ -1,0 +1,10 @@
+Changes in Version 0.002
+
+  * Added the analytical Gradient and Hessian for both parameterizations.
+  
+  * Optimization: preliminary results by BFGS that become starting values for
+    Newton-Raphson optimization computing the final results.
+
+  * Implemented some residuals
+  
+  * Updated help entries  

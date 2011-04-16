@@ -3,7 +3,7 @@ print.DirichletRegModel <- function(x, digits=max(3, getOption("digits") - 3), .
     .wd <- getOption("width")
 
     if(x$optimization$convergence == 3) cat("\n",strwrap("CAUTION! Possible convergence problems!",.wd),"\n",sep="")
-    if(x$optimization$convergence > 3) stop("\n",paste(strwrap(paste("\nOptimization did not converge in",x$optimization$counts,"iterations and exited with code",x$optimization$convergence),.wd),sep="\n",collapse="\n"))
+    if(x$optimization$convergence > 3) stop("\n",paste(strwrap(paste("\nOptimization did not converge in",x$optimization$bfgs.it,"+",x$optimization$iterations,"iterations and exited with code",x$optimization$convergence),.wd),sep="\n",collapse="\n"))
 
     cat("\nCall:\n",
         paste(strwrap(deparse(x$call), .wd), sep="\n", collapse="\n"),
@@ -11,7 +11,7 @@ print.DirichletRegModel <- function(x, digits=max(3, getOption("digits") - 3), .
         sep = "")
     
     cat("Log-likelihood: ",format(x$logLik,digits=digits)," on ",x$npar," df (",
-        x$optimization$counts," iterations)\n\n",sep="",collapse="")
+        x$optimization$bfgs.it,"+",x$optimization$iterations," iterations)\n\n",sep="",collapse="")
 
     coef.ind <- cumsum(x$n.vars)
     
