@@ -1,11 +1,3 @@
-inv.logit <- function(x){
-  log(x) - log(1-x)
-}
-
-
-
-
-
 get_starting_values <- function(Y, X.mats, Z.mat, repar, base){
 
   if(!repar){
@@ -35,7 +27,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base){
   
   }
 
-  return(as.vector(unidim.fit))
+  return(as.numeric(unlist(unidim.fit)))
 
 
 

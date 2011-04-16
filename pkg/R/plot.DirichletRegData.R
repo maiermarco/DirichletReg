@@ -5,7 +5,7 @@ plot.DirichletRegData <- function(x, ...,
                                   c.grid=TRUE,   
                                   ticks=TRUE,   
                                   colored=TRUE,   
-                                  col.scheme="classes",   
+                                  col.scheme=c("dims", "entropy"),   
                                   entropy.contours=FALSE,   
                                   entropy.colors=FALSE,   
                                   pt.size=.75,   
@@ -19,7 +19,7 @@ plot.DirichletRegData <- function(x, ...,
   
   if(class(x) != "DirichletRegData") stop("data must be prepared by 'DR.data()'")
 
-
+  col.scheme <- match.arg(col.scheme)
 
   plot.char <-   16
   line.wdth <-    1
@@ -162,7 +162,7 @@ plot.DirichletRegData <- function(x, ...,
     if(colored == TRUE){
       if(!is.null(point.col)){
         points(xy, pch=plot.char, lwd=line.wdth, col=point.col, cex=pt.size)
-      } else if(col.scheme == "classes"){
+      } else if(col.scheme == "dims"){
         points(xy, pch=plot.char, lwd=line.wdth, col=rgb(x$Y), cex=pt.size)
       } else if(col.scheme == "entropy"){
         ent.col <- entropy.colors[round(99*(rowSums(-x$Y*log(x$Y))/log(ncol(x$Y))),0)+1]

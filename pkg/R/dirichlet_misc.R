@@ -2,6 +2,24 @@ blank.trim <- function(x){ paste(unlist(strsplit(x, "^\ +|\ +$")),sep="",collaps
 
 
 
+make.symmetric <- function(x){
+  if(nrow(x) != ncol(x)) stop("x must be a square matrix")
+
+  cell.ind <- which(is.na(x), arr.ind=TRUE)
+  
+  x[cell.ind] <- x[cell.ind[,2:1]]
+  
+  return(x)
+}
+
+
+
+inv.logit <- function(x){
+  log(x) - log(1-x)
+}
+
+
+
 rdirichlet <- function(n,      
                        alpha   
                       ){

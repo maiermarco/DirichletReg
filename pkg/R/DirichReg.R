@@ -37,7 +37,9 @@ if(verbosity > 0) cat("\n- COMPUTING STARTING VALUES\n"); flush.console()
 
   
   if(is.null(control$sv)){
-    starting.vals <- get_starting_values(Y=Y, X.mats=lapply(X.mats, as.matrix), Z.mat=as.matrix(Z.mat), repar=repar, base=base) * if(repar){ 1 } else { 1/n.dim }
+    starting.vals <- get_starting_values(Y=Y, X.mats=lapply(X.mats, as.matrix),
+                       Z.mat=ifelse(is.null(Z.mat), Z.mat, as.matrix(Z.mat)),
+                       repar=repar, base=base) * if(repar){ 1 } else { 1/n.dim }
   } else {
     starting.vals <- control$sv
   }
@@ -81,19 +83,18 @@ if(verbosity > 0) cat("\n- ESTIMATING PARAMETERS\n"); flush.console()
     
     g <- matrix(coefs[((n.dim-1)*n.vars[1]+1):length(coefs)], ncol=1)
   
-    XB <- exp(apply(B, 2, function(b){ X.mats[[1]]%*%b }))
+    XB <- exp(apply(B, 2, function(b){ as.matrix(X.mats[[1]]) %*% b }))
     MU <- apply(XB, 2, function(x){ x /rowSums(XB) })
   
-    PHI <- exp(Z.mat%*%g)
+    PHI <- exp(as.matrix(Z.mat) %*% g)
     
     ALPHA <- apply(MU, 2, "*", PHI)
   
   } else {
 
-    B <- list(coefs[1:n.vars[1]])
-    for(i in 2:n.dim)B[[i]] <- coefs[(cumsum(n.vars)[i-1]+1):cumsum(n.vars)[i]]
+    B <- sapply(1:n.dim, function(i){ coefs[(cumsum(c(0,n.vars))[i]+1) : cumsum(n.vars)[i]] }, simplify=FALSE)
     
-    ALPHA <- sapply(1:length(X.mats), function(i){ exp(X.mats[[i]]%*%B[[i]]) })
+    ALPHA <- sapply(1:n.dim, function(i){ exp(as.matrix(X.mats[[i]]) %*% matrix(B[[i]], ncol=1)) })
 
     PHI <- rowSums(ALPHA)
     MU  <- apply(ALPHA, 2, "/", PHI)
@@ -125,7 +126,8 @@ if(verbosity > 0) cat("\n- ESTIMATING PARAMETERS\n"); flush.console()
               weights=weights,
               se=sqrt(diag(solve(-fit.res$hessian))),
               optimization=list(convergence=fit.res$code,
-                                counts=fit.res$iterations,
+                                iterations=fit.res$iterations,
+                                bfgs.it=fit.res$bfgs.it,
                                 message=fit.res$message))
               
   class(res) <- "DirichletRegModel"

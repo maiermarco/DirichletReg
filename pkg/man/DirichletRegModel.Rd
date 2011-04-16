@@ -16,7 +16,7 @@
 
 \method{predict}{DirichletRegModel}(object, newdata, alpha = FALSE, \ldots)
 
-\method{residuals}{DirichletRegModel}(object, type = c("score", "raw", "standardized", "composite"), \ldots)
+\method{residuals}{DirichletRegModel}(object, type = c("standardized", "score", "composite", "raw"), \ldots)
 }
 \arguments{
   \item{x}{an object}

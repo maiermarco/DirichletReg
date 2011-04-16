@@ -2,13 +2,18 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
 {
     .wd <- getOption("width")
 
-    if(object$optimization$convergence > 2) stop("\n",paste(strwrap(paste("\nOptimization did not converge in",object$optimization$counts,"iterations and exited with code",object$optimization$convergence),.wd),sep="\n",collapse="\n"))
+    if(object$optimization$convergence > 2) stop("\n",paste(strwrap(paste("\nOptimization did not converge in",object$optimization$bfgs.it,"+",object$optimization$iterations,"iterations and exited with code",object$optimization$convergence),.wd),sep="\n",collapse="\n"))
+    
+    resid.mat <- round(t(apply(residuals(object, type="standardized"), 2, quantile)), 4)
+    colnames(resid.mat) <- c("Min", "1Q", "Median", "3Q", "Max")
 
     cat("\nCall:\n",
         paste(strwrap(deparse(object$call), .wd), sep="\n", collapse="\n"),
         "\n\n", sep = "")
 
-    cat("RESIDUALS!\n\n")
+    cat("\nStandardized Residuals:\n")
+    print(resid.mat, print.gap=2)
+    cat("\n\n")
     
     coef.ind <- cumsum(object$n.vars)
     
@@ -64,7 +69,7 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
     }
 
     cat("\n\nLog-likelihood: ",format(object$logLik,digits=digits)," on ",object$npar," df (",
-        object$optimization$counts," iterations)\n",sep="",collapse="")
+        object$optimization$bfgs.it,"+",object$optimization$iterations," iterations)\n",sep="",collapse="")
     cat("Link: Log\nParameterization: ", object$parameterization, "\n\n",sep="")
 }
 

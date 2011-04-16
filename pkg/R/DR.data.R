@@ -6,6 +6,17 @@ DR.data <- function(data,
   state.norm <- FALSE
   state.tran <- FALSE
 
+  if(!is.matrix(data) & !is.data.frame(data)){
+    data <- cbind(1-data, data)
+    
+    if(any(sign(data) == -1)) stop()
+    .names <- colnames(data)
+    
+    colnames(data) <- c(paste("1 -",.names[2]), .names[2])
+
+    warning("only one variable supplied, beta-distribution assumed")
+  }
+  
   if(!is.matrix(data) & !is.data.frame(data)) stop('"data" must be either a matrix or a data.frame')
   if(ncol(data) <= 1) stop('"data" must at least have two columns')
   
@@ -58,9 +69,3 @@ DR.data <- function(data,
   return(res)
   
 }
-
-
-
-
-
-

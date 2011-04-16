@@ -7,7 +7,7 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
 }
 \usage{
 \method{plot}{DirichletRegData}(x, \ldots, dims, explore, model, c.grid = TRUE, ticks =
-                 TRUE, colored = TRUE, col.scheme = "classes",
+                 TRUE, colored = TRUE, col.scheme = c("dims", "entropy"),
                  entropy.contours = FALSE, entropy.colors = FALSE,
                  pt.size = 0.75, dim.labels, args.3d = list(rgl = TRUE,
                  theta = NULL, phi = NULL, ref.lines = NULL, ...))
