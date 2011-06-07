@@ -3,20 +3,23 @@ DR.data <- function(data,
                     base  = 1        
                    ){
 
-  state.norm <- FALSE
-  state.tran <- FALSE
+  state.norm <- FALSE   
+  state.tran <- FALSE   
 
-  if(!is.matrix(data) & !is.data.frame(data)){
+
+
+  if((!is.matrix(data) & !is.data.frame(data)) | ifelse(is.null(ncol(data)), FALSE, ncol(data) == 1)){
+    if(any((data < 0) | (data > 1))) stop("only one variable supplied with values outside [0, 1]. beta distribution cannot safely be assumed. prepare your data first.")
     data <- cbind(1-data, data)
-    
-    if(any(sign(data) == -1)) stop()
+                       
     .names <- colnames(data)
-    
     colnames(data) <- c(paste("1 -",.names[2]), .names[2])
 
-    warning("only one variable supplied, beta-distribution assumed")
+    message("only one variable supplied, beta-distribution assumed")
   }
+
   
+
   if(!is.matrix(data) & !is.data.frame(data)) stop('"data" must be either a matrix or a data.frame')
   if(ncol(data) <= 1) stop('"data" must at least have two columns')
   
@@ -43,7 +46,7 @@ DR.data <- function(data,
   
   data.original <- data
   
-  if(trafo | any(data == 0, na.rm=TRUE)){
+  if(trafo | any(data == 0, na.rm=TRUE) | any(data == 1, na.rm=TRUE)){
     n.obs <- ifelse(is.null(exclude), nrow(data), sum(!exclude))
     data <- (data * (n.obs - 1) + 1/ncol(data)) / n.obs
     state.tran <- TRUE

@@ -1,6 +1,6 @@
 prep_formula <- function(f, d){
 
-  fs <- strsplit(deparse(f), "|", fixed=T)[[1]]
+  fs <- strsplit(paste(deparse(f), collapse=""), "|", fixed=T)[[1]]
   fs <- sapply(fs, blank.trim, USE.NAMES=F)
   fl <- length(fs)
 

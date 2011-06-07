@@ -69,7 +69,7 @@ DirichReg(formula, data, weights, control, verbosity = 0, \ldots)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
-
+# fit a quadratic Dirichlet regression models
 AL <- DR.data(ArcticLake[,1:3])
 
 res <- DirichReg(AL ~ depth + I(depth^2), ArcticLake)

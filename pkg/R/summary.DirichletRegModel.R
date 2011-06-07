@@ -21,7 +21,10 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
     p.values <- 2 * pnorm(-abs(z.values))
     coef.mat <- cbind(object$coefficients, object$se, z.values, p.values)
     colnames(coef.mat) <- c("Estimate","Std. Error","z-Value","p-Value")
-    
+
+
+
+
     if(object$parameterization == "common"){
     
       for(i in 1:length(object$varnames)){
@@ -39,6 +42,9 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
 
     } else {
 
+
+
+
       printed.var <- 1
       set.size    <- ncol(object$X[[1]])
 
@@ -52,7 +58,14 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
         } else {
           cat(paste(rep("-", min(80, .wd)),sep="",collapse=""),sep="",collapse="")
           cat("\nCoefficients for variable no. ",i,": ",object$varnames[i],"\n",sep="",collapse="")
-          print.default(format(object$coefficients[printed.var:(printed.var+set.size-1)], digits=digits), print.gap=2, quote=F)
+
+          coef.mat <- cbind(object$coefficients[printed.var:(printed.var+set.size-1)],
+                            object$se[printed.var:(printed.var+set.size-1)],
+                            z.values[printed.var:(printed.var+set.size-1)],
+                            p.values[printed.var:(printed.var+set.size-1)])
+          colnames(coef.mat) <- c("Estimate","Std. Error","z-Value","p-Value")
+          
+          printCoefmat(coef.mat, digits = digits, cs.ind=1:2, tst.ind=3, has.Pvalue=T, signif.legend = F)
           
           printed.var <- printed.var + set.size
         }
@@ -63,14 +76,34 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
       cat("PRECISION MODEL:\n",sep="",collapse="")
 
       cat(paste(rep("-", min(80, .wd)),sep="",collapse=""),"\n",sep="",collapse="")
-      print.default(format(object$coefficients[printed.var:length(object$coefficients)], digits=digits), print.gap=2, quote=F)
-      cat(paste(rep("-", min(80, .wd)),sep="",collapse=""),"\n\n",sep="",collapse="")
+
+      coef.mat <- cbind(object$coefficients[printed.var:length(object$coefficients)],
+                        object$se[printed.var:length(object$coefficients)],
+                        z.values[printed.var:length(object$coefficients)],
+                        p.values[printed.var:length(object$coefficients)])
+      colnames(coef.mat) <- c("Estimate","Std. Error","z-Value","p-Value")
+      
+      printCoefmat(coef.mat, digits = digits, cs.ind=1:2, tst.ind=3, has.Pvalue=T, signif.legend = F)
+
+
+
+
+
+      cat(paste(rep("-", min(80, .wd)),sep="",collapse=""),"\n",sep="",collapse="")
 
     }
+    
+
+
 
     cat("\n\nLog-likelihood: ",format(object$logLik,digits=digits)," on ",object$npar," df (",
         object$optimization$bfgs.it,"+",object$optimization$iterations," iterations)\n",sep="",collapse="")
-    cat("Link: Log\nParameterization: ", object$parameterization, "\n\n",sep="")
+    if(object$parameterization == "common"){
+      cat("Link: Log\nParameterization: ", object$parameterization, "\n\n",sep="")
+    } else {
+      cat("Links: Logit (Means) and Log (Precision)\nParameterization: ", object$parameterization, "\n\n",sep="")
+    }
+    
 }
 
 

@@ -38,7 +38,7 @@ if(verbosity > 0) cat("\n- COMPUTING STARTING VALUES\n"); flush.console()
   
   if(is.null(control$sv)){
     starting.vals <- get_starting_values(Y=Y, X.mats=lapply(X.mats, as.matrix),
-                       Z.mat=ifelse(is.null(Z.mat), Z.mat, as.matrix(Z.mat)),
+                       Z.mat={if(repar) as.matrix(Z.mat) else Z.mat},
                        repar=repar, base=base) * if(repar){ 1 } else { 1/n.dim }
   } else {
     starting.vals <- control$sv
@@ -53,7 +53,7 @@ if(verbosity > 0) cat("\n- COMPUTING STARTING VALUES\n"); flush.console()
 if(verbosity > 0) cat("\n- ESTIMATING PARAMETERS\n"); flush.console()
 
   
-  fit.res <- DirichReg.fit(Y     = Y,
+  fit.res <- DirichReg_fit(Y     = Y,
                            X     = lapply(X.mats, as.matrix),
                            Z     = as.matrix(Z.mat),
                            sv    = starting.vals,
@@ -124,7 +124,9 @@ if(verbosity > 0) cat("\n- ESTIMATING PARAMETERS\n"); flush.console()
               logLik=fit.res$maximum,
               hessian=fit.res$hessian,
               weights=weights,
-              se=sqrt(diag(solve(-fit.res$hessian))),
+              se=tryCatch(sqrt(diag(solve(-fit.res$hessian))),
+                          error=function(x){ return(rep(NA,length(coefs))) },
+                          silent=TRUE),
               optimization=list(convergence=fit.res$code,
                                 iterations=fit.res$iterations,
                                 bfgs.it=fit.res$bfgs.it,
