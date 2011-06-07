@@ -7,7 +7,7 @@ anova.DirichletRegModel <- function(object, ..., sorted = FALSE){
   n.mods <- length(comp.objs)
   
   for(i in 2:n.mods){
-    if(!all.equal(comp.objs[[i-1]]$Y$Y, comp.objs[[i]]$Y$Y)) stop("models appear not to be nested.")
+    if(!all.equal(comp.objs[[i-1]]$Y, comp.objs[[i]]$Y)) stop("models appear not to be nested.")
   }
   
   n.pars <- rep(NA, n.mods)

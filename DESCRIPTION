@@ -1,7 +1,7 @@
 Package: DirichletReg
 Type: Package
-Version: 0.002
-Date: 2011-04-16
+Version: 0.003
+Date: 2011-06-07
 Title: Dirichlet Regression in R
 Author@R: person(        c("Marco", "J."),
                            "Maier",
@@ -9,7 +9,7 @@ Author@R: person(        c("Marco", "J."),
                  role  = c("cre","aut"))
 Author: Marco J. Maier <marco.maier@wu.ac.at>
 Maintainer: Marco J. Maier <marco.maier@wu.ac.at>
-Depends: R (>= 2.12.0), maxLik, rgl, colorspace
+Depends: R (>= 2.13.0), maxLik, rgl, colorspace
 Description: Implements the Dirichlet Regression in R
 License: GPL (>=2)
 URL: http://www.r-project.org/ http://r-forge.r-project.org/projects/dirichletreg/

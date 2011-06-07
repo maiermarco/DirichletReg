@@ -56,11 +56,11 @@ Cribari-Neto, F. & Zeileis, A. (2010). Beta Regression in R. \emph{Journal of St
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
-
+# create a DirichletRegData object from the Arctic Lake data
 AL <- DR.data(ArcticLake[, 1:3])
 AL
 
-
+# extract the original data and print the first rows
 head(getdata(AL, orig = TRUE))
 }
 \keyword{manip}

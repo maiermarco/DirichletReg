@@ -6,11 +6,11 @@
 With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensions.
 }
 \usage{
-\method{plot}{DirichletRegData}(x, \ldots, dims, explore, model, c.grid = TRUE, ticks =
-                 TRUE, colored = TRUE, col.scheme = c("dims", "entropy"),
+\method{plot}{DirichletRegData}(x, dims, explore, model, c.grid = TRUE, ticks = TRUE,
+                 colored = TRUE, col.scheme = c("dims", "entropy"),
                  entropy.contours = FALSE, entropy.colors = FALSE,
-                 pt.size = 0.75, dim.labels, args.3d = list(rgl = TRUE,
-                 theta = NULL, phi = NULL, ref.lines = NULL, ...))
+                 dim.labels, args.3d = list(rgl = TRUE, theta = NULL,
+                 phi = NULL, ref.lines = NULL, \ldots), rug = T, \ldots)
 
 \method{lines}{DirichletRegData}(x, indep, groups, \ldots, cumul = FALSE, orig.scale = FALSE)
 }
@@ -26,7 +26,7 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
   \item{col.scheme}{.}
   \item{entropy.contours}{.}
   \item{entropy.colors}{.}
-  \item{pt.size}{.}
+  \item{rug}{.}
   \item{dim.labels}{a character vector giving labels for the dimensions/variables}
   \item{args.3d}{a named list of settings for 3-dimensional plots}
 
@@ -48,7 +48,9 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
-
+# ternary plot of Arctic Lake data
+plot(DR.data(ArcticLake[, 1]))
 plot(DR.data(ArcticLake[, 1:3]))
+plot(DR.data(Rocks[, 1:4]))
 }
 \keyword{hplot}
