@@ -31,6 +31,6 @@ Data from Aitchison (???)
 }
 \examples{
 data(GlacialTills)
-
+## maybe str(Rocks) ; plot(Rocks) ...
 }
 \keyword{datasets}

@@ -1,5 +1,5 @@
 residuals.DirichletRegModel <- function(object, type=c("standardized",
-                                                       "score",
+
                                                        "composite",
                                                        "raw"),
                                                        ...){
@@ -24,9 +24,9 @@ residuals.DirichletRegModel <- function(object, type=c("standardized",
       res <- raw.res/sqrt(V)
     },
 
-    "score" = {
-      res <- digamma(colSums(A)) - digamma(A) + log(Y)
-    },
+
+
+
 
     "composite" = {
       res <- rowSums((raw.res/sqrt(V))^2)

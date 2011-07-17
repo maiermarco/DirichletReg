@@ -16,7 +16,6 @@ DirichReg <- function(formula,
   } else {
     if(is.null(control$iterlim)) control$iterlim  <-   1000
     if(is.null(control$trace))   control$trace    <-      0
-    if(is.null(control$method))  control$method   <- "BHHH"
     if(is.null(control$anGrad))  control$anGrad   <-   TRUE
   }
 
@@ -29,6 +28,7 @@ if(verbosity > 0) cat("\n- PREPARING DATA\n"); flush.console()
   n.vars   <- preparation$n.vars
   X.mats   <- preparation$X.mats
   Z.mat    <- preparation$Z.mat
+  preds    <- preparation$preds
   repar    <- preparation$repar
   d        <- preparation$d
   base     <- preparation$base
@@ -48,7 +48,7 @@ if(verbosity > 0) cat("\n- COMPUTING STARTING VALUES\n"); flush.console()
   
   
 
-  parameterization <- ifelse(repar, "alternative", "common")
+  parametrization <- ifelse(repar, "alternative", "common")
 
 if(verbosity > 0) cat("\n- ESTIMATING PARAMETERS\n"); flush.console()
 
@@ -107,16 +107,18 @@ if(verbosity > 0) cat("\n- ESTIMATING PARAMETERS\n"); flush.console()
 
   
   res <- list(call=this.call,
-              parameterization=parameterization,
+              parametrization=parametrization,
               varnames=varnames,
               n.vars=n.vars,
               Y=Y,
               X=X.mats,
               Z=Z.mat,
+              base=base,
               orig.resp=response,
               data=data,
               d=d,
               formula=formula,
+              f.elements=preds,
               npar=length(coefs),
               coefficients=coefs,
               fitted.values=list(mu=MU,phi=PHI,alpha=ALPHA),

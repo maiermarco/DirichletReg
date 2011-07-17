@@ -1,13 +1,11 @@
 plot_DRdata_3d <- function(x, entropy.contours, colored, c.grid, ticks, dim.labels, col.scheme,
-main, col, pch, cex, lwd, lty,
-.to.plot){
+.to.plot,
+.main="Ternary Plot", .col=NULL, .pch=16, .cex=1, .lwd=1, .lty=1){
 
   xy <- coord.trafo(x$Y[,c(2, 3, 1)])
-
+  
   par(mai=rep(0,4))
-  plot(NULL,asp=1,
-       xlim=c(-.0866025,1+.0866025),ylim=c(0-.05,sqrt(3)/2+.1),
-       axes=F,xlab="",ylab="")
+  plot(NULL,axes=F,xlab="",ylab="", xlim=c(-.0866025,1+.0866025), ylim=c(0-.05,sqrt(3)/2+.1), asp=1)
   if(entropy.contours){
     if(entropy.colors){
       
@@ -34,6 +32,8 @@ main, col, pch, cex, lwd, lty,
     x.grid <- cbind(coord.trafo(cbind(g.main,g.aux1,0)),
                     coord.trafo(cbind(g.main,0,g.aux1)))
 
+
+
     if(c.grid){
       segments(z.grid[,1],z.grid[,2],z.grid[,3],z.grid[,4], lwd=.5, lty=2, col=colorz[1])
       segments(x.grid[,1],x.grid[,2],x.grid[,3],x.grid[,4], lwd=.5, lty=2, col=colorz[2])
@@ -41,13 +41,13 @@ main, col, pch, cex, lwd, lty,
     }
   }
   if(colored){
-    if(!is.null(col)){
-      points(xy, pch=pch, lwd=lwd, col=col, cex=cex)
+    if(!is.null(.col)){
+      points(xy, pch=.pch, lwd=.lwd, col=.col, cex=.cex)
     } else if(col.scheme == "dims"){
-      points(xy, pch=pch, lwd=lwd, col=rgb(x$Y), cex=cex)
+      points(xy, pch=.pch, lwd=.lwd, col=rgb(x$Y), cex=.cex)
     } else if(col.scheme == "entropy"){
       ent.col <- entropy.colors[round(99*(rowSums(-x$Y*log(x$Y))/log(ncol(x$Y))),0)+1]
-      points(xy, pch=pch, lwd=lwd, col=ent.col,cex=cex)
+      points(xy, pch=.pch, lwd=.lwd, col=ent.col,cex=.cex)
       
       y.cuts <- seq(sqrt(3)/2,sqrt(3)/6,length.out=101)
       rect(.95,y.cuts[-101],1,y.cuts[-1],col=entropy.colors,border=NA)
@@ -55,10 +55,10 @@ main, col, pch, cex, lwd, lty,
       text(.90,1/sqrt(3),srt=90,labels="Entropy")
     }
   } else if(!colored) {
-    if(!is.null(col)){
-      points(xy, pch=pch, lwd=lwd, col=col, cex=cex)
+    if(!is.null(.col)){
+      points(xy, pch=.pch, lwd=.lwd, col=.col, cex=.cex)
     } else {
-      points(xy, pch=pch, lwd=lwd, cex=cex)
+      points(xy, pch=.pch, lwd=.lwd, cex=.cex)
     }
   } else { stop("error! specify color=TRUE or FALSE") }
 
@@ -95,9 +95,11 @@ main, col, pch, cex, lwd, lty,
   
   }
 
+
+
   
   text(.5,sqrt(3)/2+(1/15),labels=dim.labels[1],font=2, col=colorz[1])
-  text(-1/(10*sqrt(3)),-1/30,labels=dim.labels[2],srt=30,font=2, col=colorz[2])
-  text(1+1/(10*sqrt(3)),-1/30,labels=dim.labels[3],srt=-30,font=2, col=colorz[3])
+  text(-1/(10*sqrt(3)),-1/30,labels=dim.labels[2],font=2, col=colorz[2])
+  text(1+1/(10*sqrt(3)),-1/30,labels=dim.labels[3],font=2, col=colorz[3])
 
 }

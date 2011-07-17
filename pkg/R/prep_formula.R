@@ -5,7 +5,7 @@ prep_formula <- function(f, d){
   fl <- length(fs)
 
   response <- get(blank.trim(strsplit(fs[1],"~",fixed=TRUE)[[1]][1]))
-  if(class(response) != "DirichletRegData") stop("the response variable must be prepared by \"DR.data()\"")
+  if(class(response) != "DirichletRegData") stop("the response variable must be prepared by \"DR_data()\"")
   ndim <- response$dims
   
   Y <- response$Y
@@ -169,6 +169,7 @@ prep_formula <- function(f, d){
               n.vars   = nvars,
               X.mats   = X.matrices,
               Z.mat    = Z.matrix,
+              preds    = predictors,
               repar    = repar,
               d        = d,
               base     = response$base))
