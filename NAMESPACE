@@ -1,41 +1,32 @@
+#useDynLib(DirchletReg)
+#import("stats", "graphics", "rgl", "maxLik")
 
-
-
-export(DR.data)
+export(DR_data)
 export(getdata)
-export(print.DirichletRegData)
-export(plot.DirichletRegData)
-export(lines.DirichletRegData)
 
-export(DirichReg)
-
-export(print.DirichletRegModel)
-export(summary.DirichletRegModel)
-export(fitted.DirichletRegModel)
-export(predict.DirichletRegModel)
-export(residuals.DirichletRegModel)
-export(anova.DirichletRegModel)
+#export(BIC.DirichletRegModel)
 
 export(rdirichlet)
 export(ddirichlet)
 
-S3method(print, DirichletRegData)
-S3method(plot, DirichletRegData)
-S3method(lines, DirichletRegData)
+export(print.DirichletRegData) ; S3method(print, DirichletRegData)
+export(plot.DirichletRegData)  ; S3method(plot, DirichletRegData)
+export(lines.DirichletRegData) ; S3method(lines, DirichletRegData)
 
-S3method(print, DirichletRegModel)
-S3method(summary, DirichletRegModel)
-S3method(fitted, DirichletRegModel)
-S3method(predict, DirichletRegModel)
-S3method(residuals, DirichletRegModel)
-S3method(anova, DirichletRegModel)
+export(DirichReg)
+export(print.DirichletRegModel) ; S3method(print, DirichletRegModel)
+export(summary.DirichletRegModel) ; S3method(summary, DirichletRegModel)
+export(fitted.DirichletRegModel) ; S3method(fitted, DirichletRegModel)
+export(predict.DirichletRegModel) ; S3method(predict, DirichletRegModel)
+export(residuals.DirichletRegModel) ; S3method(residuals, DirichletRegModel)
+export(anova.DirichletRegModel) ; S3method(anova, DirichletRegModel)
+export(vcov.DirichletRegModel) ; S3method(vcov, DirichletRegModel)
+export(vcov.DirichletRegModel) ; S3method(coef, DirichletRegModel)
+export(logLik.DirichletRegModel) ; S3method(logLik, DirichletRegModel)
+#export(AIC.DirichletRegModel) ; S3method(AIC, DirichletRegModel)
+export(confint.DirichletRegModel) ; S3method(confint, DirichletRegModel)
 
+export(print.DirichletRegConfint) ; S3method(print, DirichletRegConfint)
 
-
-
-
-
-
-
-
-
+export(DirichMixture)
+export(print.DirichletRegMixture) ; S3method(print, DirichletRegMixture)

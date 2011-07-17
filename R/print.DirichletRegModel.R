@@ -7,7 +7,7 @@ print.DirichletRegModel <- function(x, digits=max(3, getOption("digits") - 3), .
 
     cat("\nCall:\n",
         paste(strwrap(deparse(x$call), .wd), sep="\n", collapse="\n"),
-        "\nusing the ", x$parameterization, " parameterization\n\n",
+        "\nusing the ", x$parametrization, " parametrization\n\n",
         sep = "")
     
     cat("Log-likelihood: ",format(x$logLik,digits=digits)," on ",x$npar," df (",
@@ -15,7 +15,7 @@ print.DirichletRegModel <- function(x, digits=max(3, getOption("digits") - 3), .
 
     coef.ind <- cumsum(x$n.vars)
     
-    if(x$parameterization == "common"){
+    if(x$parametrization == "common"){
 
       for(i in 1:length(x$varnames)){
         cat(paste(rep("-", min(80, .wd)),sep="",collapse=""),sep="",collapse="")

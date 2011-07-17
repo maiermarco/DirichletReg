@@ -44,17 +44,10 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base){
     Y.logit <- log(Y/(1-Y))
     unidim.fit <- sapply((1:ncol(Y))[-base], function(i){ lm(Y[,i]~X.mats[[i]]-1)$coefficients })
     unidim.fit <- c(unidim.fit, lm(I(rep(.5,nrow(Y)))~Z.mat-1)$coefficients)
-
   
   }
 
   return(as.numeric(unlist(unidim.fit)))
-
-
-
-
-  
-
 
 }
                                                                                

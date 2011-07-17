@@ -1,11 +1,12 @@
-plot_DRdata_4d <- function(x,dim.labels,
+plot_DRdata_4d <- function(x,dim.labels,ref.lines,
 main, cex,
-args.3d){
+args.3d, theta, phi){
 
-  theta <- if(is.null(args.3d$theta)) 40 else args.3d$theta
-  phi <- if(is.null(args.3d$phi)) 25 else args.3d$phi
+  theta <- if(is.null(theta)) 40 else theta
+  phi <- if(is.null(phi)) 25 else phi
+  ref.lines <- if(is.null(ref.lines)) NULL else ref.lines
+
   transp <- as.hexmode(round(255*ifelse(is.null(args.3d$transp), .25, args.3d$transp),0))
-  ref.lines <- if(is.null(args.3d$ref.lines)) NULL else args.3d$ref.lines
   rgl <- if(is.null(args.3d$rgl)) TRUE else args.3d$rgl
 
   xyz <- coord.trafo(x$Y)
@@ -21,6 +22,28 @@ args.3d){
   ref_axes[cbind(1:4,1:4)] <- 0
   ref_axes_xyz             <- coord.trafo(ref_axes)
 
+
+
+    .ref_pts <- list(xyz, xyz, xyz, xyz)
+
+    .ref_pts[[1]] <- xyz + coord.trafo(cbind(1-x$Y[,1],
+                                               x$Y[,1]/3,
+                                               x$Y[,1]/3,
+                                               x$Y[,1]/3)) - coord.trafo(matrix(rep(c(1,0,0,0),nrow(x$Y)),ncol=4,byrow=T))
+    .ref_pts[[2]] <- xyz + coord.trafo(cbind(  x$Y[,2]/3,
+                                             1-x$Y[,2],
+                                               x$Y[,2]/3,
+                                               x$Y[,2]/3)) - coord.trafo(matrix(rep(c(0,1,0,0),nrow(x$Y)),ncol=4,byrow=T))
+    .ref_pts[[3]] <- xyz + coord.trafo(cbind(  x$Y[,3]/3,
+                                               x$Y[,3]/3,
+                                             1-x$Y[,3],
+                                               x$Y[,3]/3)) - coord.trafo(matrix(rep(c(0,0,1,0),nrow(x$Y)),ncol=4,byrow=T))
+    .ref_pts[[4]] <- xyz + coord.trafo(cbind(  x$Y[,4]/3,
+                                               x$Y[,4]/3,
+                                               x$Y[,4]/3,
+                                             1-x$Y[,4])) - coord.trafo(matrix(rep(c(0,0,0,1),nrow(x$Y)),ncol=4,byrow=T))
+
+                                             
   if(rgl){
 
     view3d(theta=theta, phi=phi)
@@ -35,6 +58,17 @@ args.3d){
     segments3d(x=as.vector(rbind(ref_axes_xyz[,1],corners[,1])),
                y=as.vector(rbind(ref_axes_xyz[,2],corners[,2])),
                z=as.vector(rbind(ref_axes_xyz[,3],corners[,3])), lwd=1, lty=2, col=rep(lab.col,each=2), line_antialias=TRUE)
+
+    if(!is.null(ref.lines)){
+    browser()
+      for(i in ref.lines){
+      segments3d(t3d(.ref_pts[[i]],VTrans)$x, t3d(.ref_pts[[i]],VTrans)$y,
+               t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col=paste(lab.col[i], transp, sep="", collapse=""))
+    }}
+
+
+
+
 
     points3d(xyz, cex=cex, col=cmyk2rgb(x$Y), point_antialias=TRUE)
 
@@ -59,27 +93,6 @@ args.3d){
     ref_axes_xy <- t3d(ref_axes_xyz, VTrans)
     for(i in 1:4) segments(ref_axes_xy$x[i], ref_axes_xy$y[i], xy.corners$x[i], xy.corners$y[i], lwd=1, lty=2, col=lab.col[i])
 
-
-
-    .ref_pts <- list(xyz, xyz, xyz, xyz)
-
-    .ref_pts[[1]] <- xyz + coord.trafo(cbind(1-x$Y[,1],
-                                               x$Y[,1]/3,
-                                               x$Y[,1]/3,
-                                               x$Y[,1]/3)) - coord.trafo(matrix(rep(c(1,0,0,0),nrow(x$Y)),ncol=4,byrow=T))
-    .ref_pts[[2]] <- xyz + coord.trafo(cbind(  x$Y[,2]/3,
-                                             1-x$Y[,2],
-                                               x$Y[,2]/3,
-                                               x$Y[,2]/3)) - coord.trafo(matrix(rep(c(0,1,0,0),nrow(x$Y)),ncol=4,byrow=T))
-    .ref_pts[[3]] <- xyz + coord.trafo(cbind(  x$Y[,3]/3,
-                                               x$Y[,3]/3,
-                                             1-x$Y[,3],
-                                               x$Y[,3]/3)) - coord.trafo(matrix(rep(c(0,0,1,0),nrow(x$Y)),ncol=4,byrow=T))
-    .ref_pts[[4]] <- xyz + coord.trafo(cbind(  x$Y[,4]/3,
-                                               x$Y[,4]/3,
-                                               x$Y[,4]/3,
-                                             1-x$Y[,4])) - coord.trafo(matrix(rep(c(0,0,0,1),nrow(x$Y)),ncol=4,byrow=T))
-                                             
     if(!is.null(ref.lines)){
       for(i in ref.lines){
       segments(t3d(.ref_pts[[i]],VTrans)$x, t3d(.ref_pts[[i]],VTrans)$y,

@@ -1,4 +1,4 @@
-DR.data <- function(data,            
+DR_data <- function(data,            
                     trafo = FALSE,   
                     base  = 1        
                    ){

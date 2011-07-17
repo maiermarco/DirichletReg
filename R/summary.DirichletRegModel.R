@@ -25,11 +25,11 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
 
 
 
-    if(object$parameterization == "common"){
+    if(object$parametrization == "common"){
     
       for(i in 1:length(object$varnames)){
         cat(paste(rep("-", min(80, .wd)),sep="",collapse=""),sep="",collapse="")
-        cat("\nCoefficients for variable no. ",i,": ",object$varnames[i],"\n",sep="",collapse="")
+        cat("\nBeta-Coefficients for variable no. ",i,": ",object$varnames[i],"\n",sep="",collapse="")
 
 
         printCoefmat(coef.mat[ ifelse(i==1,1,coef.ind[i-1]+1):coef.ind[i] , , drop=F],
@@ -38,7 +38,7 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
 
       }
       cat(paste(rep("-", min(80, .wd)),sep="",collapse=""),"\n",sep="",collapse="")
-      cat(paste(strwrap("Signif. codes:  `***' < .001, `**' < 0.01, `*' < 0.05, `.' < 0.1",.wd),sep="\n",collapse="\n"),sep="")
+      cat(paste(strwrap("Signif. codes:  \u60***' < .001, \u60**' < 0.01, \u60*' < 0.05, \u60.' < 0.1",.wd),sep="\n",collapse="\n"),sep="")
 
     } else {
 
@@ -48,7 +48,7 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
       printed.var <- 1
       set.size    <- ncol(object$X[[1]])
 
-      cat("MEAN MODELS:\n",sep="",collapse="")
+      cat("\nMEAN MODELS:\n",sep="",collapse="")
 
       for(i in 1:length(object$varnames)){
         if(i == object$orig.resp$base){
@@ -85,23 +85,20 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
       
       printCoefmat(coef.mat, digits = digits, cs.ind=1:2, tst.ind=3, has.Pvalue=T, signif.legend = F)
 
-
-
-
-
       cat(paste(rep("-", min(80, .wd)),sep="",collapse=""),"\n",sep="",collapse="")
+      cat(paste(strwrap("Signif. codes:  \u60***' < .001, \u60**' < 0.01, \u60*' < 0.05, \u60.' < 0.1",.wd),sep="\n",collapse="\n"),sep="")
 
     }
     
 
 
 
-    cat("\n\nLog-likelihood: ",format(object$logLik,digits=digits)," on ",object$npar," df (",
+    cat("\n\n\nLog-likelihood: ",format(object$logLik,digits=digits)," on ",object$npar," df (",
         object$optimization$bfgs.it,"+",object$optimization$iterations," iterations)\n",sep="",collapse="")
-    if(object$parameterization == "common"){
-      cat("Link: Log\nParameterization: ", object$parameterization, "\n\n",sep="")
+    if(object$parametrization == "common"){
+      cat("Link: Log\nParametrization: ", object$parametrization, "\n\n",sep="")
     } else {
-      cat("Links: Logit (Means) and Log (Precision)\nParameterization: ", object$parameterization, "\n\n",sep="")
+      cat("Links: Logit (Means) and Log (Precision)\nParametrization: ", object$parametrization, "\n\n",sep="")
     }
     
 }

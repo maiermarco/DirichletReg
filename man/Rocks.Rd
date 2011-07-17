@@ -36,6 +36,6 @@ data(Rocks)
 }
 \examples{
 data(Rocks)
-
+## maybe str(Rocks) ; plot(Rocks) ...
 }
 \keyword{datasets}
