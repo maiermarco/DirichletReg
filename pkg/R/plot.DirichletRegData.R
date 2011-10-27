@@ -3,21 +3,21 @@ get_or_else <- function(what, or_else, where) if(any(what %in% names(where))) wh
 
 
 plot.DirichletRegData <- function(x,
-                                  dims,   # which dimensions to plot
-                                  c.grid=TRUE,   # plot a grid?
-                                  ticks=TRUE,   # plot ternary ticks?
-                                  colored=TRUE,   # colors?
-                                  ref.lines=NULL, # reference lines for 2d and 3d plots?
-                                  col.scheme=c("dims", "entropy"),   # if colors: which scheme?
-                                  entropy.contours=FALSE,   # plot entropy-contour lines?
-                                  entropy.colors=FALSE,   # if entropy-contours: plot colored regions?
+                                  dims,   
+                                  c.grid=TRUE,   
+                                  ticks=TRUE,   
+                                  colored=TRUE,   
+                                  ref.lines=NULL, 
+                                  col.scheme=c("dims", "entropy"),   
+                                  entropy.contours=FALSE,   
+                                  entropy.colors=FALSE,   
                                   dim.labels,
-                                  args.3d=list(rgl=TRUE, ...),  # theta and phi for the viewport
+                                  args.3d=list(rgl=TRUE, ...),  
                                   rug=T,
                                   reset_par=TRUE,
                                   ...){
 
-  if(reset_par){ # reset the current pars after plotting
+  if(reset_par){ 
     old.par <- par(no.readonly = TRUE)
     on.exit(par(old.par))
   }

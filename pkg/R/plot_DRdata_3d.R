@@ -7,7 +7,7 @@ plot_DRdata_3d <- function(x, entropy.contours, colored, c.grid, ticks, dim.labe
   plot(NULL,axes=F,xlab="",ylab="", xlim=c(-.0866025,1+.0866025), ylim=c(0-.05,sqrt(3)/2+.1), asp=1)
   if(entropy.contours){
     if(entropy.colors){
-      ### FIX ME
+      
     } else {
       for(i in 9:1) lines(.entropy.coordinates[[i]], lwd=.25)
     }
@@ -31,7 +31,7 @@ plot_DRdata_3d <- function(x, entropy.contours, colored, c.grid, ticks, dim.labe
     x.grid <- cbind(coord.trafo(cbind(g.main,g.aux1,0)),
                     coord.trafo(cbind(g.main,0,g.aux1)))
 
-#DEBUG for(a in 0:10) abline(v=a/10, lty=2)
+
 
     if(c.grid){
       segments(z.grid[,1],z.grid[,2],z.grid[,3],z.grid[,4], lwd=.5, lty=2, col=colorz[1])
@@ -61,7 +61,7 @@ plot_DRdata_3d <- function(x, entropy.contours, colored, c.grid, ticks, dim.labe
     }
   } else { stop("error! specify color=TRUE or FALSE") }
 
-  ### bounding triangle and white space
+  
   polygon(c(-1,-1,2,2),c(0,-1,-1,0),col="white",border=NA)
   polygon(c(-1,0,.5,.5,-1),c(0,0,sqrt(3)/2,3,3),col="white",border=NA)
   polygon(c(2,1,.5,.5,2),c(0,0,sqrt(3)/2,3,3),col="white",border=NA)
@@ -76,14 +76,14 @@ plot_DRdata_3d <- function(x, entropy.contours, colored, c.grid, ticks, dim.labe
     segments(z.grid[,1],z.grid[,2],
              z.grid[,1]-(1/120),z.grid[,2]+1/(40*sqrt(3)), col=colorz[2])
     segments(tk.coo,0,
-             tk.coo-(1/120),-1/(40*sqrt(3)), col=colorz[3]) # sin(-60°)/60 and /30 for text
+             tk.coo-(1/120),-1/(40*sqrt(3)), col=colorz[3]) 
 
     text(y.grid[,3]+(1/30),y.grid[,4],labels=rev(tk.lab),cex=.8, col=colorz[1])
     text(z.grid[,1]-(1/60),z.grid[,2]+1/(20*sqrt(3)),labels=rev(tk.lab),cex=.8, col=colorz[2])
     text(tk.coo-(1/60),-1/(20*sqrt(3)),labels=tk.lab,cex=.8, col=colorz[3])
   }
 
-  # dimension labels
+  
   text(.5,sqrt(3)/2+(1/15),labels=dim.labels[1],font=2, col=colorz[1])
   text(-1/(10*sqrt(3)),-1/30,labels=dim.labels[2],font=2, col=colorz[2])
   text(1+1/(10*sqrt(3)),-1/30,labels=dim.labels[3],font=2, col=colorz[3])

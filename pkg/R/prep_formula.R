@@ -15,32 +15,32 @@ prep_formula <- function(f, d){
     names(d) <- "(Intercept)"
   }
   
-  # backup rownames of Y and the data
+  
   Y.labels <- rownames(Y)
   rownames(Y) <- 1:nrow(Y)
   
   d.labels <- rownames(d)
   rownames(d) <- 1:nrow(d)
 
-  # exclude observations from the data if they have been excluded from the response matrix
-#  if(!is.null(response$exclude)){
-#    d <- d[which(!response$exclude),]
-#    Y <- Y[which(!response$exclude),]
-#  }
+  
+
+
+
+
   
   
   
-  ### extract formulae
+  
 
   predictors <- list(RHS=NULL, PHI=NULL)
   
-  if(fl == 1){ # if the formula has one element
+  if(fl == 1){ 
   
     fcomm <- strsplit(fs, "~", fixed=TRUE)[[1]]
     if(length(fcomm) != 2) stop("error in formula")
     predictors$RHS <- sapply(1:ndim, function(x) blank.trim(fcomm[2]), simplify=F)
   
-  } else if (fl == 2) { # if the formula has two elements
+  } else if (fl == 2) { 
   
     fcomm <- strsplit(fs, "~", fixed=TRUE)
 
@@ -64,7 +64,7 @@ prep_formula <- function(f, d){
 
     }
   
-  } else if (fl == ndim) { # if the formula has ndim elements
+  } else if (fl == ndim) { 
   
     fcomm <- strsplit(fs, "~", fixed=TRUE)
     if(!all(sapply(2:ndim, function(i){ length(fcomm[[i]]) == 1 }))) stop("error in formula")
@@ -83,7 +83,7 @@ prep_formula <- function(f, d){
   
   }
   
-  ### extract terms and matrices
+  
 
   if(!is.null(predictors$RHS) & is.null(predictors$PHI)){
 
@@ -122,7 +122,7 @@ prep_formula <- function(f, d){
 
   }
 
-  # check for "intercept-only" terms
+  
   X_1 <- unlist(lapply(predictors$RHS, `==`, "1"))
   if(any(X_1)) for(i in which(X_1)){
     X.matrices[[i]] <- data.frame(rep(1,nrow(Y)), row.names=1:nrow(Y))
@@ -136,7 +136,7 @@ prep_formula <- function(f, d){
 
 
 
-  ### drop invalid observations from Y
+  
   
   valid.obs <- sapply(X.matrices, rownames, simplify=FALSE)
   if(exists("Z.matrix")) valid.obs[[length(valid.obs)+1]] <- rownames(Z.matrix)
@@ -159,7 +159,7 @@ prep_formula <- function(f, d){
   
 
 
-  ### wrap up and return
+  
   
   nvars <- sapply(X.matrices, ncol, simplify=T)
 

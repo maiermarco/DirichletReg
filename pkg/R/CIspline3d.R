@@ -1,7 +1,7 @@
 CIspline3d <- function(Cints, E, ...){
 
-  if(length(Cints) != 6) stop() # these can only be plotted for alpha > 1
-  if(length(E) != 3) stop() # can only be plotted for 3d data
+  if(length(Cints) != 6) stop() 
+  if(length(E) != 3) stop() 
   
   aa <- list(...)
   .n <- ifelse(!is.null(aa[["n"]]), aa[["n"]], 200)
@@ -18,6 +18,6 @@ CIspline3d <- function(Cints, E, ...){
   
 }
 
-# plot(0,0,xlim=c(-4,4), ylim=c(-2,1), asp=1)
-# for(i in 1:6) points(Cints[i]*cos(-pi/2+(i-1)*pi/3),Cints[i]*sin(pi/2+(i-1)*pi/3), pch=as.character(i))
-# lines()
+
+
+
