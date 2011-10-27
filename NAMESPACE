@@ -1,6 +1,3 @@
-#useDynLib(DirchletReg)
-#import("stats", "graphics", "rgl", "maxLik")
-
 export(DR_data)
 export(getdata)
 
@@ -11,7 +8,7 @@ export(ddirichlet)
 
 export(print.DirichletRegData) ; S3method(print, DirichletRegData)
 export(plot.DirichletRegData)  ; S3method(plot, DirichletRegData)
-export(lines.DirichletRegData) ; S3method(lines, DirichletRegData)
+#export(lines.DirichletRegData) ; S3method(lines, DirichletRegData)
 
 export(DirichReg)
 export(print.DirichletRegModel) ; S3method(print, DirichletRegModel)
@@ -28,5 +25,5 @@ export(confint.DirichletRegModel) ; S3method(confint, DirichletRegModel)
 
 export(print.DirichletRegConfint) ; S3method(print, DirichletRegConfint)
 
-export(DirichMixture)
-export(print.DirichletRegMixture) ; S3method(print, DirichletRegMixture)
+#export(DirichMixture)
+#export(print.DirichletRegMixture) ; S3method(print, DirichletRegMixture)

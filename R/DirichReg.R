@@ -3,11 +3,11 @@ DirichReg <- function(formula,
                       weights,
                       control,
                       verbosity=0,
-                      ...){
+                      ...){# BEGIN DirichReg
 
   this.call <- match.call()
 
-  
+  # checks and preliminary work
   if(missing(formula)) stop("specification of \"formula\" is necessary.")
   if(missing(data)) data <- NULL
   if(missing(weights)) weights <- 1
@@ -35,7 +35,7 @@ if(verbosity > 0) cat("\n- PREPARING DATA\n"); flush.console()
   
 if(verbosity > 0) cat("\n- COMPUTING STARTING VALUES\n"); flush.console()
 
-  
+  # compute starting values
   if(is.null(control$sv)){
     starting.vals <- get_starting_values(Y=Y, X.mats=lapply(X.mats, as.matrix),
                        Z.mat={if(repar) as.matrix(Z.mat) else Z.mat},
@@ -44,15 +44,15 @@ if(verbosity > 0) cat("\n- COMPUTING STARTING VALUES\n"); flush.console()
     starting.vals <- control$sv
   }
 
-
+#print.default(matrix(starting.vals,ncol=1))
   
-  
+  # refine starting values
 
   parametrization <- ifelse(repar, "alternative", "common")
 
 if(verbosity > 0) cat("\n- ESTIMATING PARAMETERS\n"); flush.console()
 
-  
+  # fit and store the results
   fit.res <- DirichReg_fit(Y     = Y,
                            X     = lapply(X.mats, as.matrix),
                            Z     = as.matrix(Z.mat),
@@ -75,7 +75,7 @@ if(verbosity > 0) cat("\n- ESTIMATING PARAMETERS\n"); flush.console()
   }
 
 
-  
+  # FITTED VALUES
   if(repar){
 
     B <- matrix(0, nrow=n.vars[1], ncol=n.dim)
@@ -139,4 +139,4 @@ if(verbosity > 0) cat("\n- ESTIMATING PARAMETERS\n"); flush.console()
   return(res)
 
 
-}
+}# END DirichReg

@@ -5,9 +5,7 @@
 Glacial Tills
 }
 \description{
-Data from Aitchison (???)
-
-...
+Data from Aitchison (2003)
 }
 \usage{data(GlacialTills)}
 \format{
@@ -20,17 +18,8 @@ Data from Aitchison (???)
     \item{\code{Pcount}}{a numeric vector}
   }
 }
-\details{
-.
-}
 \source{
-.
-}
-\references{
-.
-}
-\examples{
-data(GlacialTills)
-## maybe str(Rocks) ; plot(Rocks) ...
+  Aitchison, J.\ (2003). \emph{The Statistical Analysis of Compositional Data.}
+  The Blackburn Press, Caldwell, NJ.
 }
 \keyword{datasets}

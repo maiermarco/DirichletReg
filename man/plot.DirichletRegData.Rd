@@ -6,36 +6,33 @@
 With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensions.
 }
 \usage{
-\method{plot}{DirichletRegData}(x, dims, explore, model, c.grid = TRUE, ticks = TRUE,
-                                colored = TRUE, ref.lines = NULL, col.scheme =
-                                c("dims", "entropy"), entropy.contours = FALSE,
-                                entropy.colors = FALSE, dim.labels, args.3d = list(rgl
-                                = TRUE, ...), rug = T, reset_par = TRUE, ...)
-
-\method{lines}{DirichletRegData}(x, indep, groups, \ldots, cumul = FALSE, orig.scale = FALSE)
+\method{plot}{DirichletRegData}(x, dims, c.grid = TRUE, ticks = TRUE,
+        colored = TRUE, ref.lines = NULL, col.scheme =
+        c("dims", "entropy"), entropy.contours = FALSE,
+        entropy.colors = FALSE, dim.labels, args.3d = list(rgl
+        = TRUE, ...), rug = T, reset_par = TRUE, ...)
+%\method{lines}{DirichletRegData}(x, indep, groups, \ldots, cumul = FALSE, orig.scale = FALSE)
 }
 \arguments{
-  \item{x}{the data prepared with \code{DR_data}}
-  \item{\ldots}{further arguments}
-  \item{dims}{.}
-  \item{explore}{.}
-  \item{model}{.}
-  \item{c.grid}{.}
-  \item{ticks}{.}
-  \item{colored}{.}
-  \item{col.scheme}{.}
-  \item{entropy.contours}{.}
+  \item{x}{data prepared with \code{\link{DR_data}}}
+  \item{dims}{select two, three, or four Dimensions of your data \code{x} to plot}
+  \item{c.grid}{display a grid?}
+  \item{ticks}{display ticks?}
+  \item{colored}{colored plot?}
+  \item{col.scheme}{coloring scheme can be \code{dims} or \code{entropy}}
+  \item{entropy.contours}{plot entropy contours in a ternary plot?}
   \item{entropy.colors}{.}
-  \item{rug}{.}
-  \item{reset_par}{.}
+  \item{rug}{display a rug?}
+  \item{reset_par}{reset graphical parameters after creating the plot?}
   \item{ref.lines}{.}
   \item{dim.labels}{a character vector giving labels for the dimensions/variables}
   \item{args.3d}{a named list of settings for 3-dimensional plots}
+  \item{\ldots}{further arguments}
 
-  \item{indep}{.}
-  \item{groups}{.}
-  \item{cumul}{.}
-  \item{orig.scale}{.}
+%  \item{indep}{.}
+%  \item{groups}{.}
+%  \item{cumul}{.}
+%  \item{orig.scale}{.}
 }
 %\details{
 %No details yet.

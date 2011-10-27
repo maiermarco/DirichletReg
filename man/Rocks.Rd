@@ -5,7 +5,7 @@
 Aitchison's Rock-Data
 }
 \description{
-A compilation of four datasets listed in Aitchison (???)
+A compilation of four datasets listed in Aitchison (2003)
 
 Each type of rock has 25 observations -- to use only a certain type of rock, see details.
 }
@@ -25,17 +25,8 @@ data(Rocks)
     \item{\code{type}}{a factor with levels \code{Boxite} \code{Coxite} \code{Hongite} \code{Kongite}}
   }
 }
-\details{
-.
-}
 \source{
-.
-}
-\references{
-.
-}
-\examples{
-data(Rocks)
-## maybe str(Rocks) ; plot(Rocks) ...
+  Aitchison, J.\ (2003). \emph{The Statistical Analysis of Compositional Data.}
+  The Blackburn Press, Caldwell, NJ.
 }
 \keyword{datasets}

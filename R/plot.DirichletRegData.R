@@ -3,30 +3,26 @@ get_or_else <- function(what, or_else, where) if(any(what %in% names(where))) wh
 
 
 plot.DirichletRegData <- function(x,
-                                  dims,   
-                                  explore,   
-                                  model,   
-                                  c.grid=TRUE,   
-                                  ticks=TRUE,   
-                                  colored=TRUE,   
-                                  ref.lines=NULL, 
-                                  col.scheme=c("dims", "entropy"),   
-                                  entropy.contours=FALSE,   
-                                  entropy.colors=FALSE,   
+                                  dims,   # which dimensions to plot
+                                  c.grid=TRUE,   # plot a grid?
+                                  ticks=TRUE,   # plot ternary ticks?
+                                  colored=TRUE,   # colors?
+                                  ref.lines=NULL, # reference lines for 2d and 3d plots?
+                                  col.scheme=c("dims", "entropy"),   # if colors: which scheme?
+                                  entropy.contours=FALSE,   # plot entropy-contour lines?
+                                  entropy.colors=FALSE,   # if entropy-contours: plot colored regions?
                                   dim.labels,
-                                  args.3d=list(rgl=TRUE, ...),  
+                                  args.3d=list(rgl=TRUE, ...),  # theta and phi for the viewport
                                   rug=T,
                                   reset_par=TRUE,
                                   ...){
 
-  if(reset_par){ 
+  if(reset_par){ # reset the current pars after plotting
     old.par <- par(no.readonly = TRUE)
     on.exit(par(old.par))
   }
 
   if(missing(dims))    dims    <- NULL
-  if(missing(explore)) explore <- NULL
-  if(missing(model))   model   <- NULL
   
   if(class(x) != "DirichletRegData") stop("data must be prepared by 'DR_data()'")
 
@@ -75,41 +71,17 @@ plot.DirichletRegData <- function(x,
 
 
   
-  if(!is.null(explore) & !is.null(model)) stop("model and explore cannot be specified at the same time.")
-  
-  if(!is.null(explore)){
-    frmla <- explore$formula
-    dta   <- explore$data
-
-    ex.vars <- model.frame(frmla, dta)
-    if( (length(ex.vars) < 1) | (length(ex.vars) > 3) ) stop("only 1 - 3 variables allowed in 'explore'.")
-    if( (sum(sapply(ex.vars, is.factor)) > 2) | (sum(sapply(ex.vars, is.numeric)) > 1) ) stop("check your explore-variables")
-    
-    logit.Y <- as.matrix(inv.logit(x$Y))
-    
-    ex.model <- lm(update(logit.Y~1, frmla), dta)
-    
-    .to.plot <- predict(ex.model, data.frame(depth=seq(0,100,length.out=100)))
-    .to.plot <- exp(.to.plot) / (1 + exp(.to.plot))
-    .to.plot <- .to.plot / rowSums(.to.plot)
-  } else {
-    .to.plot <- NULL
-  }
-  
-  if(!is.null(model)){
-    cat("\nnot implemented yet!\n")
-  }
 
 
   if(x$dims == 2){
     if(is.null(.main)) .main <- "Density Plot of a Beta-Distributed Variable"
     plot_DRdata_2d(y = x$Y[,2], rug=rug, main=.main, ylim=.ylim, colr=.col, lwd=.lwd, lty=.lty)
+
   } else if(x$dims == 3) {
     if(!all(is.null(c(.xlim,.ylim)))) warning("xlim and ylim not useable in a ternary plot. arguments ignored.")
     if(is.null(.main)) .main <- "Ternary Plot"
 
     plot_DRdata_3d(x=x, entropy.contours=entropy.contours, colored=colored, c.grid=c.grid, ticks=ticks, dim.labels=dim.labels, col.scheme=col.scheme,
-    .to.plot=.to.plot,
     .main=.main, .col=.col, .pch=.pch, .cex=.cex, .lwd=.lwd, .lty=.lty)
 
   } else if(x$dims == 4){

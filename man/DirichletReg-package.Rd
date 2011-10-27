@@ -10,4 +10,8 @@
 \author{
   Marco Maier
 }
+\examples{
+  example(plot.DirichletRegData)
+  example(DirichReg)
+}
 \keyword{package}
