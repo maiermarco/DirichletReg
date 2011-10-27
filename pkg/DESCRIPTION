@@ -10,6 +10,7 @@ Author@R: person(        c("Marco", "J."),
 Author: Marco J. Maier <marco.maier@wu.ac.at>
 Maintainer: Marco J. Maier <marco.maier@wu.ac.at>
 Depends: R (>= 2.13.0), maxLik, rgl, colorspace
+Suggests: betareg
 Description: Implements the Dirichlet Regression in R
 License: GPL (>=2)
 URL: http://www.r-project.org/ http://r-forge.r-project.org/projects/dirichletreg/
