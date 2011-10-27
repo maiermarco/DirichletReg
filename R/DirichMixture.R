@@ -9,7 +9,7 @@ DirichMixture <- function(Y, classes=2, EMs=5, verbosity=0, ctl=list(em.tol=1e-8
   
   params <- list()
   
-  ### initialize EM
+  
   em.cycle <- 0
   for(i in 1:EMs){
     cat("."); flush.console()
@@ -24,11 +24,11 @@ DirichMixture <- function(Y, classes=2, EMs=5, verbosity=0, ctl=list(em.tol=1e-8
     while(abs(ll_diff) > ctl$em.tol){
       em.iter <- em.iter + 1
   
-      # E
+      
       dens <- as.data.frame(lapply(theta, function(th) ddirichlet(X, exp(th))))
       post.prob <- dens/rowSums(dens)
       
-      # M
+      
       opti <- sapply(1:classes, function(i){
                 maxBFGS(fn = function(x){
                   log(post.prob[,i]*ddirichlet(X, exp(x)))

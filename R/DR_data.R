@@ -1,13 +1,13 @@
-DR_data <- function(data,            # the data to be 
-                    trafo = FALSE,   # transform (compress) the data?
-                    base  = 1        # base variable for the reparametrized model
+DR_data <- function(data,            
+                    trafo = FALSE,   
+                    base  = 1        
                    ){
 
-  state.norm <- FALSE   # was normalization forced?
-  state.tran <- FALSE   # was transformation forced?
+  state.norm <- FALSE   
+  state.tran <- FALSE   
 
 
-### CONVENIENTLY HANDLE BETA-DISTRIBUTED VARIABLES
+
   if((!is.matrix(data) & !is.data.frame(data)) | ifelse(is.null(ncol(data)), FALSE, ncol(data) == 1)){
     if(any((data < 0) | (data > 1))) stop("only one variable supplied with values outside [0, 1]. beta distribution cannot safely be assumed. prepare your data first.")
     data <- cbind(1-data, data)
@@ -43,7 +43,7 @@ DR_data <- function(data,            # the data to be
     warning("not all rows sum up to 1 => normalization forced")
   }
   
-  # save the original data for reference
+  
   data.original <- data
   
   if(trafo | any(data == 0, na.rm=TRUE) | any(data == 1, na.rm=TRUE)){

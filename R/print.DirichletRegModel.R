@@ -57,6 +57,6 @@ print.DirichletRegModel <- function(x, digits=max(3, getOption("digits") - 3), .
 }
 
 
-#print.DirichletRegModel(res2)
 
-#res2 <- DirichReg(DR_data(Rocks[,1:5])~type, Rocks)
+
+
