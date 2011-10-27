@@ -9,7 +9,7 @@ DirichMixture <- function(Y, classes=2, EMs=5, verbosity=0, ctl=list(em.tol=1e-8
   
   params <- list()
   
-  
+  ### initialize EM
   em.cycle <- 0
   for(i in 1:EMs){
     cat("."); flush.console()
@@ -24,11 +24,11 @@ DirichMixture <- function(Y, classes=2, EMs=5, verbosity=0, ctl=list(em.tol=1e-8
     while(abs(ll_diff) > ctl$em.tol){
       em.iter <- em.iter + 1
   
-      
+      # E
       dens <- as.data.frame(lapply(theta, function(th) ddirichlet(X, exp(th))))
       post.prob <- dens/rowSums(dens)
       
-      
+      # M
       opti <- sapply(1:classes, function(i){
                 maxBFGS(fn = function(x){
                   log(post.prob[,i]*ddirichlet(X, exp(x)))
@@ -63,7 +63,7 @@ DirichMixture <- function(Y, classes=2, EMs=5, verbosity=0, ctl=list(em.tol=1e-8
 
   .e <- -post.prob*log(post.prob)
   if(any(is.na(.e))) .e[is.na(.e)] <- 1
-  entropy <- rowSums(.e)/log(classes)
+  entropy <- 1 - rowSums(.e)/log(classes)
   
   res <- list(data=Y,
               classes=classes,
@@ -73,8 +73,8 @@ DirichMixture <- function(Y, classes=2, EMs=5, verbosity=0, ctl=list(em.tol=1e-8
               npar=sum(unlist(lapply(theta, length))),
               nobs=nrow(X),
               post.prob=post.prob,
-              entropy=ifelse(classes == 1, NA, 1-mean(entropy)),
-              entropy.obs=ifelse(classes == 1, NA, 1-unname(entropy)),
+              entropy=ifelse(classes == 1, NA, mean(entropy)),
+              entropy.obs=ifelse(classes == 1, NA, unname(entropy)),
               EMs=EMs,
               LLs=LLs)
 

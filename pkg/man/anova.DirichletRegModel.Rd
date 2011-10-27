@@ -2,7 +2,8 @@
 \alias{anova.DirichletRegModel}
 \title{Compare Dirichlet Regression Models using an LRT}
 \description{
-  This function allows for pairwise tests of Dirichlet regression models using a likelihood ratio test (LRT).
+  This function allows for pairwise tests of Dirichlet regression models using a
+  likelihood ratio test (LRT).
 }
 \usage{
 \method{anova}{DirichletRegModel}(object, \ldots, sorted = FALSE)
@@ -13,7 +14,10 @@
   \item{sorted}{should the models be sorted according to their numbers or parameters?}
 }
 \details{
-  The test statistic is computed \eqn{LR=-2\left[\log(L_a)-\log(L_b)\right]}{LR=-2[log(La)-log(Lb)]} where \eqn{L_i}{Li} is the likelihood of model \eqn{i}{i} with \eqn{df}{df} equal to the difference of the number of parameters in the models.
+  The test statistic is computed \eqn{LR=-2\left[\log(L_a)-\log(L_b)\right]}%
+  {LR=-2[log(La)-log(Lb)]} where \eqn{L_i}{Li} is the likelihood of model
+  \eqn{i}{i} with \eqn{df}{df} equal to the difference of the number of parameters
+  in the models.
 }
 \author{
   Marco Maier

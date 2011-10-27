@@ -22,8 +22,8 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
     coef.mat <- cbind(object$coefficients, object$se, z.values, p.values)
     colnames(coef.mat) <- c("Estimate","Std. Error","z-Value","p-Value")
 
-
-
+################################################################################
+################################################################### COMMON PARAM
 
     if(object$parametrization == "common"){
     
@@ -42,8 +42,8 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
 
     } else {
 
-
-
+################################################################################
+############################################################## ALTERNATIVE PARAM
 
       printed.var <- 1
       set.size    <- ncol(object$X[[1]])
@@ -90,8 +90,8 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
 
     }
     
-
-
+################################################################################
+############################################################################ FIN
 
     cat("\n\n\nLog-likelihood: ",format(object$logLik,digits=digits)," on ",object$npar," df (",
         object$optimization$bfgs.it,"+",object$optimization$iterations," iterations)\n",sep="",collapse="")
@@ -103,4 +103,4 @@ summary.DirichletRegModel <- function(object, digits=max(3, getOption("digits") 
     
 }
 
-
+#summary(rrr)

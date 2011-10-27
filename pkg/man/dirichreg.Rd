@@ -1,7 +1,10 @@
 \name{DirichReg}
 \alias{DirichReg}
 \title{Fitting a Dirichlet Regression}
-\description{See above}
+\description{
+  This function allows for fitting Dirichlet regression models using two different
+  
+}
 \usage{
 DirichReg(formula, data, weights, control, verbosity = 0, \ldots)
 }

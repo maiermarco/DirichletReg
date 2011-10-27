@@ -3,7 +3,8 @@
 \docType{data}
 \title{Arctic Lake Data (Aitchison)}
 \description{
-  These data are taken from Aitchison (2003) and contain information on the relation of sediment composition with depth in an Arctic lake.
+  These data are taken from Aitchison (2003) and contain information on the relation
+  of sediment composition with depth in an Arctic lake.
 }
 \usage{
   data(ArcticLake)
@@ -18,7 +19,8 @@
   }
 }
 \source{
-  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.
+  Aitchison, J.\ (2003). \emph{The Statistical Analysis of Compositional Data.}
+  The Blackburn Press, Caldwell, NJ.
 }
 \examples{
 head(ArcticLake)

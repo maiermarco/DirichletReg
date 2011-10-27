@@ -27,18 +27,9 @@ ddirichlet(x, alpha, log = FALSE, sum.up = FALSE)
 \item{rdirichlet}{returns a matrix with random numbers according to the supplied alpha vector or matrix.}
 \item{ddirichlet}{returns a vector of densities (if \code{sum.up = FALSE}) or the (log-)likelihood (if \code{sum.up = TRUE}) for the given data and alphas.}
 }
-%\references{
-%% ~put references to the literature/web site here ~
-%}
 \author{
   Marco Maier
 }
-%\note{
-%%  ~~further notes~~
-%}
-%\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-%}
 \examples{
 X1 <- rdirichlet(100, c(5, 5, 10))
 
@@ -51,5 +42,3 @@ round(X2, 2)
 ddirichlet(X1, c(5, 5, 10))
 ddirichlet(X2, a.mat)
 }
-\keyword{distribution}
-\keyword{datagen}
