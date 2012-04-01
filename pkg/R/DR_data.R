@@ -1,73 +1,92 @@
-DR_data <- function(data,            
+DR_data <- function(Y,               
                     trafo = FALSE,   
                     base  = 1        
                    ){
+
+
 
   state.norm <- FALSE   
   state.tran <- FALSE   
 
 
+  Y.original <- Y
+  
 
-  if((!is.matrix(data) & !is.data.frame(data)) | ifelse(is.null(ncol(data)), FALSE, ncol(data) == 1)){
-    if(any((data < 0) | (data > 1))) stop("only one variable supplied with values outside [0, 1]. beta distribution cannot safely be assumed. prepare your data first.")
-    data <- cbind(1-data, data)
-                       
-    .names <- colnames(data)
-    colnames(data) <- c(paste("1 -",.names[2]), .names[2])
+  
 
-    message("only one variable supplied, beta-distribution assumed")
+  if((!is.matrix(Y) & !is.data.frame(Y)) | ifelse(is.null(ncol(Y)), FALSE, ncol(Y) == 1)){
+    if(any((Y < 0) | (Y > 1))) stop("only one variable supplied with values outside [0, 1]. beta distribution cannot safely be assumed. prepare your data first.")
+    Y <- cbind(1-Y, Y)
+    
+    .name <- deparse(match.call()$Y)
+    .name <- gsub(".*\\$", "", .name)   
+    .name <- gsub("\\[.*", "", .name)   
+    if(length(.name) == 0) .name <- "Y" 
+    colnames(Y) <- c(paste("1 -",.name), .name)
+
+    message("only one variable in [0, 1] supplied - beta-distribution assumed. check this assumption.")
   }
 
+
   
 
-  if(!is.matrix(data) & !is.data.frame(data)) stop('"data" must be either a matrix or a data.frame')
-  if(ncol(data) <= 1) stop('"data" must at least have two columns')
+  if(!is.matrix(Y) & !is.data.frame(Y)) stop('"Y" must be either a matrix or a data.frame')
+  if(ncol(Y) <= 1) stop('"Y" must at least have two columns')
+  if((base < 1) | (base > ncol(Y))) stop('"base" must be in the range of variables')
   
-  if((base < 1) | (base > ncol(data))) stop('"base" must be in the range of variables')
+  if(is.null(colnames(Y))) colnames(Y) <- paste("v", 1:ncol(Y), sep="")
   
-  if(any(is.na(data))){
-    exclude <- as.logical(apply(is.na(data), 1, any))
-    warning("missing values are not allowed. the following observation(s) will be excluded:\n",
-            paste(which(exclude), collapse=", "))
-  } else {
-    exclude <- NULL
-  }
+
+
+
+
+
+
+
   
   
+
+
+  row.sums <- rowSums(Y)
   
-  row.sums <- na.exclude(rowSums(data))
-  
-  if( !isTRUE( all.equal(row.sums, rep(1, length(row.sums)) ) ) ){
-    data <- data/rowSums(data)
+  if( !all(na.delete(row.sums) == rep(1, length(na.delete(row.sums))) ) ){
+    Y <- Y/row.sums
     state.norm <- TRUE
-    warning("not all rows sum up to 1 => normalization forced")
   }
   
   
-  data.original <- data
-  
-  if(trafo | any(data == 0, na.rm=TRUE) | any(data == 1, na.rm=TRUE)){
-    n.obs <- ifelse(is.null(exclude), nrow(data), sum(!exclude))
-    data <- (data * (n.obs - 1) + 1/ncol(data)) / n.obs
-    state.tran <- TRUE
-    warning("some entries are 0 or 1 => transformation forced")
+
+
+  if(trafo | any(Y == 0, na.rm=TRUE) | any(Y == 1, na.rm=TRUE)){
+    n.obs <- length(na.delete(row.sums))
+    Y <- (Y * (n.obs - 1) + 1/ncol(Y)) / n.obs
+    if(!trafo) state.tran <- TRUE
   }
   
-  if(is.null(colnames(data))){
-    colnames(data) <- paste("v", 1:ncol(data), sep="")
-  }
-  
-  res <- list(Y = data,
-              Y.orig = data.original,
-              dims = ncol(data),
-              dim.names = colnames(data),
-              obs = nrow(data),
-              exclude = exclude,
-              normalized = state.norm,
-              transformed = state.tran,
-              base = base)
-  
+
+
+  res <- as.matrix(Y)
+  attr(res, "Y.original") <- as.data.frame(Y.original)
+  attr(res, "dims") <- ncol(Y)
+  attr(res, "dim.names") <- colnames(Y)
+  attr(res, "obs") <- nrow(Y)
+  attr(res, "valid_obs") <- length(na.delete(row.sums))
+  attr(res, "normalized") <- state.norm
+  attr(res, "transformed") <- state.tran
+  attr(res, "base") <- base
   class(res) <- "DirichletRegData"
+
+  
+  
+  if(state.norm & state.tran){
+    warning("not all rows sum up to 1 => normalization forced\nsome entries are 0 or 1 => transformation forced", immediate.=TRUE)
+  } else if(state.norm){
+    warning("not all rows sum up to 1 => normalization forced", immediate.=TRUE)
+  } else if(state.tran){
+    warning("some entries are 0 or 1 => transformation forced", immediate.=TRUE)
+  }
+
+
   
   return(res)
   

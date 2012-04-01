@@ -1,7 +1,11 @@
 AIC.DirichletRegModel <- function(object, ..., k = 2){
-  -object$logLik/2 + k*object$npar
+  - 2*object$logLik + k*object$npar
+}
+
+nobs.DirichletRegModel <- function(object, ...){
+  nrow(object$X[[1]])
 }
 
 BIC.DirichletRegModel <- function(object, ...){
-  -object$logLik/2 + log(nrow(object$X[[1]]))*object$npar
+  - 2*object$logLik + log(nobs(object))*object$npar
 }

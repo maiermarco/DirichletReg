@@ -2,14 +2,16 @@ citHeader("To cite package 'DirichletReg' in publications use:")
 desc <- packageDescription("DirichletReg")
 year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
 vers <- paste("R package version", desc$Version)
-citEntry(entry="Manual",
-         title = "DirichletReg: Dirichlet Regression in R",
+citEntry(entry  = "Manual",
+         title  = "DirichletReg: Dirichlet Regression in R",
          author = "Marco J. Maier",
-         year = year,
-         note = vers,
-         url = "http://dirichletreg.r-forge.r-project.org/",
-         textVersion = paste("Maier, M. J. (",year,
-                             "). DirichletReg: Dirichlet Regression in R. ",vers,
-                             ". http://dirichletreg.r-forge.r-project.org/",sep="")
+         year   = year,
+         note   = vers,
+         url    = "http://dirichletreg.r-forge.r-project.org/",
+         textVersion = paste("Maier, M. J. (",
+                             year,
+                             "). DirichletReg: Dirichlet Regression in R. ",
+                             vers,
+                             ". http://dirichletreg.r-forge.r-project.org/",
+                             sep="")
         )
-        

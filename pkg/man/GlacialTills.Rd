@@ -7,7 +7,7 @@ Glacial Tills
 \description{
 Data from Aitchison (2003)
 }
-\usage{data(GlacialTills)}
+\usage{GlacialTills}
 \format{
   A data frame with 92 observations on the following 5 variables.
   \describe{
@@ -19,7 +19,7 @@ Data from Aitchison (2003)
   }
 }
 \source{
-  Aitchison, J.\ (2003). \emph{The Statistical Analysis of Compositional Data.}
+  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.}
   The Blackburn Press, Caldwell, NJ.
 }
 \keyword{datasets}

@@ -1,41 +1,71 @@
-get_or_else <- function(what, or_else, where) if(any(what %in% names(where))) where[[what]] else or_else
+get_or_else <- function(what, or_else, where) if(any(what %in% names(where))) where[[what, exact=TRUE]] else or_else
 
 
 
 plot.DirichletRegData <- function(x,
                                   dims,   
-                                  c.grid=TRUE,   
                                   ticks=TRUE,   
-                                  colored=TRUE,   
                                   ref.lines=NULL, 
-                                  col.scheme=c("dims", "entropy"),   
-                                  entropy.contours=FALSE,   
-                                  entropy.colors=FALSE,   
                                   dim.labels,
-                                  args.3d=list(rgl=TRUE, ...),  
-                                  rug=T,
+                                  a2d=list(
+                                    colored=TRUE,
+                                    c.grid=TRUE,   
+                                    col.scheme=c("dims", "entropy"),   
+                                    entropy.contours=FALSE,   
+                                    entropy.colors=FALSE   
+                                  ),
+                                  a3d=list(rgl=TRUE, ...),  
+                                  rug=TRUE,
                                   reset_par=TRUE,
                                   ...){
+                                  
 
-  if(reset_par){ 
-    old.par <- par(no.readonly = TRUE)
-    on.exit(par(old.par))
+                                  
+
+  full_obs <- nrow(x)
+  if(any(is.na(x))){
+    include <- which(rowSums(is.na(x)) == 0)
+    .x <- x
+
+    x <- as.matrix(x[include,])
+    attr(x, "Y.original") <- as.data.frame(attr(.x, "Y.original")[include,])
+    attr(x, "dims") <- attr(.x, "dims")
+    attr(x, "obs") <- nrow(x)
+    attr(x, "valid_obs") <- nrow(x)
+    attr(x, "normalized") <- attr(.x, "normalized")
+    attr(x, "transformed") <- attr(.x, "transformed")
+    attr(x, "base") <- attr(.x, "base")
+    class(x) <- "DirichletRegData"
+
+    rm(.x)
+  } else {
+    include <- 1:nrow(x)
   }
-
-  if(missing(dims))    dims    <- NULL
+  
+  nx <- x
+  x <- attributes(x)
+  x$Y <- as.data.frame(unclass(nx))
+  x$dim.names <- x$dimnames[[2]]
+  class(x) <- "DirichletRegData"
+  
+  if(missing(dims)) dims <- NULL
   
   if(class(x) != "DirichletRegData") stop("data must be prepared by 'DR_data()'")
 
-  col.scheme <- match.arg(col.scheme)
+  colored <- get_or_else("colored", TRUE, a2d)
+  c.grid <- get_or_else("c.grid", TRUE, a2d)
+  col.scheme <- match.arg(get_or_else("col.scheme", "dims", a2d), c("dims", "entropy"))
+  entropy.contours <- get_or_else("entropy.contours", FALSE, a2d)
+  entropy.colors <- get_or_else("entropy.colors", FALSE, a2d)
 
   dotlist <- list(...)
   
   .main <- get_or_else("main", NULL, dotlist)
   .xlim <- get_or_else("xlim", NULL, dotlist)
   .ylim <- get_or_else("ylim", NULL, dotlist)
-   .col <- get_or_else("col", NULL, dotlist)
-   .pch <- get_or_else("pch", 16, dotlist)
-   .cex <- get_or_else("cex", 1, dotlist)
+   .col <- get_or_else("col", NULL, dotlist)  ; if(length(.col) == full_obs) .col <- .col[include]
+   .pch <- get_or_else("pch", 16, dotlist)    ; if(length(.pch) == full_obs) .pch <- .pch[include]
+   .cex <- get_or_else("cex", 1, dotlist)     ; if(length(.cex) == full_obs) .cex <- .cex[include]
    .lwd <- get_or_else("lwd", 1, dotlist)
    .lty <- get_or_else("lty", 1, dotlist)
 
@@ -81,13 +111,18 @@ plot.DirichletRegData <- function(x,
     if(!all(is.null(c(.xlim,.ylim)))) warning("xlim and ylim not useable in a ternary plot. arguments ignored.")
     if(is.null(.main)) .main <- "Ternary Plot"
 
+    if(reset_par){ 
+      old.par <- par(no.readonly = TRUE)
+      on.exit(par(old.par))
+    }
+
     plot_DRdata_3d(x=x, entropy.contours=entropy.contours, colored=colored, c.grid=c.grid, ticks=ticks, dim.labels=dim.labels, col.scheme=col.scheme,
     .main=.main, .col=.col, .pch=.pch, .cex=.cex, .lwd=.lwd, .lty=.lty)
 
   } else if(x$dims == 4){
     plot_DRdata_4d(x=x, dim.labels=dim.labels, ref.lines=ref.lines,
     main=.main,cex=.cex,
-    args.3d=args.3d, theta=theta, phi=phi
+    args.3d=a3d, theta=theta, phi=phi
     )
   }
 

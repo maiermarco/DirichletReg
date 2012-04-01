@@ -7,7 +7,9 @@
 \alias{logLik.DirichletRegModel}
 \alias{AIC.DirichletRegModel}
 \alias{BIC.DirichletRegModel}
+\alias{nobs.DirichletRegModel}
 \alias{vcov.DirichletRegModel}
+\alias{update.DirichletRegModel}
 \alias{confint.DirichletRegModel}
 \alias{print.DirichletRegConfint}
 \title{Methods for the class \code{DirichletRegModel}}
@@ -31,17 +33,21 @@
 
 \method{residuals}{DirichletRegModel}(object, type = c("standardized", "composite", "raw"), \ldots)
 
-\method{confint}{DirichletRegModel}(object, parm, level, \ldots, type=c("all", "beta", "gamma"), e = FALSE)
+\method{confint}{DirichletRegModel}(object, parm, level, \ldots, type=c("all", "beta", "gamma"), exp = FALSE)
 
 \method{print}{DirichletRegConfint}(x, digits = 3, \ldots)
 
 \method{logLik}{DirichletRegModel}(object, \ldots)
 
-%\method{AIC}{DirichletRegModel}(object, \ldots, k = 2)
+\method{AIC}{DirichletRegModel}(object, \ldots, k = 2)
 
-%\method{BIC}{DirichletRegModel}(object, \ldots)
+\method{BIC}{DirichletRegModel}(object, \ldots)
+
+\method{nobs}{DirichletRegModel}(object, \ldots)
 
 \method{vcov}{DirichletRegModel}(object, \ldots)
+
+\method{update}{DirichletRegModel}(object, formula., \ldots, evaluate = TRUE)
 }
 \arguments{
   \item{x}{an object of class \code{DirichletRegModel}}
@@ -49,38 +55,31 @@
   \item{alpha}{logical; returns alpha values}
   \item{mu}{logical; returns expected values}
   \item{phi}{logical; returns precision values}
-  \item{type}{for \code{residuals}: defines the type of residuals to be computed \code{"standardized"} (i.e. Pearson), \code{"composite"}, or \code{"raw"}
-  
+  \item{type}{for \code{residuals}: defines the type of residuals to be computed \code{"standardized"} (i.e., Pearson), \code{"composite"}, or \code{"raw"}
+
               for \code{confint}: defines the type of parameter (\code{"all"}, \code{"beta"}, or \code{"gamma"}) for which confidence values are returned}
   \item{newdata}{a \code{data.frame} containing new observations}
-%  \item{k}{number for the weighting of parameters}
+  \item{k}{number for the weighting of parameters}
   \item{parm}{a vector containing names of the parameters to print}
   \item{level}{(a vector of) confidence level(s), defaults to \code{.95}}
-  \item{e}{logical; returns parameters in exponentiated form}
+  \item{exp}{logical; returns parameters in exponentiated form}
   \item{digits}{the number of digits in the output}
+  \item{formula.}{the new formula to be updated, see \code{\link[Formula]{update.Formula}}}
+  \item{evaluate}{if \code{FALSE} the updated call will be returned, but not evaluated}
   \item{\ldots}{further arguments}
 }
-%\details{
-%.
-%}
-\author{
-  Marco Maier
-}
-%\note{
-%%  ~~further notes~~
-%}
-%\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-%}
+\author{Marco Maier}
 \examples{
-  AL <- DR_data(ArcticLake[, 1:3])
-  modl <- DirichReg(AL ~ depth + I(depth^2) | phi ~ depth, data = ArcticLake)
-  modl
-  summary(modl)
-  head(fitted(modl))
-  head(predict(modl))
-  head(residuals(modl))
-  confint(modl)
-  logLik(modl)
-  vcov(modl)
+  ALake <- ArcticLake
+  ALake$AL <- DR_data(ArcticLake[, 1:3])
+  mod1 <- DirichReg(AL ~ depth + I(depth^2) | depth, data = ALake, model="alternative")
+  update(mod1, . ~ . | . + I(depth^2), evaluate = FALSE)
+  mod1
+  summary(mod1)
+  head(fitted(mod1))
+  head(predict(mod1))
+  head(residuals(mod1))
+  confint(mod1)
+  logLik(mod1)
+  vcov(mod1)
 }
