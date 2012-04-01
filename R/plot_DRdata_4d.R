@@ -1,6 +1,13 @@
-plot_DRdata_4d <- function(x,dim.labels,ref.lines,
-main, cex,
-args.3d, theta, phi){
+plot_DRdata_4d <- function(x,
+                           dim.labels,
+                           ref.lines,
+                           main,
+                           cex,
+                           args.3d,
+                           theta,
+                           phi){
+
+
 
   theta <- if(is.null(theta)) 40 else theta
   phi <- if(is.null(phi)) 25 else phi

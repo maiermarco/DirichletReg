@@ -26,7 +26,7 @@ anova.DirichletRegModel <- function(object, ..., sorted = FALSE){
   
   for(i in 1:n.mods){
     cat("Model ",i,":\n",
-      paste(strsplit(deparse(comp.objs[[i]]$call), split=getOption("width")),sep="\n",collapse="\n"),
+      paste(deparse(comp.objs[[i]]$call, width.cutoff=getOption("width")),sep="\n",collapse="\n"),
       "\n",sep="",collapse="")
   }
   

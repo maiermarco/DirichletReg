@@ -2,7 +2,7 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
 
   e <- x$e
   repar <- x$repar
-  cat(paste(x$level, "%, ", sep=""), "Confidence Intervals ", sep="")
+  cat("\n", paste(100*x$level, collapse="%, ", sep=""), "% Confidence Intervals ", sep="")
   if(e) cat("(exponentiated)\n\n") else cat("(original form)\n\n")
 
   ctab <- x$coefficients
@@ -32,10 +32,11 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
       ll <- ncol(ctab[[1]][[cc]])
       ind <- c(rev(seq(2, ll, by=2)), seq(1, ll, by=2))
       
-      ctab[[1]][[cc]] <- ctab[[1]][[cc]][,ind]
+      ctab[[1]][[cc]] <- ctab[[1]][[cc]][,ind,drop=FALSE]
     }
-    ll <- ncol(ctab[[2]][[1]]); ind <- c(rev(seq(2, ll, by=2)), seq(1, ll, by=2))
-    ctab[[2]][[1]] <- ctab[[2]][[1]][,ind]
+    ll <- ncol(ctab[[2]][[1]])
+    ind <- c(rev(seq(2, ll, by=2)), seq(1, ll, by=2))
+    ctab[[2]][[1]] <- ctab[[2]][[1]][,ind,drop=FALSE]
 
   } else {
 
@@ -58,16 +59,16 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
   }
   
 
-  lo_lab <- sub("0\\.", ".", paste(format((1 - rev(x$level))/2, format="f"), "%", sep="") )
-  hi_lab <- sub("0\\.", ".", paste(format(x$level + (1 - x$level)/2, format="f"), "%", sep="") )
-                
+  lo_lab <- paste(format(100*(1 - rev(x$level))/2, format="f"), "%", sep="")
+  hi_lab <- paste(format(100*(x$level + (1 - x$level)/2), format="f"), "%", sep="")
+
   if(repar){
     for(tt in 1:2){
     cat("- ",ifelse(tt == 1, "Beta-Parameters:\n", "Gamma-Parameters\n"),sep="")
       for(i in seq_along(ctab[[tt]])){
-        if(tt == 1) cat("Variable: ",i,"\n",sep="")
+        if(tt == 1) cat("Variable: ",names(ctab[[1]])[i],"\n",sep="")
         if(is.null(ctab[[tt]][[i]])){cat("  variable omitted\n\n"); next}
-        ttab <- ctab[[tt]][[i]]
+        ttab <- round(ctab[[tt]][[i]], digits)
         colnames(ttab) <- c(lo_lab, ifelse(e, "exp(Est.)", "Est."), hi_lab)
         print(ttab, digits=digits, print.gap=2)
         cat("\n")
@@ -75,7 +76,8 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
     }
   } else {
     for(i in seq_along(ctab)){
-      ttab <- ctab[[i]]
+      cat("Variable: ",names(x$coefficients)[i],"\n",sep="")
+      ttab <- round(ctab[[i]], digits)
       colnames(ttab) <- c(lo_lab, ifelse(e, "exp(Est.)", "Est."), hi_lab)
       print(ttab, digits=digits, print.gap=2)
       cat("\n")

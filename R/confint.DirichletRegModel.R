@@ -3,7 +3,8 @@ confint.DirichletRegModel <- function(object,
                                       level = .95,
                                       ...,
                                       type = c("all", "beta", "gamma"),
-                                      e=FALSE){
+                                      exp=FALSE){
+  e <- exp
   type <- match.arg(type)
   
   if(any(level <= 0) | any(level >= 1)) stop("level must be in (0, 1)")
@@ -14,6 +15,8 @@ confint.DirichletRegModel <- function(object,
 
   co <- object$coefficients
   se <- object$se
+  names(co) <- object$coefnames
+  names(se) <- object$coefnames
   
   res <- list(level=level, type=type, coefficients=coef(object), se=se, e=e, repar=repar)
   
@@ -25,26 +28,29 @@ confint.DirichletRegModel <- function(object,
   res$ci <- sapply(1:length(rci), function(i) list())
 
   if(repar){
-    Xc <- cumsum(c(1, object$n.vars[-1]))
+    Xc <- rev(rev(cumsum(c(1, object$n.vars)))[-1])
     Zc <- c(1, ncol(object$Z)) + rev(Xc)[1] - 1
     
     for(ll in 1:length(rci)){
       inti <- 0
-      for(i in 1:object$orig.resp$dims){
-        res$ci[[ll]][[i]] <- if(i == object$base) NULL else {
-          inti <- inti + 1
-          rci[[ll]][Xc[inti]:(Xc[inti+1]-1),]
+      for(i in 1:object$dims){
+        res$ci[[ll]][[i]] <- if(i == object$base){
+            NULL
+          } else {
+            inti <- inti + 1
+            rci[[ll]][Xc[inti]:(Xc[inti+1]-1),,drop=FALSE]
         }
       }
-      res$ci[[ll]][[length(res$ci[[ll]]) + 1]] <- rci[[ll]][Zc[1]:Zc[2],]
+      res$ci[[ll]][[length(res$ci[[ll]]) + 1]] <- rci[[ll]][Zc[1]:Zc[2],,drop=FALSE]
+      names(res$ci[[ll]]) <- c(object$varnames, "gamma")
     }
   } else {
     Xc <- cumsum(c(1, object$n.vars))
     for(ll in 1:length(rci)){
       inti <- 0
-      for(i in 1:object$orig.resp$dims){
+      for(i in 1:object$dims){
         inti <- inti + 1
-        res$ci[[ll]][[i]] <- rci[[ll]][Xc[inti]:(Xc[inti+1]-1),]
+        res$ci[[ll]][[i]] <- rci[[ll]][Xc[inti]:(Xc[inti+1]-1),,drop=FALSE]
       }
     }
   }

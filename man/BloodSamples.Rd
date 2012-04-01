@@ -5,14 +5,9 @@
 Serum Protein Composition In Blood Samples
 }
 \description{
-  These data (Aitchison, 2003) list blood samples' compositions of \emph{Albumin},
-  \emph{Pre-Albumin}, \emph{Globulin A}, and \emph{Globulin B} in relation to two
-  types of diseases. 14 patients suffer from disease A, 16 from disease B and 6
-  are unclassified.
+These data (Aitchison, 2003) list blood samples' compositions of \emph{Albumin}, \emph{Pre-Albumin}, \emph{Globulin A}, and \emph{Globulin B} in relation to two types of diseases. 14 patients suffer from disease A, 16 from disease B and 6 are unclassified.
 }
-\usage{
-  data(BloodSamples)
-}
+\usage{BloodSamples}
 \format{
   A data frame with 36 observations on the following 6 variables.
   \describe{
@@ -25,13 +20,11 @@ Serum Protein Composition In Blood Samples
   }
 }
 \source{
-  Aitchison, J.\ (2003). \emph{The Statistical Analysis of Compositional Data.}
-  The Blackburn Press, Caldwell, NJ.
+Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.
 }
 \examples{
 head(BloodSamples)
 Bl <- DR_data(BloodSamples[,1:4])
-plot(Bl)
-Bl
+summary(Bl)
 }
 \keyword{datasets}

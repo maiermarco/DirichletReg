@@ -1,4 +1,4 @@
-DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){ flush.console()
+DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
 
 
 
@@ -25,7 +25,7 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){ flush.console()
 
 
 
-  LL <- lgamma(f)-rowSums(lgamma(A))+rowSums((A-1)*log(Y))
+  LL <- w*(lgamma(f)-rowSums(lgamma(A))+rowSums((A-1)*log(Y)))
   
 
 
@@ -94,7 +94,7 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){ flush.console()
         nder <- (1:d)[-derv]
 
         hessian[hess.i, hess.j] <-
-        sum( -X[,v1]*X[,v2]*f*eps[,derv]*(( 
+        sum(w*( -X[,v1]*X[,v2]*f*eps[,derv]*(( 
           rowSums(eps[,nder,drop=F]*log(Y[,nder,drop=F])) - log(Y[,derv]) * rowSums(eps[,nder,drop=F])  
         )*(
           2 * eEps[[derv]] + rowSums(eps[,nder,drop=F]^2) - eps[,derv]^2
@@ -109,14 +109,14 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){ flush.console()
           + rowSums(eps[,nder,drop=F]^2)
           - eps[,derv]^2) 
         ))
-        ) / esum^4)
+        ) / esum^4))
       
       
       } else if((derv[1] != derv[2]) & all(derv != -1)) {
         nder <- (1:d)[-derv]
 
         hessian[hess.i, hess.j] <-
-        sum(X[,v1]*X[,v2]*f*eps[,derv[1]]*eps[,derv[2]]*(
+        sum(w*(X[,v1]*X[,v2]*f*eps[,derv[1]]*eps[,derv[2]]*(
           rowSums(sapply(derv, function(i){
             f*eps[,i]*psigamma(A[,i], 1)*rowSums(eps[,-i])
           }))
@@ -129,7 +129,7 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){ flush.console()
             }))
           + rowSums(sapply(derv, function(i){ log(Y[,i])*(eps[,i]-rowSums(eps[,-i])) }))
           )    
-        ) / esum^4)
+        ) / esum^4))
       
       
       } else if(any(derv != -1) & any(derv == -1)) {
@@ -137,7 +137,7 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){ flush.console()
         nder <- (1:d)[-derv]
         
         hessian[hess.i, hess.j] <-
-        sum(Z[,v1] * X[,v2] * f * eps[,derv] * (
+        sum(w*(Z[,v1] * X[,v2] * f * eps[,derv] * (
           esum * (rowSums(sapply(nder, function(i){
             eps[,i] * (psigamma(A[,i]) - log(Y[,i]))
             }) ))
@@ -150,17 +150,17 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){ flush.console()
             eps[,i]^2*psigamma(A[,i], 1)
             })) - eps[,derv] * psigamma(A[,derv], 1) * rowSums(eps[,nder,drop=F])  
           )
-        ) / esum^3)
+        ) / esum^3))
       
       
       } else if(all(derv == -1)){
         hessian[hess.i, hess.j] <-
-        sum(Z[,v1]*Z[,v2]*f*(
+        sum(w*(Z[,v1]*Z[,v2]*f*(
           rowSums(sapply(1:d, function(i){
             eps[,i] * ( log(Y[,i]) - psigamma(A[,i]) - A[,i]*psigamma(A[,i],1) )
           }))
         + esum * (psigamma(f) + f*psigamma(f,1)) 
-        )/esum)
+        )/esum))
       }
     }
   }

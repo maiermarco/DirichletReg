@@ -11,7 +11,7 @@ ddirichlet(x, alpha, log = FALSE, sum.up = FALSE)
 \arguments{
   \item{n}{number of random observations to draw}
   \item{x}{a matrix containing observations}
-  \item{alpha}{the Dirichlet distribution's parameters. Can be a vector (one set of parameters for all observations) or a matrix (a different set of parameters for each observation), see details}
+  \item{alpha}{the Dirichlet distribution's parameters. Can be a vector (one set of parameters for all observations) or a matrix (a different set of parameters for each observation), see \dQuote{Details}}
   \item{log}{if \code{TRUE}, logarithmic densities are returned}
   \item{sum.up}{if \code{TRUE}, the (log-)likelihood is returned}
 }

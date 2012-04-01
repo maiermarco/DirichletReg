@@ -5,16 +5,32 @@ predict.DirichletRegModel <- function(object, newdata, mu=TRUE, alpha=FALSE, phi
   repar <- object$parametrization == "alternative"
   dims  <- ncol(object$Y)
 
-  formulae <- object$f.elements
-  X <- lapply(formulae[[1]], function(f){ model.matrix(as.formula(paste("~",unlist(f),collapse="")), newdata) })
-  if(repar) Z <- model.matrix(as.formula(paste("~",unlist(formulae[[2]][1]),collapse="")), newdata)
+
+
+
+
+  model_formula <- object$mf_formula
+  model_formula$data <- as.name("newdata")
+  model_formula$lhs <- 0
+  mf <- eval(model_formula)
+  if(!repar){ 
+    if(length(model_formula$formula)[2]){
+      X <- lapply(rep(1,ncol(object$Y)), function(i) model.matrix(Formula(terms(model_formula$formula, data=newdata, rhs=i)), mf) )
+    } else {             
+      X <- lapply(1:ncol(object$Y), function(i) model.matrix(Formula(terms(model_formula$formula, data=newdata, rhs=i)), mf) )
+    }
+    Z <- NULL
+  } else { 
+    X <- lapply(1:ncol(object$Y), function(i) model.matrix(Formula(terms(model_formula$formula, data=newdata, rhs=1)), mf) )
+    Z <- model.matrix(Formula(terms(model_formula$formula, data=newdata, rhs=2)), mf)
+  }
   
   cc <- coef(object)
   if(repar) cc[[1]] <- unlist(cc[[1]])
   if(!repar) cc <- unlist(cc)
   
   from <- 1
-  base <- object$orig.resp$base
+  base <- object$base
 
   if(repar){
     ETA <- matrix(0, nrow=nrow(newdata), ncol=ncol(object$Y))

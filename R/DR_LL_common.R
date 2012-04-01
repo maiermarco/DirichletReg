@@ -25,7 +25,7 @@ DReg <- function(x, Y, X, d, k, w, NR){
   for(comp in 1:d){
     for(iv in 1:k[comp]){
       i <- i + 1
-      gradient[,i] <- X[[comp]][,iv] * A[,comp] * ( log(Y[,comp]) - psigamma(A[,comp]) + psigamma(rowSums(A)) )
+      gradient[,i] <- w * X[[comp]][,iv] * A[,comp] * ( log(Y[,comp]) - psigamma(A[,comp]) + psigamma(rowSums(A)) )
     }
   }
 
@@ -57,18 +57,18 @@ DReg <- function(x, Y, X, d, k, w, NR){
         derv <- derv[1]
 
         hessian[hess.i, hess.j] <-
-        sum(X[[derv]][,vars[1]] * X[[derv]][,vars[2]] * A[,derv] * (
+        sum(w*(X[[derv]][,vars[1]] * X[[derv]][,vars[2]] * A[,derv] * (
           log(Y[,derv]) + psigamma(rowSums(A)) - psigamma(A[,derv]) + A[,derv] * (
             psigamma(rowSums(A), 1) - psigamma(A[,derv], 1)
           )
-        ))
+        )))
       
       
       } else {
         hessian[hess.i, hess.j] <-
-        sum(
+        sum(w*(
           X[[derv[1]]][,vars[1]]*X[[derv[2]]][,vars[2]]*A[,derv[1]]*A[,derv[2]]*psigamma(rowSums(A), 1)
-        )
+        ))
       }
     }
   }
