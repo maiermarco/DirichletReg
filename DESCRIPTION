@@ -1,7 +1,7 @@
 Package: DirichletReg
 Type: Package
 Version: 0.4-0
-Date: 2012-04-01
+Date: 2012-04-02
 Title: Dirichlet Regression in R
 Authors@R: person(given  = c("Marco", "J."),
                   family = "Maier",
