@@ -15,7 +15,9 @@ Imports: stats, graphics, methods
 Suggests: colorspace
 Description: Implements the Dirichlet Regression in R
 License: GPL (>= 2)
-URL: http://www.r-project.org/ http://r-forge.r-project.org/projects/dirichletreg/
+URL: http://dirichletreg.r-forge.r-project.org/
+     http://r-forge.r-project.org/projects/dirichletreg/
+     http://cran.at.r-project.org/web/packages/DirichletReg/
 ByteCompile: yes
 LazyLoad: yes
 LazyData: yes
