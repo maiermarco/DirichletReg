@@ -1,21 +1,29 @@
+useDynLib("DirichletReg")
+
+import("maxLik")
+import("Formula")
+import("rgl")
+
 import("stats")
+import("graphics")
+import("methods")
 
 export("rdirichlet")
 export("ddirichlet")
+export("ddirichlet_R")
 
 export("DR_data")
-export("print.DirichletRegData")   ; S3method("print", "DirichletRegData")
-export("summary.DirichletRegData") ; S3method("summary", "DirichletRegData")
-export("plot.DirichletRegData")    ; S3method("plot", "DirichletRegData")
-#export("lines.DirichletRegData")   ; S3method("lines", "DirichletRegData")
+export("print.DirichletRegData")    ; S3method("print", "DirichletRegData")
+export("summary.DirichletRegData")  ; S3method("summary", "DirichletRegData")
+export("plot.DirichletRegData")     ; S3method("plot", "DirichletRegData")
 
 export("DirichReg")
 export("print.DirichletRegModel")     ; S3method("print", "DirichletRegModel")
-export("summary.DirichletRegModel")   ; S3method("summary", "DirichletRegModel")
+export("summary.DirichletRegModel")   ; S3method("summary", "DirichletRegModel")   ; S3method("print", "summary_DirichletRegModel")
 export("fitted.DirichletRegModel")    ; S3method("fitted", "DirichletRegModel")
 export("predict.DirichletRegModel")   ; S3method("predict", "DirichletRegModel")
 export("residuals.DirichletRegModel") ; S3method("residuals", "DirichletRegModel")
-export("anova.DirichletRegModel")     ; S3method("anova", "DirichletRegModel")
+export("anova.DirichletRegModel")     ; S3method("anova", "DirichletRegModel")     ; S3method("print", "anova_DirichletRegModel")
 export("vcov.DirichletRegModel")      ; S3method("vcov", "DirichletRegModel")
 export("vcov.DirichletRegModel")      ; S3method("coef", "DirichletRegModel")
 export("logLik.DirichletRegModel")    ; S3method("logLik", "DirichletRegModel")
@@ -26,6 +34,3 @@ export("confint.DirichletRegModel")   ; S3method("confint", "DirichletRegModel")
 export("update.DirichletRegModel")    ; S3method("update", "DirichletRegModel")
 
 export("print.DirichletRegConfint") ; S3method("print", "DirichletRegConfint")
-
-#export("DirichMixture")
-#export("print.DirichletRegMixture") ; S3method("print", "DirichletRegMixture")

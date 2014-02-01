@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{DirichletReg-package}
 \alias{DirichletReg}
 \docType{package}

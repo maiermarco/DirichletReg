@@ -1,4 +1,4 @@
-fitted.DirichletRegModel <- function(object, mu=TRUE, alpha=FALSE, phi=FALSE, ...){
+fitted.DirichletRegModel <- function(object, mu = TRUE, alpha = FALSE, phi = FALSE, ...){
 
   if(!any(mu | alpha | phi)) stop("Either mu, alpha or phi has to be requested.")
 

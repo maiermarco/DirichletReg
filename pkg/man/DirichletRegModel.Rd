@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{DirichletRegModel}
 \alias{print.DirichletRegModel}
 \alias{summary.DirichletRegModel}
@@ -14,18 +15,15 @@
 \alias{print.DirichletRegConfint}
 \title{Methods for the class \code{DirichletRegModel}}
 \description{
-  These are available methods for the results of Dirichlet regression models and
-  objects of class \code{DirichletRegModel}. These methods contain functions for
-  \code{print} and \code{summary} of the data, generate \code{fitted} values and
-  predicting new values using \code{predict}. Various types of \code{residuals}
-  are implemented and \code{confint} can be used to compute confidence intervals
-  of the parameters. Furthermore \code{logLik} extracts the log-likelihood of the
-  model and \code{vcov} extracts the covariance matrix of the parameter estimates.
+  These are available methods for the results of Dirichlet regression models and objects of class \code{DirichletRegModel}.
+  These methods contain functions for \code{print} and \code{summary} of the data, generate \code{fitted} values and predicting new values using \code{predict}.
+  Various types of \code{residuals} are implemented and \code{confint} can be used to compute confidence intervals of the parameters.
+  Furthermore \code{logLik} extracts the log-likelihood of the model and \code{vcov} extracts the covariance matrix of the parameter estimates.
 }
 \usage{
 \method{print}{DirichletRegModel}(x, digits = max(3, getOption("digits") - 3), \ldots)
 
-\method{summary}{DirichletRegModel}(object, digits = max(3, getOption("digits") - 3), \ldots)
+\method{summary}{DirichletRegModel}(object, \ldots)
 
 \method{fitted}{DirichletRegModel}(object, mu = TRUE, alpha = FALSE, phi = FALSE, \ldots)
 
@@ -68,6 +66,9 @@
   \item{evaluate}{if \code{FALSE} the updated call will be returned, but not evaluated}
   \item{\ldots}{further arguments}
 }
+%\details{
+%.
+%}
 \author{Marco Maier}
 \examples{
   ALake <- ArcticLake

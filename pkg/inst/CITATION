@@ -1,17 +1,43 @@
-citHeader("To cite package 'DirichletReg' in publications use:")
+citHeader('To cite package "DirichletReg" in publications use:')
 desc <- packageDescription("DirichletReg")
 year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
 vers <- paste("R package version", desc$Version)
-citEntry(entry  = "Manual",
-         title  = "DirichletReg: Dirichlet Regression in R",
-         author = "Marco J. Maier",
-         year   = year,
-         note   = vers,
-         url    = "http://dirichletreg.r-forge.r-project.org/",
-         textVersion = paste("Maier, M. J. (",
-                             year,
-                             "). DirichletReg: Dirichlet Regression in R. ",
-                             vers,
-                             ". http://dirichletreg.r-forge.r-project.org/",
-                             sep="")
-        )
+
+citEntry(header = "Current Version",
+  entry  = "MANUAL",
+  title  = "DirichletReg: Dirichlet Regression in R",
+  author = "Marco J. Maier",
+  year   = year,
+  note   = vers,
+  url    = "http://dirichletreg.r-forge.r-project.org/",
+
+  textVersion = paste0(
+    "Maier, M. J. (",
+    year,
+    "). DirichletReg: Dirichlet Regression in R. ",
+    vers,
+    ". http://dirichletreg.r-forge.r-project.org/"
+  )
+)
+
+citEntry(header = "Technical Report (2014)",
+  entry       = "TECHREPORT",
+  title       = "DirichletReg: Dirichlet Regression for Compositional Data in R",
+  author      = "Marco J. Maier",
+  year        = "2014",
+  institution = "{WU Vienna University of Economics and Business}",
+  address     = "{Vienna}",
+  type        = "{Research Report Series{\\slash}Department of Statistics and Mathematics}",
+  number      = "125",
+  month       = "January",
+  url         = "http://epub.wu.ac.at/4077/",
+
+  textVersion = paste0(
+    "Maier, M. J. (2014). ",
+    "DirichletReg: Dirichlet Regression for Compositional Data in R. ",
+    "Research Report Series / Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. ",
+    "http://epub.wu.ac.at/4077/"
+  ),
+  
+  footer = 'To get BibTeX citations, type:\ntoBibtex(citation("DirichletReg"))'
+)

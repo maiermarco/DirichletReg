@@ -1,57 +1,62 @@
-anova.DirichletRegModel <- function(object, ..., sorted = FALSE){
+anova.DirichletRegModel <- function(object, ..., sorted = FALSE) {
 
   comp.objs <- list(object, ...)
-  
-  if(any(!(sapply(comp.objs, class, simplify=TRUE) == "DirichletRegModel"))) stop("only models fitted using DirichReg can be compared.")
+
+  if(!all(unlist(lapply(comp.objs, class)) == "DirichletRegModel")) stop('only models fitted using "DirichReg()" can be compared.')
+  for(i in seq_along(comp.objs)[-1L]){
+    if(!identical(comp.objs[[i-1L]][["Y"]], comp.objs[[i]][["Y"]])) stop("models appear not to be nested.")
+  }
   
   n.mods <- length(comp.objs)
+  n.pars <- unlist(lapply(seq_len(n.mods), function(i){ comp.objs[[i]]$npar }))
+  calls <- lapply(seq_len(n.mods), function(i) comp.objs[[i]]$call)
+  sorting <- if(sorted){ order(n.pars, decreasing=TRUE) } else { seq_len(n.mods) }
   
-  for(i in 2:n.mods){
-    if(!all.equal(comp.objs[[i-1]]$Y, comp.objs[[i]]$Y)) stop("models appear not to be nested.")
-  }
+  comp.objs <- comp.objs[sorting]
+    
+  deviances <- unlist(lapply(seq_len(n.mods), function(i){ -2*comp.objs[[i]]$logLik }))
+  dev_diffs <- abs(c(NA, deviances[1L] - deviances[-1L]))
+  df <- abs(c(NA, n.pars[1L] - n.pars[-1L]))
   
-  n.pars <- rep(NA, n.mods)
+  res <- structure(list(
+    "Deviance"   = deviances,
+    "N. par"     = n.pars,
+    "Difference" = dev_diffs,
+    "df"         = df,
+    "Pr(>Chi)"   = pchisq(dev_diffs, df, lower.tail = FALSE),
+    "sorting"    = sorting,
+    "n.mods"     = n.mods,
+    "calls"      = calls
+  ), class = "anova_DirichletRegModel")
   
-  for(i in 1:n.mods){
-    n.pars[i] <- comp.objs[[i]]$npar
-  }
+  print(res)
+  invisible(res)
+ 
+}
 
-  if(sorted){
-    sorting <- order(n.pars, decreasing=TRUE)
-  } else {
-    sorting <- 1:n.mods
-  }
 
-  cat("\nAnalysis of Deviance Table\n\n")
-  
-  for(i in 1:n.mods){
-    cat("Model ",i,":\n",
-      paste(deparse(comp.objs[[i]]$call, width.cutoff=getOption("width")),sep="\n",collapse="\n"),
-      "\n",sep="",collapse="")
-  }
-  
-  cat("\n")
-  
-  res <- matrix(NA, ncol=5, nrow=n.mods)
-  
-  colnames(res) <- c("Deviance", "N. par", "Difference", "df", "p-value")
-  rownames(res) <- paste("Model",sorting)
-  
-  r <- 1
-  for(i in sorting){
-    res[r,1:2] <- c(-2*comp.objs[[i]]$logLik, comp.objs[[i]]$npar)
-    r <- r + 1
-  }
 
-  for(i in 2:n.mods){
-    res[i,3] <- abs(res[i-1, 1] - res[i, 1])
-    res[i,4] <- abs(res[i-1, 2] - res[i, 2])
-  }
+print.anova_DirichletRegModel <- function(x, ...){
 
-  res[-1,5] <- 1 - pchisq(res[-1,3], res[-1,4])
-      
-  print.default(res, quote=F, print.gap=3,na.print="-")
+  if(interactive()) writeLines("")
   
-  cat("\n")
+  writeLines("Analysis of Deviance Table\n")
   
+  model_numbers <- unlist(lapply(format(x$sorting), function(i){ paste0("Model ", i) }))
+  model_names <- unlist(lapply(x$sorting, function(i){ deparse(x$call[[i]], width.cutoff=500L) }))
+  
+  for(i in seq_len(x$n.mods)){
+    writeLines(strwrap(paste0(model_numbers[[i]], ": ", model_names[[i]]), width=getOption("width"), exdent = 2L))
+  }
+  
+  writeLines("")
+  
+  res <- as.data.frame(x[1:5])
+  colnames(res) <- names(x[1:5])
+  rownames(res) <- model_numbers
+  
+  printCoefmat(res, cs.ind = 1L, tst.ind = 3L, P.values = TRUE, na.print = "")
+  
+  writeLines("")
+
 }

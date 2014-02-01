@@ -1,9 +1,33 @@
-.onAttach <- function(libname, pkgname){
-  version <- read.dcf(file=system.file("DESCRIPTION", package=pkgname),
-                      fields="Version")
-  packageStartupMessage("This is ",paste(pkgname, version))
-  packageStartupMessage(pkgname, " is BETA software\nPlease report any bugs to marco.maier@wu.ac.at")
+#.onAttach <- function(libname, pkgname){
+#  version <- read.dcf(file=system.file("DESCRIPTION", package=pkgname),
+#                      fields="Version")
+#  packageStartupMessage("This is ",paste(pkgname, version))
+#  packageStartupMessage(pkgname, " is BETA software\nPlease report any bugs to marco.maier@wu.ac.at")
+#}
+
+
+
+blank.trim <- function(x){ paste(unlist(strsplit(x, "^\ +|\ +$")),sep="",collapse="") }
+
+
+
+make.symmetric <- function(x){
+  if(nrow(x) != ncol(x)) stop("x must be a square matrix")
+
+  cell.ind <- which(is.na(x), arr.ind=TRUE)
+  
+  x[cell.ind] <- x[cell.ind[,2:1]]
+  
+  return(x)
 }
+
+
+
+inv.logit <- function(x){
+  log(x) - log(1-x)
+}
+
+
 
 swrap <- function(text, type=c("stop","warning","message"), xdent){
   if(missing(xdent)) xdent <- ifelse(match.arg(type) == "message", 0, 4)
@@ -14,6 +38,8 @@ swrap <- function(text, type=c("stop","warning","message"), xdent){
     paste(strwrap(text, width=width, indent=xdent, exdent=xdent), sep="", collapse="\n"),
   sep="", collapse="")
 }
+
+
 
 na.delete <- function(x){
   return(x[which(!is.na(x), arr.ind=TRUE)])

@@ -1,4 +1,4 @@
-coef.DirichletRegModel <- function(object, type=c("both", "beta", "gamma"), ...){
+coef.DirichletRegModel <- function(object, type = c("both", "beta", "gamma"), ...){
 
   type <- match.arg(type, c("both", "beta", "gamma"))
 
@@ -7,26 +7,28 @@ coef.DirichletRegModel <- function(object, type=c("both", "beta", "gamma"), ...)
 
   if(object$parametrization == "common"){
 
-    ind <- cumsum(c(1, object$n.vars))
-    cc <- sapply(seq_along(ind)[-1], function(i) cc[ind[i-1]:(ind[i]-1)], simplify=FALSE)
+    ind <- cumsum(c(1L, object$n.vars))
+    cc <- lapply(seq_along(ind)[-1L], function(i) cc[seq.int(from = ind[i - 1L], to = ind[i] - 1L)])
     names(cc) <- object$varnames
     return(cc)
 
   } else {
 
-    ind <- cumsum(c(1, object$n.vars))
+    ind <- cumsum(c(1L, object$n.vars))
     bb <- list()
     
-    bb_par <- cc[-((length(cc)-ncol(object$Z)+1):length(cc))]
-    iter <- 0
-    for(i in 1:object$dims){
-      bb[[i]] <- if(i == object$base) NULL else {
-        iter <- iter + 1
-        bb_par[ind[iter]:(ind[iter+1]-1)]
+    bb_par <- cc[-seq.int(from = length(cc) - ncol(object$Z) + 1L, to = length(cc))]
+    iter <- 0L
+    for(i in seq_len(object$dims)){
+      if(i == object$base){
+        bb[i] <- list(NULL)
+      } else {
+        iter <- iter + 1L
+        bb[[i]] <- bb_par[seq.int(from = ind[iter], to = ind[iter + 1L] - 1L)]
       }
     }
     names(bb) <- c(object$varnames)
-    gg <- list(cc[ ((length(cc)-ncol(object$Z)+1):length(cc))])
+    gg <- list("gamma" = cc[seq.int(from = length(cc) - ncol(object$Z) + 1L, to = length(cc))])
 
     if(type == "both"){
       return(list("beta"=bb, "gamma"=gg))

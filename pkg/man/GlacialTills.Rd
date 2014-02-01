@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{GlacialTills}
 \alias{GlacialTills}
 \docType{data}

@@ -1,5 +1,18 @@
 %\VignetteIndexEntry{DirichletReg -- Article Sources}
+\SweaveOpts{keep.source=FALSE}
+<<global-settings, echo=FALSE, results=hide>>=
+options(
+  prompt = "> ",
+  continue = "+ ",
+  width = 100L,
+  encoding = "UTF-8",
+  useFancyQuotes = TRUE
+)
+library("DirichletReg")
+@
 \documentclass[nojss]{jss}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
 \author{Marco J.\ Maier\\Wirtschaftsuniversit\"at Wien}
 \title{\pkg{DirichletReg}: Dirichlet Regression for Compositional Data in \proglang{R}}
@@ -7,7 +20,7 @@
 \Plainauthor{Marco J. Maier}
 \Plaintitle{DirichletReg: Dirichlet Regression for Compositional Data in R}
 
-\Abstract{\noindent\centering\ldots}
+\Abstract{\noindent Full \proglang{R} Code for\\Maier, M.\,J. (2014). DirichletReg: Dirichlet Regression for Compositional Data in R. Research Report Series\slash{}Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. \url{http://epub.wu.ac.at/4077/}}
 
 \Keywords{
   Dirichlet regression,
@@ -42,48 +55,58 @@
   URL: \url{http://statmath.wu.ac.at/~maier/}
 }
 
-\usepackage{amsmath,amssymb,amsfonts,bm}
+\usepackage{amsmath,amssymb,amsfonts,bm,lmodern}
 \usepackage{tabularx,booktabs,array,blkarray,multicol}
 
 \newcommand{\given}{\,\vert\,}
 \newcommand{\gnuR}{\proglang{R}}
 
-  % \usepackage{Sweave}
+%\usepackage{Sweave}
   \usepackage[rgb]{xcolor}
   \definecolor{inputblue}{Hsb}{240, .8, .3}
   \definecolor{outputred}{Hsb}{  0, .8, .3}
-  \usepackage{fancyvrb}
+  \usepackage{fancyvrb,textcomp}
+  \makeatletter
+  \begingroup
+  \catcode`'=\active \catcode``=\active
+  \g@addto@macro\@noligs{\let`\textasciigrave \let'\textquotesingle}
+  \endgroup
+  \makeatother
   \renewenvironment{Schunk}{\begingroup\footnotesize}{\endgroup}
   \DefineVerbatimEnvironment{Sinput}{Verbatim}{fontshape=sl,fontsize=\footnotesize,formatcom=\color{inputblue}}
   \DefineVerbatimEnvironment{Soutput}{Verbatim}{fontsize=\scriptsize,formatcom=\color{outputred}}
   \DefineVerbatimEnvironment{Scode}{Verbatim}{fontshape=sl,fontsize=\footnotesize}
-
-<<echo=FALSE,results=hide>>=
-options(prompt = "> ", continue = "+ ", width = 100, useFancyQuotes = FALSE)
-library(DirichletReg)
-pdf.options(colormodel="rgb")
-@
-\SweaveOpts{keep.source=FALSE}
+  \setkeys{Gin}{width=0.8\textwidth,keepaspectratio=true}
 
 \begin{document}\setcounter{section}{3}
 \section{Application examples}
 \subsection{The Arctic lake (common parametrization)}
 <<>>=
-library(DirichletReg)
+library("DirichletReg")
 head(ArcticLake)
 AL <- DR_data(ArcticLake[,1:3])
 @
 <<>>=
 AL[1:6,]
 @
-\begin{figure}\centering
-<<fig=TRUE>>=
-par(mfrow=c(2,1))
+Code for Fig.~\ref{fig:AL.tern.compo} (left):
+<<plot1, eval=FALSE, fig=FALSE, results=hide>>=
 plot(AL, cex=.5, a2d=list(colored=FALSE, c.grid=FALSE))
-
+@
+Code for Fig.~\ref{fig:AL.tern.compo} (right):
+<<plot2, eval=FALSE, fig=FALSE, results=hide>>=
 plot(rep(ArcticLake$depth,3),as.numeric(AL),
-     pch=21, bg=rep(c("#E495A5", "#86B875", "#7DB0DD"),each=39),                                    # colorspace : rainbow_hcl(3)
+     pch=21, bg=rep(c("#E495A5", "#86B875", "#7DB0DD"),each=39),                # colorspace : rainbow_hcl(3)
      xlab="Depth (m)", ylab="Proportion", ylim=0:1)
+@
+\begin{figure}\centering%
+\setkeys{Gin}{width=.49\linewidth, keepaspectratio=true}
+<<echo=FALSE, fig=TRUE>>=
+<<plot1>>
+@
+\hfill\setkeys{Gin}{width=.49\linewidth, keepaspectratio=true}
+<<echo=FALSE, fig=TRUE>>=
+<<plot2>>
 @
 \caption{Arctic lake: Ternary plot and depth vs.\ composition.}\label{fig:AL.tern.compo}
 \end{figure}
@@ -99,8 +122,8 @@ anova(lake1,lake2)
 <<>>=
 summary(lake2)
 @
-\begin{figure}
-<<fig=TRUE>>=
+Code for Fig.~\ref{fig:AL.tern.fitted}:
+<<plot3, eval=FALSE, fig=FALSE, results=hide>>=
 par(mar=c(4, 4, 4, 4)+0.1)
 plot(rep(ArcticLake$depth,3),as.numeric(AL),
      pch=21, bg=rep(c("#E495A5", "#86B875", "#7DB0DD"),each=39),                # colorspace : rainbow_hcl(3)
@@ -115,10 +138,13 @@ axis(4)
 mtext(expression(paste("Precision (",phi,")",sep="")), 4, line=3)
 legend("top",legend=c(expression(hat(mu[c]==hat(alpha)[c]/hat(alpha)[0])),expression(hat(phi)==hat(alpha)[0])),lty=c(1,2),lwd=c(3,2),bty="n")
 @
+\begin{figure}\centering%
+<<echo=FALSE, fig=TRUE>>=
+<<plot3>>
+@
 \caption{Arctic lake: Fitted values of the quadratic model.}\label{fig:AL.tern.fitted}
 \end{figure}
-\begin{figure}
-<<fig=TRUE>>=
+<<>>=
 AL <- ArcticLake
 AL$AL <- DR_data(ArcticLake[,1:3])
 
@@ -126,7 +152,9 @@ dd <- range(ArcticLake$depth)
 X <- data.frame(depth=seq(dd[1], dd[2], length.out=200))
 
 pp <- predict(DirichReg(AL~depth+I(depth^2),AL), X)
-
+@
+Code for Fig.~\ref{fig:AL.tern.fitted.two}:
+<<plot4, eval=FALSE, fig=FALSE, results=hide>>=
 plot(AL$AL, cex=.1, reset_par=FALSE)
 points(DirichletReg:::coord.trafo(AL$AL[,c(2,3,1)]), pch=16, cex=.5, col=gray(.5))
 
@@ -141,7 +169,11 @@ p2m <- exp(cbind(0,p2[,1],p2[,2]))/rowSums(exp(cbind(0,p2[,1],p2[,2])))
 
 lines(DirichletReg:::coord.trafo(p2m[,c(2,3,1)]), lwd=3, col=c("#6E1D34", "#004E42")[1], lty="21")   # colorspace : rainbow_hcl(2,l=25)
 @
-\caption{Arctic lake: OLS (dashed) vs. Dirichlet regression (solid) predictions.}\label{fig:AL.tern.fitted.two}
+\begin{figure}\centering%
+<<echo=FALSE, fig=TRUE>>=
+<<plot4>>
+@
+\caption{Arctic lake: OLS (dashed) vs.\ Dirichlet regression (solid) predictions.}\label{fig:AL.tern.fitted.two}
 \end{figure}
 \subsection{Blood samples (alternative parametrization)}
 <<>>=
@@ -156,14 +188,18 @@ anova(blood1, blood2)
 <<>>=
 summary(blood1)
 @
-\begin{figure}
-<<fig=TRUE,width=10,height=5>>=
-par(mfrow=c(1,4))
+Code for Fig.~\ref{fig:blood:boxfitted}:
+<<plot5, eval=FALSE, fig=FALSE, results=hide>>=
+par(mfrow=c(1,4), mar=c(4,4,4,2)+.25)
 for(i in 1:4){
   boxplot(Bld$Smp[,i]~Bld$Disease, ylim=range(Bld$Smp[,1:4]), main=paste(names(Bld)[i]), xlab="Disease Type", ylab="Proportion")
   segments(c(-5,1.5),unique(fitted(blood2)[,i]),
-           c(1.5,5),unique(fitted(blood2)[,i]),lwd=3,lty=2)
+           c(1.5,5),unique(fitted(blood2)[,i]),lwd=2,lty=2)
 }
+@
+\begin{figure}\centering%
+<<echo=FALSE, fig=TRUE, width=10, height=5>>=
+<<plot5>>
 @
 \caption{Blood samples: Box plots and fitted values (dashed lines indicate the fitted values for each group).}
 \label{fig:blood:boxfitted}
@@ -175,8 +211,8 @@ LP <- L / rowSums(L)
 dimnames(LP) <- list(paste("C",1:6), c("A", "B"))
 print(data.frame(round(LP * 100, 1),"pred."=as.factor(ifelse(LP[,1]>LP[,2], "==> A", "==> B"))),print.gap=2)
 @
-\begin{figure}
-<<fig=TRUE,width=10,height=7.5>>=
+Code for Fig.~\ref{fig:blood:predictions}:
+<<plot6, eval=FALSE, fig=FALSE, results=hide>>=
 B2 <- DR_data(BloodSamples[,c(1,2,4)])
 plot(B2, cex=.001, reset_par=FALSE)
 
@@ -207,7 +243,11 @@ points(DirichletReg:::coord.trafo(temp/rowSums(temp)), pch=21, bg=(div.col[c(1,1
 temp <- B2[31:36,c(2,3,1)]
 points(DirichletReg:::coord.trafo(temp/rowSums(temp)), pch=21, bg=div.col[round(100*LP[,2],0)], cex=1, lwd=.5)
 
-legend("topleft", bty="n", legend=c("Disease A","Disease B",NA,"Expected Values"), pch=c(21,21,NA,22), pt.bg=c(div.col[c(1,100)],NA,"white"))
+legend("topright", bty="n", legend=c("Disease A","Disease B",NA,"Expected Values"), pch=c(21,21,NA,22), pt.bg=c(div.col[c(1,100)],NA,"white"))
+@
+\begin{figure}\centering%
+<<echo=FALSE, fig=TRUE, width=10, height=5>>=
+<<plot6>>
 @
 \caption{Blood samples: Observed values and predictions}
 \label{fig:blood:predictions}
@@ -222,50 +262,12 @@ rs1 <- DirichReg(acc ~ dyslexia*iq | dyslexia*iq, RS, model="alternative")
 rs2 <- DirichReg(acc ~ dyslexia*iq | dyslexia+iq, RS, model="alternative")
 anova(rs1,rs2)
 @
-<<>>=
-a <- RS$accuracy
-logRa_a <- log(a/(1-a))
-rlr <- lm(logRa_a~dyslexia*iq, RS)
-summary(rlr)
-@
-<<>>=
-summary(rs2)
-@
-<<>>=
-confint(rs2)
-confint(rs2, exp=TRUE)
-@
-\begin{figure}
-<<fig=TRUE,height=12,width=8>>=
-gcol <- c("#E495A5", "#39BEB1")[3-as.numeric(RS$dyslexia)]                      # colorspace : rainbow_hcl(2)
-tmt <- c(-3,3)
-par(mfrow=c(3,2))
-qqnorm(residuals(rlr,"pearson"), ylim=tmt, xlim=tmt, pch=21, bg=gcol, main="Normal Q\uadQ\uadPlot: OLS Residuals",cex=.75,lwd=.5)
-abline(0,1, lwd=2)
-qqline(residuals(rlr,"pearson"), lty=2)
-
-qqnorm(residuals(rs2,"standardized")[,2], ylim=tmt, xlim=tmt, pch=21, bg=gcol, main="Normal Q\uadQ\uadPlot: DirichReg Residuals",cex=.75,lwd=.5)
-abline(0,1, lwd=2)
-qqline(residuals(rs2,"standardized")[,2], lty=2)
-
-plot(ReadingSkills$iq, residuals(rlr,"pearson"), pch=21, bg=gcol, ylim=c(-3,3),main="OLS Residuals",xlab="IQ",ylab="Pearson Residuals",cex=.75,lwd=.5)
-abline(h=0,lty=2)
-plot(ReadingSkills$iq, residuals(rs2,"standardized")[,2], pch=21, bg=gcol ,ylim=c(-3,3),main="DirichReg Residuals",xlab="IQ",ylab="Standardized Residuals",cex=.75,lwd=.5)
-abline(h=0,lty=2)
-
-plot(fitted(rlr), residuals(rlr,"pearson"), pch=21, bg=gcol ,ylim=c(-3,3),main="OLS Residuals",xlab="Fitted",ylab="Pearson Residuals",cex=.75,lwd=.5)
-abline(h=0,lty=2)
-plot(fitted(rs2)[,2], residuals(rs2,"standardized")[,2], pch=21, bg=gcol ,ylim=c(-3,3),main="DirichReg Residuals",xlab="Fitted",ylab="Standardized Residuals",cex=.75,lwd=.5)
-abline(h=0,lty=2)
-@
-\caption{Reading skills: residual plots of OLS and Dirichlet regression models.}\label{fig:readingskills.residplot}
-\end{figure}
-\begin{figure}
-<<fig=TRUE>>=
+Code for Fig.~\ref{fig:ReadingSkills}:
+<<plot7, eval=FALSE, fig=FALSE, results=hide>>=
 g.ind <- as.numeric(RS$dyslexia)
 g1 <- g.ind == 1   # normal
 g2 <- g.ind != 1   # dyslexia
-par(mar=c(4,4,4,4)+0.1)
+par(mar=c(4,4,4,4)+0.25)
 plot(accuracy~iq, RS, pch=21, bg=c("#E495A5", "#39BEB1")[3-g.ind],              # colorspace : rainbow_hcl(2)
 cex=1.5, main="Dyslexic (Red) vs. Control (Green) Group",
 xlab="IQ Score",ylab="Reading Accuracy", xlim=range(ReadingSkills$iq))
@@ -279,6 +281,9 @@ pv <- predict(rs2, X, TRUE, TRUE, TRUE)
 lines(x1, pv$mu[1:n,2], col=c("#E495A5", "#39BEB1")[2],lwd=3)                   # colorspace : rainbow_hcl(2)
 lines(x2, pv$mu[(n+1):(2*n),2], col=c("#E495A5", "#39BEB1")[1],lwd=3)           # colorspace : rainbow_hcl(2)
 
+a <- RS$accuracy
+logRa_a <- log(a/(1-a))
+rlr <- lm(logRa_a~dyslexia*iq, RS)
 ols <- 1/(1+exp(-predict(rlr, X)))
 lines(x1, ols[1:n], col=c("#AD6071", "#00897D")[2],lwd=3,lty=2)                 # colorspace : rainbow_hcl(2,l=50)
 lines(x2, ols[(n+1):(2*n)], col=c("#AD6071", "#00897D")[1],lwd=3,lty=2)         # colorspace : rainbow_hcl(2,l=50)
@@ -291,6 +296,52 @@ axis(4)
 mtext(expression(paste("Precision (",phi,")",sep="")), 4, line=3)
 legend("topleft",legend=c(expression(hat(mu)),expression(hat(phi)),"OLS"),lty=c(1,3,2),lwd=c(3,2,3),bty="n")
 @
+\begin{figure}\centering%
+<<echo=FALSE, fig=TRUE>>=
+<<plot7>>
+@
 \caption{Reading skills: Predicted values of Dirichlet regression and OLS regression.}\label{fig:ReadingSkills}
+\end{figure}
+<<>>=
+a <- RS$accuracy
+logRa_a <- log(a/(1-a))
+rlr <- lm(logRa_a~dyslexia*iq, RS)
+summary(rlr)
+@
+<<>>=
+summary(rs2)
+@
+<<>>=
+confint(rs2)
+confint(rs2, exp=TRUE)
+@
+Code for Fig.~\ref{fig:readingskills.residplot}:
+<<plot8, eval=FALSE, fig=FALSE, results=hide>>=
+gcol <- c("#E495A5", "#39BEB1")[3-as.numeric(RS$dyslexia)]                      # colorspace : rainbow_hcl(2)
+tmt <- c(-3,3)
+par(mfrow=c(3,2), cex=.8)
+qqnorm(residuals(rlr,"pearson"), ylim=tmt, xlim=tmt, pch=21, bg=gcol, main="Normal Q-Q-Plot: OLS Residuals",cex=.75,lwd=.5)
+abline(0,1, lwd=2)
+qqline(residuals(rlr,"pearson"), lty=2)
+
+qqnorm(residuals(rs2,"standardized")[,2], ylim=tmt, xlim=tmt, pch=21, bg=gcol, main="Normal Q-Q-Plot: DirichReg Residuals",cex=.75,lwd=.5)
+abline(0,1, lwd=2)
+qqline(residuals(rs2,"standardized")[,2], lty=2)
+
+plot(ReadingSkills$iq, residuals(rlr,"pearson"), pch=21, bg=gcol, ylim=c(-3,3),main="OLS Residuals",xlab="IQ",ylab="Pearson Residuals",cex=.75,lwd=.5)
+abline(h=0,lty=2)
+plot(ReadingSkills$iq, residuals(rs2,"standardized")[,2], pch=21, bg=gcol ,ylim=c(-3,3),main="DirichReg Residuals",xlab="IQ",ylab="Standardized Residuals",cex=.75,lwd=.5)
+abline(h=0,lty=2)
+
+plot(fitted(rlr), residuals(rlr,"pearson"), pch=21, bg=gcol ,ylim=c(-3,3),main="OLS Residuals",xlab="Fitted",ylab="Pearson Residuals",cex=.75,lwd=.5)
+abline(h=0,lty=2)
+plot(fitted(rs2)[,2], residuals(rs2,"standardized")[,2], pch=21, bg=gcol ,ylim=c(-3,3),main="DirichReg Residuals",xlab="Fitted",ylab="Standardized Residuals",cex=.75,lwd=.5)
+abline(h=0,lty=2)
+@
+\begin{figure}\centering%
+<<echo=FALSE, fig=TRUE, height=12, width=8>>=
+<<plot8>>
+@
+\caption{Reading skills: residual plots of OLS and Dirichlet regression models.}\label{fig:readingskills.residplot}
 \end{figure}
 \end{document}

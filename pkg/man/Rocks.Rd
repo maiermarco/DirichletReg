@@ -1,13 +1,14 @@
+\encoding{UTF-8}
 \name{Rocks}
 \alias{Rocks}
 \docType{data}
 \title{
-Aitchison's Rock Data
+  Aitchison's Rock Data
 }
 \description{
-A compilation of four datasets listed in Aitchison (2003)
+  A compilation of four datasets listed in Aitchison (2003)
 
-Each type of rock has 25 observations -- to use only a certain type of rock, see \dQuote{Details}.
+  Each type of rock has 25 observations -- to use only a certain type of rock, see \dQuote{Details}.
 }
 \usage{Rocks}
 \format{
