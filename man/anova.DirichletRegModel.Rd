@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{anova.DirichletRegModel}
 \alias{anova.DirichletRegModel}
 \title{Compare Dirichlet Regression Models using an LRT}

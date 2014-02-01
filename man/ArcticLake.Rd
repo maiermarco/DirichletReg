@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{ArcticLake}
 \alias{ArcticLake}
 \docType{data}

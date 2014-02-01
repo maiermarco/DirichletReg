@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{BloodSamples}
 \alias{BloodSamples}
 \docType{data}

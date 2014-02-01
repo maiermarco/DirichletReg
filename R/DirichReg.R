@@ -2,12 +2,12 @@ DirichReg <- function(formula,
                       data,
                       model = c("common", "alternative"),
                       subset,
-                      sub.comp,                                                 
+                      sub.comp,                                                 # subcompositions
                       base,
                       weights,
                       control,
                       verbosity=0
-                      ){
+                      ){# BEGIN DirichReg
 
   this.call <- match.call()
   
@@ -21,7 +21,7 @@ if(verbosity > 0){
   if(interactive()) flush.console()
 }
 
-  
+  # checks and preliminary work
   if(missing(data)) data <- environment(formula)
 
   if(missing(formula)){
@@ -41,8 +41,8 @@ if(verbosity > 0){
   }
 
   if(ifelse(!missing(data), deparse(oformula[[2]]) %in% names(data), FALSE)){
-    Y_full <- data[[deparse(oformula[[2]])]]                                    
-  } else {                                                                      
+    Y_full <- data[[deparse(oformula[[2]])]]                                    # GET THE FULL DRData OBJECT FOR INFORMATIONS (Y_full)
+  } else {                                                                      # handle responses in .GlobalEnv
     Y_full <- get(deparse(oformula[[2]]), environment(oformula))
     if(missing(data)){
       data[[deparse(oformula[[2]])]] <- Y_full
@@ -65,15 +65,15 @@ if(verbosity > 0){
   if("(weights)" %in% names(mf)) weights <- mf[["(weights)"]] else weights <- rep(1, nrow(mf))
 
   Y <- model.response(mf, "numeric")
-
+## SUBCOMPOSITIONS
   if(missing(sub.comp)){
-    sub.comp <- 1:ncol(Y)
+    sub.comp <- seq_len(ncol(Y))
   } else {
     if(length(sub.comp) == ncol(Y)) warning("no subcomposition made, because all variables were selected")
     if(length(sub.comp) == (ncol(Y) - 1)) stop("no subcomposition made, because all variables except one were selected")
     if(any((sub.comp < 1) | (sub.comp > ncol(Y)))) stop("subcompositions must contain indices of variables of the Dirichlet data object")
-    y_in  <- (1:ncol(Y))[sub.comp]
-    y_out <- (1:ncol(Y))[-sub.comp]
+    y_in  <- (seq_len(ncol(Y)))[sub.comp]
+    y_out <- (seq_len(ncol(Y)))[-sub.comp]
     y_in_labels <- colnames(Y)[y_in]
     y_out_labels <- paste(colnames(Y)[y_out], sep="", collapse=" + ")
     Y <- cbind(rowSums(Y[,y_out]), Y[,y_in])
@@ -81,17 +81,17 @@ if(verbosity > 0){
   }
   
   base <- ifelse(missing(base), attr(Y_full, "base"), base)
-  if(!(base %in% (1:ncol(Y)))) stop("the base variable lies outside the number of variables")
+  if(!(base %in% seq_len(ncol(Y)))) stop("the base variable lies outside the number of variables")
 
   n.dim <- ncol(Y)
 
-
+## SANITY CHECKS AND FORMULA EXPANSION
   if(length(formula)[1] != 1) stop("the left hand side of the model must contain one object prepared by DR_data()")
 
-  if(!repar){   
-    if(length(formula)[2] == 1) for(i in 2:ncol(Y)) attr(formula, "rhs") <- lapply(1:ncol(Y), function(i) attr(formula, "rhs")[[1]])
+  if(!repar){   # COMMON
+    if(length(formula)[2] == 1) for(i in 2:ncol(Y)) attr(formula, "rhs") <- lapply(seq_len(ncol(Y)), function(i) attr(formula, "rhs")[[1]])
     if(length(formula)[2] > ncol(Y)) stop("the right hand side must contain specifications for either one or all variables")
-  } else {   
+  } else {   # ALTERNATIVE
     if(length(formula)[2] == 1) formula <- as.Formula(formula(formula), ~ 1)
     if(length(formula)[2] > 2) stop("the right hand side can only contain one or two specifications in the alternative parametrization")
   }
@@ -99,11 +99,11 @@ if(verbosity > 0){
 
 
   if(!repar){
-    X.mats <- lapply(1:ncol(Y), function(i) model.matrix(terms(formula, data=data, rhs=i), mf) )
+    X.mats <- lapply(seq_len(ncol(Y)), function(i) model.matrix(terms(formula, data=data, rhs=i), mf) )
     Z.mat <- NULL
     n.vars <- unlist(lapply(X.mats, ncol))
   } else {
-    X.mats <- lapply(1:ncol(Y), function(i) model.matrix(terms(formula, data=data, rhs=1), mf) )
+    X.mats <- lapply(seq_len(ncol(Y)), function(i) model.matrix(terms(formula, data=data, rhs=1), mf) )
     Z.mat  <- model.matrix(terms(formula, data=data, rhs=2), mf)
     n.vars <- c(unlist(lapply(X.mats, ncol))[-1], ncol(Z.mat))
   }
@@ -115,7 +115,7 @@ if(verbosity > 0){
   if(interactive()) flush.console()
 }
 
-  
+  # compute starting values
   if(is.null(control$sv)){
     starting.vals <- get_starting_values(Y=Y, X.mats=lapply(X.mats, as.matrix),
                        Z.mat={if(repar) as.matrix(Z.mat) else Z.mat},
@@ -132,7 +132,7 @@ if(verbosity > 0){
   if(interactive()) flush.console()
 }
 
-  
+  # fit and store the results
   fit.res <- DirichReg_fit(Y     = Y,
                            X     = lapply(X.mats, as.matrix),
                            Z     = as.matrix(Z.mat),
@@ -157,11 +157,11 @@ if(verbosity > 0){
   }
 
 
-  
+  # FITTED VALUES
   if(repar){
 
     B <- matrix(0, nrow=n.vars[1], ncol=n.dim)
-    B[cbind(rep(1:n.vars[1], (n.dim-1)), rep((1:n.dim)[-base], each=n.vars[1]))] <- coefs[1:((n.dim-1)*n.vars[1])]
+    B[cbind(rep(seq_len(n.vars[1]), (n.dim-1)), rep(seq_len(n.dim)[-base], each=n.vars[1]))] <- coefs[1:((n.dim-1)*n.vars[1])]
     
     g <- matrix(coefs[((n.dim-1)*n.vars[1]+1):length(coefs)], ncol=1)
   
@@ -174,9 +174,9 @@ if(verbosity > 0){
   
   } else {
 
-    B <- sapply(1:n.dim, function(i){ coefs[(cumsum(c(0,n.vars))[i]+1) : cumsum(n.vars)[i]] }, simplify=FALSE)
+    B <- sapply(seq_len(n.dim), function(i){ coefs[(cumsum(c(0,n.vars))[i]+1) : cumsum(n.vars)[i]] }, simplify=FALSE)
     
-    ALPHA <- sapply(1:n.dim, function(i){ exp(as.matrix(X.mats[[i]]) %*% matrix(B[[i]], ncol=1)) })
+    ALPHA <- sapply(seq_len(n.dim), function(i){ exp(as.matrix(X.mats[[i]]) %*% matrix(B[[i]], ncol=1)) })
 
     PHI <- rowSums(ALPHA)
     MU  <- apply(ALPHA, 2, "/", PHI)
@@ -192,9 +192,9 @@ if(verbosity > 0){
                    error=function(x){ return(matrix(NA, nrow=nrow(hessian), ncol=ncol(hessian))) },
                    silent=TRUE)
                    
-  if(!repar){   
+  if(!repar){   ## COMMON
     coefnames <- apply(cbind(rep(varnames, n.vars), unlist(lapply(X.mats, colnames))), 1, paste, collapse=":")
-  } else {   
+  } else {   ## ALTERNATIVE
     coefnames <- apply(cbind(rep(c(varnames[-base], "(phi)"), n.vars), c(unlist(lapply(X.mats, colnames)[-base]), colnames(Z.mat))), 1, paste, collapse=":")
   }
 
@@ -240,4 +240,4 @@ if(verbosity > 0){
   return(res)
 
 
-}
+}# END DirichReg
