@@ -1,5 +1,7 @@
 coord.trafo <- function(Y){
 
+  .Deprecated(new = "toSimplex")
+
   if((ncol(Y) < 3) | (ncol(Y) > 4)) stop("does not work for less than 3 or more than 4 dimensions")
   
   if(ncol(Y) == 3){

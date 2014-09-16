@@ -1,9 +1,9 @@
 DirichReg_fit <- function(Y, X, Z, sv, d, k, w, ctls, repar, base, vrb){# BEGIN DirichReg.fit
 
 ################################################################################
-################################################ alternative parametrization ###
+################################################ alternative parametrization
   if(repar){
-    ## first a couple of iterations only for precisions to accelerate
+
     bfgs1 <- suppressWarnings(maxBFGS(fn=DReg.repar,
                start=sv, fixed=1:((d-1)*ncol(X[[1]])),
                finalHessian=FALSE, iterlim=10, tol=1e-2, reltol=1e-2,
@@ -20,7 +20,7 @@ DirichReg_fit <- function(Y, X, Z, sv, d, k, w, ctls, repar, base, vrb){# BEGIN 
               Y=Y, X=X[[1]], Z=Z, d=d, k=k[1], w=w, base=base, NR=TRUE)
             )
 ################################################################################
-##################################################### common parametrization ###
+##################################################### common parametrization
   } else {
     bfgs <- suppressWarnings(maxBFGS(fn=DReg, 
               start=sv,

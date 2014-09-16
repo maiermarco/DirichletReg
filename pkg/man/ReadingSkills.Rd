@@ -1,6 +1,7 @@
 \encoding{UTF-8}
-\name{ReadingSkills}
+\name{Reading Accuracy Data}
 \alias{ReadingSkills}
+\alias{ReadDisc}
 \docType{data}
 \title{
 Pammer and Kevan's Data on Reading Skills
@@ -8,7 +9,8 @@ Pammer and Kevan's Data on Reading Skills
 \description{
 These data provide transformed reading accuracy scores predicted by IQ and diagnosed dyslexia.
 }
-\usage{ReadingSkills}
+\usage{ReadingSkills
+ReadDisc}
 \format{
   A data frame containing 44 observations on 3 variables.
   \describe{

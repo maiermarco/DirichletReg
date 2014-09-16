@@ -6,19 +6,17 @@
 This function allows for pairwise tests of Dirichlet regression models using a likelihood ratio test (LRT).
 }
 \usage{
-\method{anova}{DirichletRegModel}(object, \ldots, sorted = FALSE)
+\method{anova}{DirichletRegModel}(object, \dots, sorted = FALSE)
 }
 \arguments{
-\item{object}{the model to be compared against those listed in \ldots}
-\item{\ldots}{models to be tested against the one specified as \code{object}}
+\item{object}{the model to be compared against those listed in \dots}
+\item{\dots}{models to be tested against the one specified as \code{object}}
 \item{sorted}{should the models be sorted according to their numbers or parameters?}
 }
 \details{
 The test statistic is computed \eqn{LR=-2\left[\log(L_a)-\log(L_b)\right]}{LR=-2[log(La)-log(Lb)]} where \eqn{L_i}{Li} is the likelihood of model \eqn{i}{i} with \eqn{df}{df} equal to the difference of the number of parameters in the models.
 }
-\author{
-Marco Maier
-}
+\author{Marco J. Maier}
 \examples{
 ALake <- ArcticLake
 ALake$AL <- DR_data(ArcticLake[,1:3])

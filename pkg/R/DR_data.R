@@ -1,13 +1,14 @@
-DR_data <- function(Y,                                   # response (compositional variable)
-                    trafo = sqrt(.Machine$double.eps),   # transform (compress) the data?
-                    base  = 1                            # base variable for the reparametrized (alternative) model
+DR_data <- function(Y,
+                    trafo = sqrt(.Machine$double.eps),
+                    base  = 1,
+                    norm_tol = sqrt(.Machine$double.eps)
                    ){
 
                    
 # initialization
-  force.norm <- FALSE   # was normalization forced?
-  state.tran <- FALSE   # was Y transformed?
-  force.tran <- FALSE   # was transformation forced?
+  force.norm <- FALSE
+  state.tran <- FALSE
+  force.tran <- FALSE
 
 # set all rows containing NAs to NA
   if(any(is.na(Y))){ Y[which(rowSums(is.na(Y)) > 0),] <- NA }
@@ -28,8 +29,8 @@ DR_data <- function(Y,                                   # response (composition
     Y <- cbind(1.0-Y, Y)
     
     .name <- deparse(match.call()$Y)
-    .name <- gsub(".*\\$", "", .name)   # eliminate references to the object the variable comes from
-    .name <- gsub("\\[.*", "", .name)   # eliminate indices
+    .name <- gsub(".*\\$", "", .name)
+    .name <- gsub("\\[.*", "", .name)
     if(length(.name) == 0L) .name <- "Y" 
     colnames(Y) <- c(paste("1 -", .name), .name)
 
@@ -50,10 +51,10 @@ DR_data <- function(Y,                                   # response (composition
 
 
 
-### NORMALIZATION  
+### NORMALIZATION - forced only if rowSums != 1 w/tolerance = norm_tol
   row.sums <- rowSums(Y)
   
-  if( !all(na.delete(row.sums) == rep(1.0, length(na.delete(row.sums))) ) ){
+  if( !isTRUE(all.equal( na.delete(row.sums), rep(1.0, length(na.delete(row.sums))), tolerance = norm_tol, check.attributes = FALSE)) ){
     Y <- Y/row.sums
     force.norm <- TRUE
   }
@@ -82,14 +83,14 @@ DR_data <- function(Y,                                   # response (composition
 ### OBJECT DEFINITION
   res <- structure(
     as.matrix(Y),
-    "Y.original" = as.data.frame(Y.original),
-    "dims" = ncol(Y),
-    "dim.names" = colnames(Y),
-    "obs" = nrow(Y),
-    "valid_obs" = length(na.delete(row.sums)),
-    "normalized" = force.norm,
+    "Y.original"  = as.data.frame(Y.original),
+    "dims"        = ncol(Y),
+    "dim.names"   = colnames(Y),
+    "obs"         = nrow(Y),
+    "valid_obs"   = length(na.delete(row.sums)),
+    "normalized"  = force.norm,
     "transformed" = state.tran,
-    "base" = base,
+    "base"        = base,
     "class" = "DirichletRegData"
   )
 

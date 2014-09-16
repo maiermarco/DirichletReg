@@ -1,26 +1,26 @@
-rdirichlet <- function(n,      # a single integer specifying the sample size
-                       alpha   # alpha which can either be a single vector or a matrix (rows = n)
+rdirichlet <- function(n,
+                       alpha
                       ){
 
-  # check if the sample size is an integer > 0
+
   if( ((n %% 1) != 0) | (n <= 0)) stop("n must be an integer > 0")
-  # check if any value in alpha is <= 0
+
   if( any(alpha <= 0) ) stop("all values in alpha must be > 0")
 
   .vec <- is.vector(alpha)
   .mat <- is.matrix(alpha)
   
-  if(!.vec & !.mat){ # alpha is neither a vector nor a matrix
+  if(!.vec & !.mat){
 
     stop("alpha must be a vector or a matrix")
 
-  } else if(.vec & !.mat){ # alpha is a vector
+  } else if(.vec & !.mat){
 
     dims <- length(alpha)
     G <- matrix(rgamma(n*dims, alpha, 1), byrow=TRUE, ncol=dims)
     X <- G / rowSums(G)
 
-  } else { # alpha is a matrix
+  } else {
 
     dims <- ncol(alpha)
     if(n != nrow(alpha)) stop("when alpha is a matrix, the number of its rows must be equal to n")
@@ -38,7 +38,7 @@ rdirichlet <- function(n,      # a single integer specifying the sample size
 
 
 ddirichlet <- function(x, alpha, log = FALSE, sum.up = FALSE){
-  # some checking!
+
   if(is.null(dim(x))) stop("x must be a matrix")
   x_dims <- dim(x)
   if( any(alpha <= 0) ) stop('all values in alpha must be > 0.')
@@ -72,8 +72,8 @@ ddirichlet <- function(x, alpha, log = FALSE, sum.up = FALSE){
 
 
 
-ddirichlet_R <- function(x, alpha, log = FALSE, sum.up = FALSE){                # PURE R VERSION
-  # some checking!
+ddirichlet_R <- function(x, alpha, log = FALSE, sum.up = FALSE){
+
   if(is.null(dim(x))) stop("x must be a matrix")
   if(is.vector(alpha)){
     if(ncol(x) != length(alpha)) stop("alpha must be a vector/matrix fitting to the data in x")
