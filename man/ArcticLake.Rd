@@ -9,13 +9,11 @@ These data are taken from Aitchison (2003) and contain information on the relati
 \usage{ArcticLake}
 \format{
   A data frame with 39 observations on the following 4 variables:
-  \describe{
-    \item{\code{sand}}{relative frequencies of sand}
-    \item{\code{silt}}{relative frequencies of silt}
-    \item{\code{clay}}{relative frequencies of clay}
-    \item{\code{depth}}{water depth in meters}
-  }
-}
+  \describe{%
+    \item{\code{sand}, \code{silt}, \code{clay}}{relative frequencies of sand, silt, and clay}%
+    \item{\code{depth}}{water depth in meters}%
+  }%
+}%
 \source{
 Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.
 }

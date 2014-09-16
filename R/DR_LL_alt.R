@@ -1,6 +1,6 @@
 DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
 ################################################################################
-### PREPARATION ################################################################
+### PREPARATION
 ################################################################################
 
   npar <- length(x)
@@ -24,7 +24,7 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
 
 
 ################################################################################
-### LOG-LIKELIHOOD #############################################################
+### LOG-LIKELIHOOD
 ################################################################################
 
   LL <- w*(lgamma(f)-rowSums(lgamma(A))+rowSums((A-1)*log(Y)))
@@ -32,7 +32,7 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
 
 
 ################################################################################
-### GRADIENT ###################################################################
+### GRADIENT
 ################################################################################
 
   gradient <- matrix(NA, nrow=nrow(Y), ncol=npar)
@@ -61,7 +61,7 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
 
 
 ################################################################################
-### HESSIAN ####################################################################
+### HESSIAN
 ################################################################################
 
   if(NR){
@@ -82,15 +82,15 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
   
   for(hess.j in 1:npar){
     for(hess.i in 1:npar){
-      if(hess.i < hess.j) next   # skip symmetric elements
+      if(hess.i < hess.j) next
     
       v1 <- hessian.ind[hess.i,2]
       v2 <- hessian.ind[hess.j,2]
       
       derv <- hessian.ind[c(hess.i, hess.j),1]
       
-      ##########################################################################
-      ############################################### BETAs - SAME RESPONSES ###
+
+
       if((derv[1] == derv[2]) & all(derv != -1)) {
         derv <- derv[1]
         nder <- seq_along_d[-derv]
@@ -112,8 +112,8 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
           - eps[,derv]^2) 
         ))
         ) / esum^4))
-      ##########################################################################
-      ########################################## BETAs - DIFFERENT RESPONSES ###
+
+
       } else if((derv[1] != derv[2]) & all(derv != -1)) {
         nder <- seq_along_d[-derv]
 
@@ -132,8 +132,8 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
           + rowSums(sapply(derv, function(i){ log(Y[,i])*(eps[,i]-rowSums(eps[,-i])) }))
           )    
         ) / esum^4))
-      ##########################################################################
-      ######################################################### BETA / GAMMA ###
+
+
       } else if(any(derv != -1) & any(derv == -1)) {
         derv <- derv[which(derv != -1)]
         nder <- seq_along_d[-derv]
@@ -153,8 +153,8 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
             })) - eps[,derv] * psigamma(A[,derv], 1) * rowSums(eps[,nder,drop=F])  
           )
         ) / esum^3))
-      ##########################################################################
-      ############################################################### GAMMAs ###
+
+
       } else if(all(derv == -1)){
         hessian[hess.i, hess.j] <-
         sum(w*(Z[,v1]*Z[,v2]*f*(

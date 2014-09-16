@@ -12,6 +12,10 @@ export("rdirichlet")
 export("ddirichlet")
 export("ddirichlet_R")
 
+export("toQuaternary") ; export("toQuaternaryVectors")
+export("toTernary")    ; export("toTernaryVectors")
+export("toSimplex")
+
 export("DR_data")
 export("print.DirichletRegData")    ; S3method("print", "DirichletRegData")
 export("summary.DirichletRegData")  ; S3method("summary", "DirichletRegData")

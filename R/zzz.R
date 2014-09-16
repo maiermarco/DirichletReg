@@ -42,5 +42,9 @@ swrap <- function(text, type=c("stop","warning","message"), xdent){
 
 
 na.delete <- function(x){
-  return(x[which(!is.na(x), arr.ind=TRUE)])
+  if(is.null(dim(x))){
+    return( x[!is.na(x)] )
+  } else {
+    return( x[ suppressWarnings( rowSums(is.na(x)) ) == 0L , ] )
+  }  
 }

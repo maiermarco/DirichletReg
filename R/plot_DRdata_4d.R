@@ -24,7 +24,7 @@ plot_DRdata_4d <- function(x,
   coo.lab <- 2 * corners - coord.trafo(diag(4)*(.9-.1/3)+.1/3)
   lab.col <- cmyk2rgb(diag(4)+cbind(0,0,0,c(.2,.2,.2,0)))
 
-  # reference - axes
+
   ref_axes                 <- matrix(1/3, ncol=4, nrow=4)
   ref_axes[cbind(1:4,1:4)] <- 0
   ref_axes_xyz             <- coord.trafo(ref_axes)
@@ -61,7 +61,7 @@ plot_DRdata_4d <- function(x,
                xlim=c(0,1), ylim=c(-sqrt(3)/6, sqrt(3)/2), zlim=c(-sqrt(3)/6, sqrt(3)/2),
                line_antialias=TRUE)
                
-    # axes - references
+
     segments3d(x=as.vector(rbind(ref_axes_xyz[,1],corners[,1])),
                y=as.vector(rbind(ref_axes_xyz[,2],corners[,2])),
                z=as.vector(rbind(ref_axes_xyz[,3],corners[,3])), lwd=1, lty=2, col=rep(lab.col,each=2), line_antialias=TRUE)
@@ -112,7 +112,7 @@ plot_DRdata_4d <- function(x,
 
     points(t3d(xyz,VTrans), pch=16, cex=cex, col=cmyk2rgb(x$Y))
 
-  } # END if(rgl)
+  }
 
 
 

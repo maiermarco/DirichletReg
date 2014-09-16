@@ -11,7 +11,7 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
   TRUE, c.grid = TRUE, col.scheme = c("dims", "entropy"), entropy.contours =
   FALSE, entropy.colors = FALSE), a3d = list(rgl = TRUE, ...), rug = TRUE,
   reset_par = TRUE, ...)
-%\method{lines}{DirichletRegData}(x, indep, groups, \ldots, cumul = FALSE, orig.scale = FALSE)
+%\method{lines}{DirichletRegData}(x, indep, groups, \dots, cumul = FALSE, orig.scale = FALSE)
 }
 \arguments{
   \item{x}{data prepared with \code{\link{DR_data}}}
@@ -23,7 +23,7 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
   \item{a3d}{a named list of settings for quaternary plots (4 variables), see Details}
   \item{rug}{display a rug for a one-dimensional plot (2 variables)}
   \item{reset_par}{reset graphical parameters of \code{\link{DR_data}} after creating a two-dimensional plot (2 variables), see Details}
-  \item{\ldots}{further graphical arguments as \code{col}, \code{pch}, \code{cex}, \ldots}
+  \item{\dots}{further graphical arguments as \code{col}, \code{pch}, \code{cex}, \ldots}
 %  \item{indep}{.}
 %  \item{groups}{.}
 %  \item{cumul}{.}
@@ -32,9 +32,7 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
 %\details{
 %No details yet.
 %}
-\author{
-  Marco Maier
-}
+\author{Marco J. Maier}
 %\note{
 %%  ~~further notes~~
 %}

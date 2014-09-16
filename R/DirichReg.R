@@ -2,17 +2,17 @@ DirichReg <- function(formula,
                       data,
                       model = c("common", "alternative"),
                       subset,
-                      sub.comp,                                                 # subcompositions
+                      sub.comp,
                       base,
                       weights,
                       control,
-                      verbosity=0
+                      verbosity = 0
                       ){# BEGIN DirichReg
 
   this.call <- match.call()
   
   if(!(verbosity %in% 0:4)){
-    verbosity <- 0
+    verbosity <- 0L
     warning("invalid value for verbosity.")
   }
 
@@ -21,50 +21,87 @@ if(verbosity > 0){
   if(interactive()) flush.console()
 }
 
-  # checks and preliminary work
+
   if(missing(data)) data <- environment(formula)
 
   if(missing(formula)){
     stop("specification of \"formula\" is necessary.")
   } else {
     oformula <- formula
-    formula <- as.Formula(formula)
   }
   model <- match.arg(model)
   if(missing(control)){
-    control <- list(sv=NULL, iterlim=1000, tol1=1e-5, tol2=1e-10)
+    control <- list(sv = NULL, iterlim = 1000L, tol1 = 1e-5, tol2 = 1e-10)
   } else {
     if(is.null(control$sv))      control$sv       <-  NULL
-    if(is.null(control$iterlim)) control$iterlim  <-  1000
+    if(is.null(control$iterlim)) control$iterlim  <- 1000L
     if(is.null(control$tol1))    control$tol1     <-  1e-5
     if(is.null(control$tol2))    control$tol2     <- 1e-10
   }
 
-  if(ifelse(!missing(data), deparse(oformula[[2]]) %in% names(data), FALSE)){
-    Y_full <- data[[deparse(oformula[[2]])]]                                    # GET THE FULL DRData OBJECT FOR INFORMATIONS (Y_full)
-  } else {                                                                      # handle responses in .GlobalEnv
-    Y_full <- get(deparse(oformula[[2]]), environment(oformula))
-    if(missing(data)){
-      data[[deparse(oformula[[2]])]] <- Y_full
-    } else {
-      assign(deparse(oformula[[2]]), Y_full)
-    }
-  } 
+#>>> get Y
+  resp_lang <- oformula[[2L]]
+  resp_char <- deparse(resp_lang)
+
+  has_data    <- !missing(data)
+  Y_in_data   <- ifelse(has_data, resp_char %in% names(data), FALSE)
+  has_DR_call <- grepl("DR_data", resp_char, fixed = TRUE)
+
+  if(Y_in_data){
+    Y_full <- data[[resp_char]]
+  } else if(has_DR_call){
+    Y_full <- eval(resp_lang)
+    warning(paste0(strwrap("The response was transformed by DR_data() on the fly. This is not recommended, consider adapting your code.", width = getOption("width") - 9L, exdent = 9L), collapse = "\n"), call. = FALSE, immediate. = TRUE)
+    oformula[[2L]] <- as.symbol("Y_full")
+  } else {
+    Y_full <- get(resp_char, environment(oformula))
+  }
+  formula <- as.Formula(oformula)
+  
   if(class(Y_full) != "DirichletRegData") stop("the response must be prepared by DR_data")
 
-  repar <- ifelse(model == "common", FALSE, TRUE)
+  if(has_data){
+    assign(resp_char, Y_full)
+  } else {
+    data[[resp_char]] <- Y_full
+  }
+
+
+
+#  if(ifelse(!missing(data), deparse(oformula[[2]]) %in% names(data), FALSE)){
+#    Y_full <- data[[deparse(oformula[[2]])]]
+#  } else {
+#    Y_full <- get(deparse(oformula[[2]]), environment(oformula))
+#    if(missing(data)){
+#      data[[deparse(oformula[[2]])]] <- Y_full
+#    } else {
+#      assign(deparse(oformula[[2]]), Y_full)
+#    }
+#  } 
+#  if(class(Y_full) != "DirichletRegData") stop("the response must be prepared by DR_data")
+
+#<<< get Y
   
+  repar <- ifelse(model == "common", FALSE, TRUE)
+
   mf <- match.call(expand.dots = FALSE)
-  mf <- mf[c(1, match(c("formula", "data", "subset", "weights"), names(mf), 0))]
-  mf$formula <- as.Formula(mf$formula)
-  mf$drop.unused.levels <- TRUE
-  mf[[1]] <- as.name("model.frame")
+# if response was produced by DR_data()
+  if(has_DR_call){
+    mf[["formula"]][[2L]] <- as.symbol("Y_full")
+  }  
+  mf <- mf[c(1L, match(c("formula", "data", "subset", "weights"), names(mf), 0L))]
+  mf[["formula"]] <- as.Formula(mf[["formula"]])
+  mf[["drop.unused.levels"]] <- TRUE
+  mf[[1L]] <- as.name("model.frame")
   mf_formula <- mf
   d <- mf <- eval(mf, parent.frame())
   
   if("(weights)" %in% names(mf)) weights <- mf[["(weights)"]] else weights <- rep(1, nrow(mf))
 
   Y <- model.response(mf, "numeric")
+
+
+
 ## SUBCOMPOSITIONS
   if(missing(sub.comp)){
     sub.comp <- seq_len(ncol(Y))
@@ -88,18 +125,17 @@ if(verbosity > 0){
 ## SANITY CHECKS AND FORMULA EXPANSION
   if(length(formula)[1] != 1) stop("the left hand side of the model must contain one object prepared by DR_data()")
 
-  if(!repar){   # COMMON
+  if(!repar){
     if(length(formula)[2] == 1) for(i in 2:ncol(Y)) attr(formula, "rhs") <- lapply(seq_len(ncol(Y)), function(i) attr(formula, "rhs")[[1]])
     if(length(formula)[2] > ncol(Y)) stop("the right hand side must contain specifications for either one or all variables")
-  } else {   # ALTERNATIVE
+  } else {
     if(length(formula)[2] == 1) formula <- as.Formula(formula(formula), ~ 1)
     if(length(formula)[2] > 2) stop("the right hand side can only contain one or two specifications in the alternative parametrization")
   }
 
 
-
   if(!repar){
-    X.mats <- lapply(seq_len(ncol(Y)), function(i) model.matrix(terms(formula, data=data, rhs=i), mf) )
+    X.mats <- lapply(seq_len(ncol(Y)), function(i){ model.matrix(terms(formula, data=data, rhs=i), mf) })
     Z.mat <- NULL
     n.vars <- unlist(lapply(X.mats, ncol))
   } else {
@@ -108,14 +144,15 @@ if(verbosity > 0){
     n.vars <- c(unlist(lapply(X.mats, ncol))[-1], ncol(Z.mat))
   }
   
-  
+#browser()
+
 
 if(verbosity > 0){
   cat("- COMPUTING STARTING VALUES\n")
   if(interactive()) flush.console()
 }
 
-  # compute starting values
+
   if(is.null(control$sv)){
     starting.vals <- get_starting_values(Y=Y, X.mats=lapply(X.mats, as.matrix),
                        Z.mat={if(repar) as.matrix(Z.mat) else Z.mat},
@@ -132,7 +169,7 @@ if(verbosity > 0){
   if(interactive()) flush.console()
 }
 
-  # fit and store the results
+
   fit.res <- DirichReg_fit(Y     = Y,
                            X     = lapply(X.mats, as.matrix),
                            Z     = as.matrix(Z.mat),
@@ -157,7 +194,7 @@ if(verbosity > 0){
   }
 
 
-  # FITTED VALUES
+
   if(repar){
 
     B <- matrix(0, nrow=n.vars[1], ncol=n.dim)
@@ -192,9 +229,9 @@ if(verbosity > 0){
                    error=function(x){ return(matrix(NA, nrow=nrow(hessian), ncol=ncol(hessian))) },
                    silent=TRUE)
                    
-  if(!repar){   ## COMMON
+  if(!repar){
     coefnames <- apply(cbind(rep(varnames, n.vars), unlist(lapply(X.mats, colnames))), 1, paste, collapse=":")
-  } else {   ## ALTERNATIVE
+  } else {
     coefnames <- apply(cbind(rep(c(varnames[-base], "(phi)"), n.vars), c(unlist(lapply(X.mats, colnames)[-base]), colnames(Z.mat))), 1, paste, collapse=":")
   }
 
@@ -205,37 +242,37 @@ if(verbosity > 0){
 
   se <- if(!any(is.na(vcov))) sqrt(diag(vcov)) else rep(NA,length(coefs))
   
-  res <- list(call=this.call,
-              parametrization=parametrization,
-              varnames=varnames,
-              n.vars=n.vars,
-              dims=length(varnames),
-              Y=Y,
-              X=X.mats,
-              Z=Z.mat,
-              subset=if(missing(subset)) NULL else subset,
-              sub.comp=sub.comp,
-              base=base,
-              weights=weights,
-              orig.resp=Y_full,
-              data=data,
-              d=d,
-              formula=formula,
-              mf_formula=mf_formula,
-              npar=length(coefs),
-              coefficients=coefs,
-              coefnames=shortnames,
-              fitted.values=list(mu=MU,phi=PHI,alpha=ALPHA),
-              logLik=fit.res$maximum,
-              vcov=vcov,
-              hessian=hessian,
-              se=se,
-              optimization=list(convergence=fit.res$code,
-                                iterations=fit.res$iterations,
-                                bfgs.it=fit.res$bfgs.it,
-                                message=fit.res$message))
-              
-  class(res) <- "DirichletRegModel"
+  res <- structure(list(
+    call            = this.call,
+    parametrization = parametrization,
+    varnames        = varnames,
+    n.vars          = n.vars,
+    dims            = length(varnames),
+    Y               = Y,
+    X               = X.mats,
+    Z               = Z.mat,
+    sub.comp        = sub.comp,
+    base            = base,
+    weights         = weights,
+    orig.resp       = Y_full,
+    data            = data,
+    d               = d,
+    formula         = formula,
+    mf_formula      = mf_formula,
+    npar            = length(coefs),
+    coefficients    = coefs,
+    coefnames       = shortnames,
+    fitted.values   = list(mu=MU,phi=PHI,alpha=ALPHA),
+    logLik          = fit.res$maximum,
+    vcov            = vcov,
+    hessian         = hessian,
+    se              = se,
+    optimization    = list(convergence = fit.res$code,
+                          iterations   = fit.res$iterations,
+                          bfgs.it      = fit.res$bfgs.it,
+                          message      = fit.res$message)
+  ),
+  class = "DirichletRegModel")
               
   return(res)
 

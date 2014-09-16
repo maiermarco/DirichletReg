@@ -41,9 +41,7 @@ ddirichlet_R(x, alpha, log = FALSE, sum.up = FALSE)
 \item{ddirichlet}{returns a vector of densities (if \code{sum.up = FALSE}) or the (log-)likelihood (if \code{sum.up = TRUE}) for the given data and alphas.}
 \item{ddirichlet_R}{as \code{ddirichlet}, only implemented purely in R.}
 }
-\author{
-  Marco Maier
-}
+\author{Marco J. Maier}
 \examples{
 X1 <- rdirichlet(100, c(5, 5, 10))
 

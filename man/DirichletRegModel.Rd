@@ -21,31 +21,31 @@
   Furthermore \code{logLik} extracts the log-likelihood of the model and \code{vcov} extracts the covariance matrix of the parameter estimates.
 }
 \usage{
-\method{print}{DirichletRegModel}(x, digits = max(3, getOption("digits") - 3), \ldots)
+\method{print}{DirichletRegModel}(x, digits = max(3, getOption("digits") - 3), \dots)
 
-\method{summary}{DirichletRegModel}(object, \ldots)
+\method{summary}{DirichletRegModel}(object, \dots)
 
-\method{fitted}{DirichletRegModel}(object, mu = TRUE, alpha = FALSE, phi = FALSE, \ldots)
+\method{fitted}{DirichletRegModel}(object, mu = TRUE, alpha = FALSE, phi = FALSE, \dots)
 
-\method{predict}{DirichletRegModel}(object, newdata, mu = TRUE, alpha = FALSE, phi = FALSE, \ldots)
+\method{predict}{DirichletRegModel}(object, newdata, mu = TRUE, alpha = FALSE, phi = FALSE, \dots)
 
-\method{residuals}{DirichletRegModel}(object, type = c("standardized", "composite", "raw"), \ldots)
+\method{residuals}{DirichletRegModel}(object, type = c("standardized", "composite", "raw"), \dots)
 
-\method{confint}{DirichletRegModel}(object, parm, level, \ldots, type=c("all", "beta", "gamma"), exp = FALSE)
+\method{confint}{DirichletRegModel}(object, parm, level, \dots, type=c("all", "beta", "gamma"), exp = FALSE)
 
-\method{print}{DirichletRegConfint}(x, digits = 3, \ldots)
+\method{print}{DirichletRegConfint}(x, digits = 3, \dots)
 
-\method{logLik}{DirichletRegModel}(object, \ldots)
+\method{logLik}{DirichletRegModel}(object, \dots)
 
-\method{AIC}{DirichletRegModel}(object, \ldots, k = 2)
+\method{AIC}{DirichletRegModel}(object, \dots, k = 2)
 
-\method{BIC}{DirichletRegModel}(object, \ldots)
+\method{BIC}{DirichletRegModel}(object, \dots)
 
-\method{nobs}{DirichletRegModel}(object, \ldots)
+\method{nobs}{DirichletRegModel}(object, \dots)
 
-\method{vcov}{DirichletRegModel}(object, \ldots)
+\method{vcov}{DirichletRegModel}(object, \dots)
 
-\method{update}{DirichletRegModel}(object, formula., \ldots, evaluate = TRUE)
+\method{update}{DirichletRegModel}(object, formula., \dots, evaluate = TRUE)
 }
 \arguments{
   \item{x}{an object of class \code{DirichletRegModel}}
@@ -64,12 +64,12 @@
   \item{digits}{the number of digits in the output}
   \item{formula.}{the new formula to be updated, see \code{\link[Formula]{update.Formula}}}
   \item{evaluate}{if \code{FALSE} the updated call will be returned, but not evaluated}
-  \item{\ldots}{further arguments}
+  \item{\dots}{further arguments}
 }
 %\details{
 %.
 %}
-\author{Marco Maier}
+\author{Marco J. Maier}
 \examples{
   ALake <- ArcticLake
   ALake$AL <- DR_data(ArcticLake[, 1:3])
