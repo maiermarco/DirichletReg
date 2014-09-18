@@ -1,4 +1,4 @@
-context("Arctic Lake Data Tests")
+cat("=== Arctic Lake Data Tests =====================================================\n")
 
 context("AL: Original Data")
 
@@ -14,12 +14,13 @@ context("AL: Transformation")
 AL <- ArcticLake[, 4, drop=FALSE]
 
 test_that("Arctic Lake - Data Transformation", {
-  expect_identical(list(dim(AL), class(AL)), list(c(39L, 1L), "data.frame"))
+  expect_identical(dim(AL), c(39L, 1L))
+  expect_identical(class(AL), "data.frame")
   expect_warning(AL$Y <<- DR_data(ArcticLake[, 1:3]), ".*normalization forced.*")
-  expect_true(all(rowSums(AL$Y) == 1))
+  expect_equal(unname(rowSums(AL$Y)), rep(1.0, 39L))
 })
 
-context("AL: Common Model Checks - Mathematica")
+cat("\n--- Common Model Checks - DirichletReg vs. Mathematica")
 
 context("AL: Common - Null Model ( Y ~ 1 )")
 
@@ -36,9 +37,14 @@ resC1_mathematica <- list(
   HESSIAN = matrix(c(-55.10500066979587876697, 22.20582474400168179970, 12.43883086502252973858, 22.20582474400168179970, -62.21464112109048121996, 28.23926138550186271570, 12.43883086502252973858, 28.23926138550186271570, -58.89205189102017582447), 3L),
   VCOV    = matrix(c(0.02764425670687651061389, 0.01599938109376821138710, 0.01351070157568414676500, 0.01599938109376821138710, 0.02980478755725261791073, 0.01767095470989548347560, 0.01351070157568414676500, 0.01767095470989548347560, 0.02830725008251964840603),3)
 )
-  
+
 test_that("Arctic Lake - Data Transformation", {
   expect_equal(resC1_mathematica$MLE, resC1$logLik)
   expect_equal(resC1_mathematica$DEV, -2.0*resC1$logLik)
-  expect_equal(resC1_mathematica$COEFS, resC1$coefficients, check.attributes = FALSE)
+  expect_equal(resC1_mathematica$COEFS, unname(resC1$coefficients), check.attributes = FALSE)
+  expect_equal(resC1_mathematica$SE, unname(resC1$se), check.attributes = FALSE)
+  expect_equal(resC1_mathematica$Z, unname(resC1$coefficients / resC1$se), check.attributes = FALSE)
+  expect_equal(resC1_mathematica$P, 2*pnorm(-abs(unname(resC1$coefficients / resC1$se))), check.attributes = FALSE)
+  expect_equal(resC1_mathematica$HESSIAN, unname(resC1$hessian), check.attributes = FALSE)
+  expect_equal(resC1_mathematica$VCOV, unname(resC1$vcov), check.attributes = FALSE)
 })
