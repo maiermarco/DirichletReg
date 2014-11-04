@@ -3,7 +3,7 @@ AIC.DirichletRegModel <- function(object, ..., k = 2){
 }
 
 nobs.DirichletRegModel <- function(object, ...){
-  nrow(object$X[[1]])
+  sum(object$weights)
 }
 
 BIC.DirichletRegModel <- function(object, ...){

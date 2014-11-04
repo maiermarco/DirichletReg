@@ -1,0 +1,10 @@
+.*.dumptruck
+src\/.*\.R$
+inst/NEWSRd2txt\.R
+.*\.aux$
+.*\.log$
+.*\.bat$
+.*\.out$
+.*\.nb$
+.*\.o$
+.*\.dll$

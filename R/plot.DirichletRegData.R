@@ -3,23 +3,23 @@ get_or_else <- function(what, or_else, where) if(any(what %in% names(where))) wh
 
 
 plot.DirichletRegData <- function(x,
-                                  dims,
-                                  ticks=TRUE,
-                                  ref.lines=NULL,
+                                  dims,   
+                                  ticks=TRUE,   
+                                  ref.lines=NULL, 
                                   dim.labels,
                                   a2d=list(
                                     colored=TRUE,
-                                    c.grid=TRUE,
-                                    col.scheme=c("dims", "entropy"),
-                                    entropy.contours=FALSE,
-                                    entropy.colors=FALSE
+                                    c.grid=TRUE,   
+                                    col.scheme=c("dims", "entropy"),   
+                                    entropy.contours=FALSE,   
+                                    entropy.colors=FALSE   
                                   ),
-                                  a3d=list(rgl=TRUE, ...),
+                                  a3d=list(rgl=TRUE, ...),  
                                   rug=TRUE,
                                   reset_par=TRUE,
                                   ...){
                                   
-## ADAPT TO THE NEW DATA STRUCTURE
+
   full_obs <- nrow(x)
   if(any(is.na(x))){
     include <- which(rowSums(is.na(x)) == 0)
@@ -109,7 +109,7 @@ plot.DirichletRegData <- function(x,
     if(!all(is.null(c(.xlim,.ylim)))) warning("xlim and ylim not useable in a ternary plot. arguments ignored.")
     if(is.null(.main)) .main <- "Ternary Plot"
 
-    if(reset_par){
+    if(reset_par){ 
       old.par <- par(no.readonly = TRUE)
       on.exit(par(old.par))
     }

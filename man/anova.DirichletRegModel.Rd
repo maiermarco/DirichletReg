@@ -3,7 +3,7 @@
 \alias{anova.DirichletRegModel}
 \title{Compare Dirichlet Regression Models using an LRT}
 \description{
-This function allows for pairwise tests of Dirichlet regression models using a likelihood ratio test (LRT).
+This function allows for pairwise tests of Dirichlet regression models using a likelihood ratio test (\acronym{LRT}).
 }
 \usage{
 \method{anova}{DirichletRegModel}(object, \dots, sorted = FALSE)

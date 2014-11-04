@@ -12,8 +12,9 @@
 \alias{vcov.DirichletRegModel}
 \alias{update.DirichletRegModel}
 \alias{confint.DirichletRegModel}
+\alias{drop1.DirichletRegModel}
 \alias{print.DirichletRegConfint}
-\title{Methods for the class \code{DirichletRegModel}}
+\title{Methods for the Class \code{DirichletRegModel}}
 \description{
   These are available methods for the results of Dirichlet regression models and objects of class \code{DirichletRegModel}.
   These methods contain functions for \code{print} and \code{summary} of the data, generate \code{fitted} values and predicting new values using \code{predict}.
@@ -46,6 +47,8 @@
 \method{vcov}{DirichletRegModel}(object, \dots)
 
 \method{update}{DirichletRegModel}(object, formula., \dots, evaluate = TRUE)
+
+\method{drop1}{DirichletRegModel}(object, scope, test = c("LRT", "none"), k = 2, \dots)
 }
 \arguments{
   \item{x}{an object of class \code{DirichletRegModel}}
@@ -64,6 +67,8 @@
   \item{digits}{the number of digits in the output}
   \item{formula.}{the new formula to be updated, see \code{\link[Formula]{update.Formula}}}
   \item{evaluate}{if \code{FALSE} the updated call will be returned, but not evaluated}
+  \item{scope}{defines the scope of variables to be dropped, see \code{\link[stats]{drop1}}}
+  \item{test}{defines the type of test for \code{drop1}}
   \item{\dots}{further arguments}
 }
 %\details{
@@ -71,16 +76,25 @@
 %}
 \author{Marco J. Maier}
 \examples{
-  ALake <- ArcticLake
-  ALake$AL <- DR_data(ArcticLake[, 1:3])
-  mod1 <- DirichReg(AL ~ depth + I(depth^2) | depth, data = ALake, model="alternative")
-  update(mod1, . ~ . | . + I(depth^2), evaluate = FALSE)
-  mod1
-  summary(mod1)
-  head(fitted(mod1))
-  head(predict(mod1))
-  head(residuals(mod1))
-  confint(mod1)
-  logLik(mod1)
-  vcov(mod1)
+ALake <- ArcticLake
+ALake$AL <- DR_data(ArcticLake[, 1:3])
+
+mod1 <- DirichReg(AL ~ depth + I(depth^2) | depth, data = ALake, model="alternative")
+
+update(mod1, . ~ . | . + I(depth^2), evaluate = FALSE)
+mod1
+
+summary(mod1)
+
+head(fitted(mod1))
+
+predict(mod1, newdata = data.frame("depth" = seq(10, 100, 10)))
+
+head(residuals(mod1))
+
+confint(mod1)
+confint(mod1, exp = TRUE)
+
+logLik(mod1)
+round(vcov(mod1), 5)
 }

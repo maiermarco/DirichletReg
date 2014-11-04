@@ -1,5 +1,34 @@
 News for Package 'DirichletReg'
 
+Changes in Version 0.6-0:
+
+  • All likelihood and gradient functions are now written in C (all
+    called via '.Call()' now instead of '.C()') which leads to a
+    considerable gain in speed.
+
+  • A 'drop1' method for Dirichlet regression models was added.  As it
+    is still experimental and will probably change, use it with care.
+    Options such as 'scope' will be added in one of the next releases.
+
+  • Fixed a bug in the 'print' method for confidence intervals and one
+    in 'confint.DirichletRegModel()'.
+
+  • Expanded the 'testthat' check- and test-suite.
+
+  • Known issue: If you have collinear (aliased) terms, the estimation
+    will fail.  This will be handled automatically in subsequent
+    releases, but for now, please remove the respective terms.  If you
+    fit a model and it says something like:
+    
+    Error in prepareFixed(start = start, activePar = NULL, fixed = fixed) :
+    At least one parameter must not be fixed using argument 'fixed'
+    you most likely have collinear terms or "empty" combinations of
+    interaction terms.
+
+Changes in Version 0.5-2:
+
+  • Fixed checking functions in 'tests/testthat'.
+
 Changes in Version 0.5-1:
 
   • Fixed a bug when using the 'subset' argument.

@@ -53,7 +53,7 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
       ll <- ncol(ctab[[cc]])
       ind <- c(rev(seq(2, ll, by=2)), seq(1, ll, by=2))
       
-      ctab[[cc]] <- ctab[[cc]][,ind]
+      ctab[[cc]] <- ctab[[cc]][ , ind, drop=FALSE ]
     }
 
   }

@@ -7,7 +7,7 @@ plot_DRdata_4d <- function(x,
                            theta,
                            phi){
 
-# if( "rgl" %in% installed.packages() ) require("rgl", quietly=TRUE) else stop("you need to install the package \"rgl\". To install it now, type:\ninstall.packages(\"rgl\")")
+
 
   theta <- if(is.null(theta)) 40 else theta
   phi <- if(is.null(phi)) 25 else phi
@@ -24,13 +24,13 @@ plot_DRdata_4d <- function(x,
   coo.lab <- 2 * corners - coord.trafo(diag(4)*(.9-.1/3)+.1/3)
   lab.col <- cmyk2rgb(diag(4)+cbind(0,0,0,c(.2,.2,.2,0)))
 
-
+  
   ref_axes                 <- matrix(1/3, ncol=4, nrow=4)
   ref_axes[cbind(1:4,1:4)] <- 0
   ref_axes_xyz             <- coord.trafo(ref_axes)
 
 
-# reference points orthogonal to the planes
+
     .ref_pts <- list(xyz, xyz, xyz, xyz)
 
     .ref_pts[[1]] <- xyz + coord.trafo(cbind(1-x$Y[,1],
@@ -61,7 +61,7 @@ plot_DRdata_4d <- function(x,
                xlim=c(0,1), ylim=c(-sqrt(3)/6, sqrt(3)/2), zlim=c(-sqrt(3)/6, sqrt(3)/2),
                line_antialias=TRUE)
                
-
+    
     segments3d(x=as.vector(rbind(ref_axes_xyz[,1],corners[,1])),
                y=as.vector(rbind(ref_axes_xyz[,2],corners[,2])),
                z=as.vector(rbind(ref_axes_xyz[,3],corners[,3])), lwd=1, lty=2, col=rep(lab.col,each=2), line_antialias=TRUE)
@@ -73,9 +73,6 @@ plot_DRdata_4d <- function(x,
                t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col=paste(lab.col[i], transp, sep="", collapse=""))
     }}
 
-#    segments(.ref_xy[[2]]$x,.ref_xy[[2]]$y, t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col="#BF00BF40")
-#    segments(.ref_xy[[3]]$x,.ref_xy[[3]]$y, t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col="#BFBF0040")
-#    segments(.ref_xy[[4]]$x,.ref_xy[[4]]$y, t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col="#00000040")
 
     points3d(xyz, cex=cex, col=cmyk2rgb(x$Y), point_antialias=TRUE)
 
@@ -106,9 +103,6 @@ plot_DRdata_4d <- function(x,
                t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col=paste(lab.col[i], transp, sep="", collapse=""))
     }}
 
-#    segments(.ref_xy[[2]]$x,.ref_xy[[2]]$y, t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col="#BF00BF40")
-#    segments(.ref_xy[[3]]$x,.ref_xy[[3]]$y, t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col="#BFBF0040")
-#    segments(.ref_xy[[4]]$x,.ref_xy[[4]]$y, t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col="#00000040")
 
     points(t3d(xyz,VTrans), pch=16, cex=cex, col=cmyk2rgb(x$Y))
 
