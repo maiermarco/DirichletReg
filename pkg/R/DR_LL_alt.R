@@ -1,7 +1,7 @@
 DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
-################################################################################
-### PREPARATION
-################################################################################
+
+
+
 
   npar <- length(x)
   seq_along_d <- seq_len(d)
@@ -20,49 +20,56 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
   f <- exp(Z%*%g)
   
   A <- apply(mu, 2, function(MU){ MU*f })
+  Aplus <- rowSums(A)
+
+
+
+
+
+
+  LL <- .Call("weighted_logLL", Y, A, Aplus, dim(Y), w)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  attr(LL, "gradient") <- .Call("grad_alternative", Y, X, Z, A, eps, esum, f, npar, ncol(X), ncol(Z), dim(A), base, w)
   
 
 
-################################################################################
-### LOG-LIKELIHOOD
-################################################################################
-
-  LL <- w*(lgamma(f)-rowSums(lgamma(A))+rowSums((A-1)*log(Y)))
-  
-
-
-################################################################################
-### GRADIENT
-################################################################################
-
-  gradient <- matrix(NA, nrow=nrow(Y), ncol=npar)
-
-  i <- 0
-  for(co in seq_along_d[-base]){
-    for(iv in seq_along_k){
-      i <- i + 1
-      gradient[,i] <- w * X[,iv] * eps[,co] * f * (
-                      + rowSums(eps[,-co,drop=F]) * (log(Y[,co]) - psigamma(A[,co]))
-                      + rowSums(eps[,-co,drop=F] * (psigamma(A[,-co,drop=F]) - log(Y[,-co,drop=F])))
-                      ) / esum^2
-    }
-  }
-  
-  for(iv in 1:ncol(Z)){
-    i <- i + 1
-    gradient[,i] <- w * Z[,iv] * f * (
-                    + esum * psigamma(f)
-                    + rowSums( eps * (log(Y) - psigamma(A)) )
-                    ) / esum
-  }
-  
-  attr(LL, "gradient") <- gradient
 
 
 
-################################################################################
-### HESSIAN
-################################################################################
 
   if(NR){
 
@@ -82,15 +89,15 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
   
   for(hess.j in 1:npar){
     for(hess.i in 1:npar){
-      if(hess.i < hess.j) next
+      if(hess.i < hess.j) next   
     
       v1 <- hessian.ind[hess.i,2]
       v2 <- hessian.ind[hess.j,2]
       
       derv <- hessian.ind[c(hess.i, hess.j),1]
       
-
-
+      
+      
       if((derv[1] == derv[2]) & all(derv != -1)) {
         derv <- derv[1]
         nder <- seq_along_d[-derv]
@@ -112,8 +119,8 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
           - eps[,derv]^2) 
         ))
         ) / esum^4))
-
-
+      
+      
       } else if((derv[1] != derv[2]) & all(derv != -1)) {
         nder <- seq_along_d[-derv]
 
@@ -132,8 +139,8 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
           + rowSums(sapply(derv, function(i){ log(Y[,i])*(eps[,i]-rowSums(eps[,-i])) }))
           )    
         ) / esum^4))
-
-
+      
+      
       } else if(any(derv != -1) & any(derv == -1)) {
         derv <- derv[which(derv != -1)]
         nder <- seq_along_d[-derv]
@@ -153,8 +160,8 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
             })) - eps[,derv] * psigamma(A[,derv], 1) * rowSums(eps[,nder,drop=F])  
           )
         ) / esum^3))
-
-
+      
+      
       } else if(all(derv == -1)){
         hessian[hess.i, hess.j] <-
         sum(w*(Z[,v1]*Z[,v2]*f*(

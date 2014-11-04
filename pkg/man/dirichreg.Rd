@@ -23,7 +23,8 @@ DirichReg(formula, data, model = c("common", "alternative"),
 \details{
   \subsection{Formula Specification and Models}{
     \code{formula} determines the used predictors.
-    The responses \strong{must} be prepared by \code{\link{DR_data}} and can be optionally stored in the object containing all covariates which is then specified as the argument \code{data} (\dQuote{on-the-fly} processing is not implemented yet).
+    The responses \strong{must} be prepared by \code{\link{DR_data}} and can be optionally stored in the object containing all covariates which is then specified as the argument \code{data}.
+    (Although \dQuote{on-the-fly} processing of \code{DR_data} in a formula works, it is only intended for testing purposes and may be removed at any time -- use at your own risk.)
     
     There are two different parametrization (controlled by the argument \code{model}, see below):
     \itemize{

@@ -29,4 +29,4 @@ lines.DirichletRegData <- function(x, indep, groups, ..., cumul=FALSE, orig.scal
 }
 
 
-#lines.DirichletRegData(DR_data(AL), list(ArcticLake$depth,~ArcticLake$depth+I(ArcticLake$depth^2)))
+

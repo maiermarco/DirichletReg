@@ -1,6 +1,25 @@
 \name{NEWS}
 \title{News for Package \pkg{DirichletReg}}
 \encoding{UTF-8}
+\section{Changes in Version 0.6-0}{
+  \itemize{
+    \item All likelihood and gradient functions are now written in C (all called via \code{.Call()} now instead of \code{.C()}) which leads to a considerable gain in speed.
+    \item A \code{drop1} method for Dirichlet regression models was added.
+          As it is still experimental and will probably change, use it with care.
+          Options such as \code{scope} will be added in one of the next releases.
+    \item Fixed a bug in the \code{print} method for confidence intervals and one in \code{confint.DirichletRegModel()}.
+    \item Expanded the \pkg{testthat} check- and test-suite.
+    \item Known issue: If you have collinear (aliased) terms, the estimation will fail.
+          This will be handled automatically in subsequent releases, but for now, please remove the respective terms.
+          If you fit a model and it says something like: \preformatted{Error in prepareFixed(start = start, activePar = NULL, fixed = fixed) :
+At least one parameter must not be fixed using argument 'fixed'} you most likely have collinear terms or \dQuote{empty} combinations of interaction terms.
+  }
+}
+\section{Changes in Version 0.5-2}{
+  \itemize{
+    \item Fixed checking functions in \code{tests/testthat}.
+  }
+}
 \section{Changes in Version 0.5-1}{
   \itemize{
     \item Fixed a bug when using the \code{subset} argument.

@@ -16,11 +16,6 @@ plot_DRdata_3d <- function(x,
   
   par(mai=rep(0,4))
   plot(NULL,axes=FALSE,ann=FALSE, xlim=c(-.0866025,2/sqrt(3)+.0866025), ylim=c(0-.05,1+.1), asp=1)
-###
-###
-###
-###
-### FIX ENTROPY!
   if(entropy.contours){
     if(entropy.colors){
       heatcols <- c("#D9545F", "#E06951", "#E47C42", "#E88F33", "#EAA428", "#E9B62D", "#E8C842", "#E5D961", "#E2E6BD")
@@ -45,7 +40,7 @@ plot_DRdata_3d <- function(x,
     c2.grid <- cbind(toTernaryVectors(0,g.main,g.aux1), toTernaryVectors(g.aux1,g.main,0))
     c3.grid <- cbind(toTernaryVectors(0,g.aux1,g.main), toTernaryVectors(g.aux1,0,g.main))
 
-#DEBUG for(a in 0:10) abline(v=a/10, lty=2)
+
 
     if(c.grid){
       segments(c1.grid[,1],c1.grid[,2],c1.grid[,3],c1.grid[,4], lwd=.5, lty="36", col=colorz[1])
@@ -90,19 +85,19 @@ plot_DRdata_3d <- function(x,
     segments(c3.grid[,1L],
              0,
              c3.grid[,1L]-(1/120),
-             -1/(40*sqrt(3)), col=colorz[3])
+             -1/(40*sqrt(3)), col=colorz[3]) 
 
     text(c3.grid[,3L]+(1/30),c3.grid[,4],labels=rev(tk.lab),cex=.8, col=colorz[1])
     text(c1.grid[,1L]-(1/60),c1.grid[,2]+1/(20*sqrt(3)),labels=rev(tk.lab),cex=.8, col=colorz[2])
     text(c3.grid[,1L]-(1/60),-1/(20*sqrt(3)),labels=rev(tk.lab),cex=.8, col=colorz[3])
   }
 
-
+  
   text(1/sqrt(3),1+(1/15),labels=dim.labels[1],font=2, col=colorz[1])
   text(-1/(10*sqrt(3)),-1/30,labels=dim.labels[2],font=2, col=colorz[2])
   text(2/sqrt(3)+1/(10*sqrt(3)),-1/30,labels=dim.labels[3],font=2, col=colorz[3])
 
-
+  
   polygon(c(0, 2/sqrt(3), 1/sqrt(3), 0),
           c(0,         0,         1, 0))
 

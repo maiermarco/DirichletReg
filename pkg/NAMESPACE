@@ -36,5 +36,8 @@ export("BIC.DirichletRegModel")       ; S3method("BIC", "DirichletRegModel")
 export("nobs.DirichletRegModel")      ; S3method("nobs", "DirichletRegModel")
 export("confint.DirichletRegModel")   ; S3method("confint", "DirichletRegModel")
 export("update.DirichletRegModel")    ; S3method("update", "DirichletRegModel")
+export("drop1.DirichletRegModel")     ; S3method("drop1", "DirichletRegModel")
+                                        S3method("terms", "DirichletRegModel")
+                                        S3method("model.matrix", "DirichletRegModel")
 
 export("print.DirichletRegConfint") ; S3method("print", "DirichletRegConfint")
