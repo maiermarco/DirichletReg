@@ -1,5 +1,15 @@
 News for Package 'DirichletReg'
 
+Changes in Version 0.6-1:
+
+  • Re-derived gradients/Hessians, optimized C-code, and tweaked
+    computation of starting values which leads to considerably better
+    performance.
+
+  • Fixed some bugs in 'drop1'.
+
+  • Expanded 'testthat' checks.
+
 Changes in Version 0.6-0:
 
   • All likelihood and gradient functions are now written in C (all

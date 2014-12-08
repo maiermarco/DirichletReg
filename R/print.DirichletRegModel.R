@@ -1,7 +1,7 @@
 print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
-  
+
   .wd <- getOption("width")
-  
+
   names(x$coefficients) <- x$coefnames
 
   if(x$optimization$convergence == 3) cat("\n",strwrap("CAUTION! Possible convergence problems!",.wd),"\n",sep="")
@@ -14,13 +14,13 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
   writeLines(paste0("using the ", x$parametrization, " parametrization"))
 
   writeLines("")
-  
+
   writeLines(paste0("Log-likelihood: ",format(x$logLik,digits=digits)," on ",x$npar," df (", x$optimization$bfgs.it," BFGS + ",x$optimization$iterations," NR Iterations)"))
 
   writeLines("")
-      
+
   coef.ind <- cumsum(x$n.vars)
-  
+
   if(x$parametrization == "common"){
 
     for(i in 1:length(x$varnames)){
@@ -46,11 +46,11 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
         writeLines(paste0(rep("-", min(41L, .wd)),collapse=""))
         writeLines(paste0("Coefficients for variable no. ",i , ": ", x$varnames[i]))
         print.default(format(x$coefficients[printed.var:(printed.var+set.size-1)], digits=digits), print.gap=2, quote=F)
-        
+
         printed.var <- printed.var + set.size
       }
     }
-    
+
     writeLines(paste0(rep("-", min(41L, .wd)), collapse=""))
 
     writeLines("")

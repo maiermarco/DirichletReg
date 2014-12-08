@@ -6,9 +6,9 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
   if(e) cat("(exponentiated)\n\n") else cat("(original form)\n\n")
 
   ctab <- x$coefficients
-  
+
   if(repar){
-  
+
     if(e){
       for(v in 1:length(ctab)){
         ctab[[v]] <- lapply(ctab[[v]], function(l) if(is.null(l)) NULL else exp(l))
@@ -31,7 +31,7 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
       if(is.null(ctab[[1]][[cc]])) next
       ll <- ncol(ctab[[1]][[cc]])
       ind <- c(rev(seq(2, ll, by=2)), seq(1, ll, by=2))
-      
+
       ctab[[1]][[cc]] <- ctab[[1]][[cc]][,ind,drop=FALSE]
     }
     ll <- ncol(ctab[[2]][[1]])
@@ -52,12 +52,12 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
     for(cc in seq_along(x$ci[[1]])){
       ll <- ncol(ctab[[cc]])
       ind <- c(rev(seq(2, ll, by=2)), seq(1, ll, by=2))
-      
+
       ctab[[cc]] <- ctab[[cc]][ , ind, drop=FALSE ]
     }
 
   }
-  
+
 
   lo_lab <- paste(format(100*(1 - rev(x$level))/2, format="f"), "%", sep="")
   hi_lab <- paste(format(100*(x$level + (1 - x$level)/2), format="f"), "%", sep="")

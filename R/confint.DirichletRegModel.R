@@ -6,7 +6,7 @@ confint.DirichletRegModel <- function(object,
                                       exp=FALSE){
   e <- exp
   type <- match.arg(type)
-  
+
   if(any(level <= 0) | any(level >= 1)) stop("level must be in (0, 1)")
   level <- sort(level)
 
@@ -17,9 +17,9 @@ confint.DirichletRegModel <- function(object,
   se <- object$se
   names(co) <- object$coefnames
   names(se) <- object$coefnames
-  
+
   res <- list(level=level, type=type, coefficients=coef(object), se=se, e=e, repar=repar)
-  
+
   rci <- lapply(level, function(L){
     cbind(qnorm((1 - L)/2, co, se),
           qnorm(L + (1 - L)/2, co, se))
@@ -30,7 +30,7 @@ confint.DirichletRegModel <- function(object,
   if(repar){
     Xc <- rev(rev(cumsum(c(1, object$n.vars)))[-1])
     Zc <- c(1, ncol(object$Z)) + rev(Xc)[1] - 1
-    
+
     for(ll in seq_along(rci)){
       inti <- 0
       for(i in seq_len(object$dims)){
@@ -54,20 +54,20 @@ confint.DirichletRegModel <- function(object,
       }
     }
   }
-  
 
 
 
-  if(e){ 
+
+  if(e){
     for(ll in 1:length(rci)){
       for(these in which(!unlist(lapply(res$ci[[1]], is.null)))){
         res$ci[[ll]][[these]] <- exp(res$ci[[ll]][[these]])
       }
     }
   }
-  
+
   class(res) <- "DirichletRegConfint"
 
   return(res)
-  
+
 }

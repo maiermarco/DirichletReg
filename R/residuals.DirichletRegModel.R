@@ -13,14 +13,14 @@ residuals.DirichletRegModel <- function(object, type=c("standardized",
   raw.res <- Y - M
 
   type <- match.arg(type)
-  
+
   wghts <- object$weights
-    
+
   V <- apply(M, 2, function(m) (m*(1-m))/(1+f) )
 
   switch(type,
-  
-    "standardized" = {          
+
+    "standardized" = {
       res <- raw.res/sqrt(V)
     },
 
@@ -35,10 +35,10 @@ residuals.DirichletRegModel <- function(object, type=c("standardized",
     "raw" = {
       res <- raw.res
     }
-    
+
 
   )
-  
+
   return(res)
 
 }

@@ -1,6 +1,13 @@
 \name{NEWS}
 \title{News for Package \pkg{DirichletReg}}
 \encoding{UTF-8}
+\section{Changes in Version 0.6-1}{
+  \itemize{
+    \item Re-derived gradients/Hessians, optimized C-code, and tweaked computation of starting values which leads to considerably better performance.
+    \item Fixed some bugs in \code{drop1}.
+    \item Expanded \pkg{testthat} checks.
+  }
+}
 \section{Changes in Version 0.6-0}{
   \itemize{
     \item All likelihood and gradient functions are now written in C (all called via \code{.Call()} now instead of \code{.C()}) which leads to a considerable gain in speed.
