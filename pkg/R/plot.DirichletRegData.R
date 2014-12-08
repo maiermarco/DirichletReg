@@ -3,22 +3,22 @@ get_or_else <- function(what, or_else, where) if(any(what %in% names(where))) wh
 
 
 plot.DirichletRegData <- function(x,
-                                  dims,   
-                                  ticks=TRUE,   
-                                  ref.lines=NULL, 
+                                  dims,  
+                                  ticks=TRUE,  
+                                  ref.lines=NULL,
                                   dim.labels,
                                   a2d=list(
                                     colored=TRUE,
-                                    c.grid=TRUE,   
-                                    col.scheme=c("dims", "entropy"),   
-                                    entropy.contours=FALSE,   
-                                    entropy.colors=FALSE   
+                                    c.grid=TRUE,  
+                                    col.scheme=c("dims", "entropy"),  
+                                    entropy.contours=FALSE,  
+                                    entropy.colors=FALSE  
                                   ),
-                                  a3d=list(rgl=TRUE, ...),  
+                                  a3d=list(rgl=TRUE, ...), 
                                   rug=TRUE,
                                   reset_par=TRUE,
                                   ...){
-                                  
+
 
   full_obs <- nrow(x)
   if(any(is.na(x))){
@@ -39,15 +39,15 @@ plot.DirichletRegData <- function(x,
   } else {
     include <- 1:nrow(x)
   }
-  
+
   nx <- x
   x <- attributes(x)
   x$Y <- as.data.frame(unclass(nx))
   x$dim.names <- x$dimnames[[2]]
   class(x) <- "DirichletRegData"
-  
+
   if(missing(dims)) dims <- NULL
-  
+
   if(class(x) != "DirichletRegData") stop("data must be prepared by 'DR_data()'")
 
   colored <- get_or_else("colored", TRUE, a2d)
@@ -57,7 +57,7 @@ plot.DirichletRegData <- function(x,
   entropy.colors <- get_or_else("entropy.colors", FALSE, a2d)
 
   dotlist <- list(...)
-  
+
   .main <- get_or_else("main", NULL, dotlist)
   .xlim <- get_or_else("xlim", NULL, dotlist)
   .ylim <- get_or_else("ylim", NULL, dotlist)
@@ -70,9 +70,9 @@ plot.DirichletRegData <- function(x,
       theta <- get_or_else("theta", NULL, dotlist)
         phi <- get_or_else("phi", NULL, dotlist)
   ref.lines <- get_or_else("ref.lines", NULL, dotlist)
-   
+
   .marginal <- FALSE
-  
+
   if(is.null(dims)){
     if(x$dims > 4){
       x$Y         <- x$Y[, 1:4]
@@ -90,15 +90,15 @@ plot.DirichletRegData <- function(x,
     x$dim.names <- x$dim.names[dims]
     .marginal <- TRUE
   }
-  
 
- 
+
+
   if(missing(dim.labels)){
     dim.labels <- x$dim.names
   }
 
 
-  
+
 
 
   if(x$dims == 2){
@@ -109,7 +109,7 @@ plot.DirichletRegData <- function(x,
     if(!all(is.null(c(.xlim,.ylim)))) warning("xlim and ylim not useable in a ternary plot. arguments ignored.")
     if(is.null(.main)) .main <- "Ternary Plot"
 
-    if(reset_par){ 
+    if(reset_par){
       old.par <- par(no.readonly = TRUE)
       on.exit(par(old.par))
     }

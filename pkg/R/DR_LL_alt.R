@@ -1,33 +1,22 @@
-DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
+DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, bx, gi, NR){
 
 
 
 
-  npar <- length(x)
-  seq_along_d <- seq_len(d)
-  seq_along_k <- seq_len(k)
+  B <- matrix(0.0, nrow = k, ncol = d)
+  B[bi] <- x[bx]
 
-  B <- matrix(0, nrow=k, ncol=d)
-  B[cbind(rep(seq_along_k, (d-1)), rep(seq_along_d[-base], each=k))] <- x[1:((d-1)*k)]
-  
-  g <- matrix(x[((d-1)*k+1):npar], ncol=1L)
+  eps  <- apply(B, 2L, function(b){ exp(X %*% b) })
 
-  eps  <- exp(apply(B, 2L, function(b){ X%*%b }))
-  esum <- rowSums(eps)
-  
-  mu <- apply(eps, 2L, function(x){ x / esum })
+  mu <- eps / .rowSums(eps, n, d, FALSE)
 
-  f <- exp(Z%*%g)
-  
-  A <- apply(mu, 2, function(MU){ MU*f })
-  Aplus <- rowSums(A)
+  phi <- as.numeric(exp( Z %*% matrix(x[gi], ncol=1L) ))
 
+  A <- mu * phi
 
-
-
-
-
-  LL <- .Call("weighted_logLL", Y, A, Aplus, dim(Y), w)
+  digamma_A <- digamma(A)
+  trigamma_A <- trigamma(A)
+  digamma_phi <- digamma(phi)
 
 
 
@@ -35,36 +24,8 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
 
 
 
+  LL <- .Call("wght_LL_grad_alternative", logY, A, mu, phi, digamma_A, digamma_phi, X, ncolX, Z, ncolZ, n, d, base, npar, w)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  attr(LL, "gradient") <- .Call("grad_alternative", Y, X, Z, A, eps, esum, f, npar, ncol(X), ncol(Z), dim(A), base, w)
-  
 
 
 
@@ -73,113 +34,93 @@ DReg.repar <- function(x, Y, X, Z, d, k, w, base, NR){
 
   if(NR){
 
-  if(d == 2){
-    eEps <- list(0, 0)
-  } else {
-    eEps <- sapply(seq_along_d, function(i){
-              rowSums(combn(seq_along_d[-i], 2, function(a){
-                eps[,a[1]]*eps[,a[2]]
-              }))
-            }, simplify=F)
-  }
+  trigamma_phi <- trigamma(phi)
 
-  hessian <- matrix(NA, nrow=npar, ncol=npar)
+  hessian <- matrix(NA_real_, nrow=npar, ncol=npar)
 
-  hessian.ind <- rbind(as.matrix(expand.grid(seq_along_k, seq_along_d[-base])[,2:1]), cbind(-1, 1:ncol(Z)))
-  
-  for(hess.j in 1:npar){
-    for(hess.i in 1:npar){
-      if(hess.i < hess.j) next   
-    
-      v1 <- hessian.ind[hess.i,2]
-      v2 <- hessian.ind[hess.j,2]
-      
-      derv <- hessian.ind[c(hess.i, hess.j),1]
-      
-      
-      
-      if((derv[1] == derv[2]) & all(derv != -1)) {
-        derv <- derv[1]
-        nder <- seq_along_d[-derv]
+  hessian.ind <- rbind(as.matrix(expand.grid(seq_len(k), seq_len(d)[-base])[,2:1]), cbind(-1, seq_len(ncolZ)))
 
-        hessian[hess.i, hess.j] <-
-        sum(w*( -X[,v1]*X[,v2]*f*eps[,derv]*(( 
-          rowSums(eps[,nder,drop=F]*log(Y[,nder,drop=F])) - log(Y[,derv]) * rowSums(eps[,nder,drop=F])  
-        )*(
-          2 * eEps[[derv]] + rowSums(eps[,nder,drop=F]^2) - eps[,derv]^2
-        )
-      + rowSums(sapply(nder, function(i){ eps[,i,drop=F] * (
-          eps[,i,drop=F] * eps[,derv,drop=F] * f * psigamma(A[,i,drop=F], 1)
-        - psigamma(A[,i,drop=F]) * ( 2 * eEps[[derv]] + rowSums(eps[,nder,drop=F]^2) - eps[,derv,drop=F]^2 )
-        ) }))
-      + (rowSums(eps[,nder,drop=F]) * (
-          rowSums(eps[,nder,drop=F]) * eps[,derv] * f * psigamma(A[,derv], 1) + psigamma(A[,derv]) * (
-            2 * eEps[[derv]]
-          + rowSums(eps[,nder,drop=F]^2)
-          - eps[,derv]^2) 
-        ))
-        ) / esum^4))
-      
-      
-      } else if((derv[1] != derv[2]) & all(derv != -1)) {
-        nder <- seq_along_d[-derv]
+  for(hess.j in seq_len(npar)){
+    for(hess.i in seq_len(npar)){
+      if(hess.i < hess.j){ next }
 
-        hessian[hess.i, hess.j] <-
-        sum(w*(X[,v1]*X[,v2]*f*eps[,derv[1]]*eps[,derv[2]]*(
-          rowSums(sapply(derv, function(i){
-            f*eps[,i]*psigamma(A[,i], 1)*rowSums(eps[,-i])
-          }))
-        + rowSums(sapply(derv, function(i){
-            psigamma(A[,i])*(2*eEps[[i]]+rowSums(eps[,-i]^2)-eps[,i]^2)
-          }))
-        + esum * (
-            rowSums(sapply(nder, function(i){
-              -f*mu[,i]*eps[,i]*psigamma(A[,i],1) - 2*eps[,i]*psigamma(A[,i]) + 2*log(Y[,i])*eps[,i]
-            }))
-          + rowSums(sapply(derv, function(i){ log(Y[,i])*(eps[,i]-rowSums(eps[,-i])) }))
-          )    
-        ) / esum^4))
-      
-      
-      } else if(any(derv != -1) & any(derv == -1)) {
-        derv <- derv[which(derv != -1)]
-        nder <- seq_along_d[-derv]
-        
-        hessian[hess.i, hess.j] <-
-        sum(w*(Z[,v1] * X[,v2] * f * eps[,derv] * (
-          esum * (rowSums(sapply(nder, function(i){
-            eps[,i] * (psigamma(A[,i]) - log(Y[,i]))
-            }) ))
-        + (log(Y[,derv]) - psigamma(A[,derv])) * (
-            rowSums(eps[,-derv,drop=F]^2)
-          + eps[,derv] * rowSums(eps[,-derv,drop=F])
-          + 2 * eEps[[derv]]
-          )
-        + f * ( rowSums(sapply(nder, function(i){
-            eps[,i]^2*psigamma(A[,i], 1)
-            })) - eps[,derv] * psigamma(A[,derv], 1) * rowSums(eps[,nder,drop=F])  
-          )
-        ) / esum^3))
-      
-      
+      v1 <- hessian.ind[hess.i, 2L]
+      v2 <- hessian.ind[hess.j, 2L]
+
+      derv <- hessian.ind[c(hess.i, hess.j), 1L]
+      d1 <- derv[1L]
+      d2 <- derv[2L]
+
+     
+     
+      if((derv[1L] == derv[2L]) & all(derv != -1L)) {
+        derv <- derv[1L]
+
+        hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
+          sum(w*(
+            X[,v1] * X[,v2] * A[,derv] * (
+              (2.0*mu[,derv] - 1.0) * (
+                rowSums(mu[,-derv,drop=FALSE]*(logY[,-derv,drop=FALSE]-digamma_A[,-derv,drop=FALSE]))
+              - (1.0 - mu[,derv]) * (logY[,derv]-digamma_A[,derv])
+              )
+              -
+              A[,derv]*(
+                (1.0 - mu[,derv])^2 * trigamma_A[,derv]
+              + rowSums(mu[,-derv,drop=FALSE]^2*trigamma_A[,-derv,drop=FALSE])
+              )
+            )
+          ))
+     
+     
+      } else if((derv[1L] != derv[2L]) & all(derv != -1L)) {
+        hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
+          sum(w*(
+            X[,v1] * X[,v2] * mu[,d1] * mu[,d2] * phi * (
+              rowSums(
+                mu[,-derv,drop=FALSE] * (
+                  2.0 * (logY[,-derv,drop=FALSE] - digamma_A[,-derv,drop=FALSE])
+                - A[,-derv,drop=FALSE] * trigamma_A[,-derv,drop=FALSE]
+                )
+              )
+            +
+              rowSums(
+                (2*mu[,derv,drop=FALSE] - 1.0) * (logY[,derv,drop=FALSE] - digamma_A[,derv,drop=FALSE])
+              - A[,derv,drop=FALSE] * (mu[,derv,drop=FALSE] - 1.0) * trigamma_A[,derv,drop=FALSE]
+              )
+            )
+          ))
+     
+     
+      } else if(any(derv != -1L) & any(derv == -1L)) {
+        derv <- derv[which(derv != -1L)]
+
+        hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
+          sum(w*(
+            Z[,v1] * X[,v2] * A[,derv] * (
+              rowSums(mu[,-derv,drop=FALSE] * (
+                digamma_A[,-derv,drop=FALSE] + A[,-derv,drop=FALSE]*trigamma_A[,-derv,drop=FALSE] - logY[,-derv,drop=FALSE]
+              ))
+            +
+              (mu[,derv] - 1.0) * (
+                digamma_A[,derv] + A[,derv]*trigamma_A[,derv] - logY[,derv]
+              )
+            )
+          ))
+     
+     
       } else if(all(derv == -1)){
-        hessian[hess.i, hess.j] <-
-        sum(w*(Z[,v1]*Z[,v2]*f*(
-          rowSums(sapply(seq_along_d, function(i){
-            eps[,i] * ( log(Y[,i]) - psigamma(A[,i]) - A[,i]*psigamma(A[,i],1) )
-          }))
-        + esum * (psigamma(f) + f*psigamma(f,1)) 
-        )/esum))
+        hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
+          sum(w*(
+            Z[,v1] * Z[,v2] * phi * ( digamma_phi + phi * trigamma_phi + rowSums(mu * (logY - digamma_A - A * trigamma_A)) )
+          ))
       }
     }
   }
 
-  hessian <- make.symmetric(hessian)
-
   attr(LL, "hessian") <- hessian
 
   }
-  
+
   return(LL)
-  
+
 }

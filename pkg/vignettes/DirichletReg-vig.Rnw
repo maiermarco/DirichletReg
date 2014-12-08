@@ -156,9 +156,9 @@ pp <- predict(DirichReg(AL~depth+I(depth^2),AL), X)
 Code for Fig.~\ref{fig:AL.tern.fitted.two}:
 <<plot4, eval=FALSE, fig=FALSE, results=hide>>=
 plot(AL$AL, cex=.1, reset_par=FALSE)
-points(DirichletReg:::coord.trafo(AL$AL[,c(2,3,1)]), pch=16, cex=.5, col=gray(.5))
+points(toSimplex(AL$AL), pch=16, cex=.5, col=gray(.5))
 
-lines(DirichletReg:::coord.trafo(pp[,c(2,3,1)]), lwd=3, col=c("#6E1D34", "#004E42")[2])   # colorspace : rainbow_hcl(2,l=25)
+lines(toSimplex(pp), lwd=3, col=c("#6E1D34", "#004E42")[2])   # colorspace : rainbow_hcl(2,l=25)
 
 Dols <- log(cbind(ArcticLake[,2]/ArcticLake[,1],
                   ArcticLake[,3]/ArcticLake[,1]))
@@ -167,7 +167,7 @@ ols <- lm(Dols~depth+I(depth^2), ArcticLake)
 p2 <- predict(ols, X)
 p2m <- exp(cbind(0,p2[,1],p2[,2]))/rowSums(exp(cbind(0,p2[,1],p2[,2])))
 
-lines(DirichletReg:::coord.trafo(p2m[,c(2,3,1)]), lwd=3, col=c("#6E1D34", "#004E42")[1], lty="21")   # colorspace : rainbow_hcl(2,l=25)
+lines(toSimplex(p2m), lwd=3, col=c("#6E1D34", "#004E42")[1], lty="21")   # colorspace : rainbow_hcl(2,l=25)
 @
 \begin{figure}\centering%
 <<echo=FALSE, fig=TRUE>>=
@@ -178,7 +178,7 @@ lines(DirichletReg:::coord.trafo(p2m[,c(2,3,1)]), lwd=3, col=c("#6E1D34", "#004E
 \subsection{Blood samples (alternative parametrization)}
 <<>>=
 Bld <- BloodSamples
-Bld$Smp <- DR_data(Bld[, 1:4])
+Bld$Smp <- DR_data(Bld[,1:4])
 @
 <<>>=
 blood1 <- DirichReg(Smp~Disease|1, Bld, model="alternative", base=3)
@@ -216,32 +216,16 @@ Code for Fig.~\ref{fig:blood:predictions}:
 B2 <- DR_data(BloodSamples[,c(1,2,4)])
 plot(B2, cex=.001, reset_par=FALSE)
 
-div.col <- c("#023FA5", "#1A44A4", "#2749A4", "#314DA4", "#3952A5", "#4056A6", 
-"#465BA8", "#4D5FA9", "#5264AA", "#5868AC", "#5D6CAE", "#6371AF", 
-"#6875B1", "#6D79B3", "#727DB5", "#7681B7", "#7B85B8", "#8089BA", 
-"#848DBC", "#8991BE", "#8D95BF", "#9199C1", "#959CC3", "#9AA0C5", 
-"#9EA4C6", "#A2A7C8", "#A5ABCA", "#A9AECB", "#ADB1CD", "#B1B5CE", 
-"#B4B8D0", "#B8BBD1", "#BBBED2", "#BEC1D4", "#C1C4D5", "#C5C7D6", 
-"#C8CAD8", "#CBCCD9", "#CDCFDA", "#D0D1DB", "#D3D4DC", "#D5D6DD", 
-"#D7D8DE", "#D9DADF", "#DBDCE0", "#DDDEE0", "#DFDFE1", "#E0E0E1", 
-"#E1E1E2", "#E2E2E2", "#E2E2E2", "#E2E1E1", "#E2E0E0", "#E1DFDF", 
-"#E1DDDD", "#E0DBDC", "#E0D9DA", "#DFD6D8", "#DED4D6", "#DDD1D3", 
-"#DCCFD1", "#DBCCCE", "#DBC9CC", "#D9C6C9", "#D8C2C6", "#D7BFC3", 
-"#D6BCC0", "#D5B8BD", "#D4B5BA", "#D2B1B7", "#D1ADB3", "#CFA9B0", 
-"#CEA5AC", "#CCA1A9", "#CB9DA5", "#C999A2", "#C7949E", "#C6909A", 
-"#C48C96", "#C28792", "#C0828E", "#BE7E8A", "#BC7986", "#B97482", 
-"#B76F7E", "#B56A7A", "#B36576", "#B06071", "#AE5A6D", "#AB5569", 
-"#A94F64", "#A64A60", "#A3445B", "#A03E57", "#9D3752", "#9B304E", 
-"#982949", "#952045", "#911640", "#8E063B")                                     # colorspace : diverge_hcl(100)
+div.col <- colorRampPalette(c("#023FA5", "#c0c0c0", "#8E063B"))(100)
 # expected values
-temp <- (alpha/rowSums(alpha))[,c(2,4,1)]
-points(DirichletReg:::coord.trafo(temp/rowSums(temp)), pch=22, bg=div.col[c(1,100)], cex=2, lwd=.25)
+temp <- (alpha/rowSums(alpha))[,c(1,2,4)]
+points(toSimplex(temp/rowSums(temp)), pch=22, bg=div.col[c(1,100)], cex=2, lwd=.25)
 # known values   
-temp <- B2[1:30,c(2,3,1)]
-points(DirichletReg:::coord.trafo(temp/rowSums(temp)), pch=21, bg=(div.col[c(1,100)])[BloodSamples$Disease[1:30]], cex=.5, lwd=.25)
+temp <- B2[1:30,]
+points(toSimplex(temp/rowSums(temp)), pch=21, bg=(div.col[c(1,100)])[BloodSamples$Disease[1:30]], cex=.5, lwd=.25)
 # unclassified  
-temp <- B2[31:36,c(2,3,1)]
-points(DirichletReg:::coord.trafo(temp/rowSums(temp)), pch=21, bg=div.col[round(100*LP[,2],0)], cex=1, lwd=.5)
+temp <- B2[31:36,]
+points(toSimplex(temp/rowSums(temp)), pch=21, bg=div.col[round(100*LP[,2],0)], cex=1, lwd=.5)
 
 legend("topright", bty="n", legend=c("Disease A","Disease B",NA,"Expected Values"), pch=c(21,21,NA,22), pt.bg=c(div.col[c(1,100)],NA,"white"))
 @

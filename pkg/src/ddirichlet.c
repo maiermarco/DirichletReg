@@ -44,7 +44,7 @@ SEXP ddirichlet_log_vector(SEXP y, SEXP alpha, SEXP rc){
   double *p_result = REAL(result);
   
   // computing the norming constant
-  for(int col = 0; col < v_c; col++){
+  for(int col = 0; col < v_c; ++col){
     R_CheckUserInterrupt();
     a_sum += p_alpha[col];
     aux   += lgammafn(p_alpha[col]);
@@ -52,10 +52,10 @@ SEXP ddirichlet_log_vector(SEXP y, SEXP alpha, SEXP rc){
   norm_const = lgammafn(a_sum) - aux;
 
   // computing densities
-  for(int row = 0; row < v_r; row++){
+  for(int row = 0; row < v_r; ++row){
     R_CheckUserInterrupt();
     p_result[row] = 0.0;
-    for(int col = 0; col < v_c; col++){
+    for(int col = 0; col < v_c; ++col){
       p_result[row] += ( p_alpha[col] - 1.0 ) * log( p_y[row + col * v_r] );
     }
     p_result[row] += norm_const;
@@ -95,15 +95,17 @@ SEXP ddirichlet_log_matrix(SEXP y, SEXP alpha, SEXP rc, SEXP alpha_rc){
   SEXP result = PROTECT(allocVector(REALSXP, v_r));
   double *p_result = REAL(result);
 
-  double a_sum;
+  double a_sum = 0.0;
+  int mat_el = 0;
 
-  for(int row = 0; row < v_r; row++){
+  for(int row = 0; row < v_r; ++row){
     R_CheckUserInterrupt();
     a_sum = 0.0;
     p_result[row] = 0.0;
-    for(int col = 0; col < v_c; col++){
-      a_sum += p_alpha[row + col * v_r];
-      p_result[row] += ( p_alpha[row + col * v_r] - 1.0 ) * log( p_y[row + col * v_r] ) - lgammafn( p_alpha[row + col * v_r] );
+    for(int col = 0; col < v_c; ++col){
+      mat_el = row + col * v_r;
+      a_sum += p_alpha[mat_el];
+      p_result[row] += ( p_alpha[mat_el] - 1.0 ) * log( p_y[mat_el] ) - lgammafn( p_alpha[mat_el] );
     }
     p_result[row] += lgammafn(a_sum);
   }

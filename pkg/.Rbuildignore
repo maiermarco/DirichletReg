@@ -1,5 +1,6 @@
 .*.dumptruck
 src\/.*\.R$
+src\/altlasten.*
 inst/NEWSRd2txt\.R
 .*\.aux$
 .*\.log$
@@ -8,3 +9,5 @@ inst/NEWSRd2txt\.R
 .*\.nb$
 .*\.o$
 .*\.dll$
+.*\.bak$
+tests\/testthat\/\_res.*\.R$

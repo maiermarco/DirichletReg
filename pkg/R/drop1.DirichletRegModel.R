@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 safe_pchisq <- function(q, df, ...){
   df[df <= 0] <- NA
   pchisq(q = q, df = df, ...)
@@ -43,6 +37,7 @@ drop1.DirichletRegModel <- function(
     if(interactive()) writeLines(paste(rep("-", getOption("width")), collapse = ""))
   }
 
+
   if(!missing(scope)) stop("scope not implemented yet.")
 
   if(!missing(test) && test == "Chisq"){
@@ -52,12 +47,12 @@ drop1.DirichletRegModel <- function(
   } else if(missing(test)){
     test <- "LRT"
   }
-  
+
   x <- model.matrix(object)
   n <- nobs(object)
-  
+
   Formula <- as.Formula(formula(object))
-  
+
   if(object$parametrization == "common"){
     asgn <- lapply(x[["X"]], attr, which = "assign")
     tl <- lapply(seq_len(length(Formula)[2L]), function(f_index){ attr(terms(Formula, rhs = f_index), "term.labels") })
@@ -71,8 +66,8 @@ drop1.DirichletRegModel <- function(
       attr(terms(Formula, rhs = 2L), "term.labels")
     )
   }
-  
-  
+
+ 
   if(missing(scope)){
     scope <- lapply(seq_along(tl), function(f_index){
       drop.scope(formula(Formula, rhs = f_index))
@@ -90,33 +85,35 @@ stop("not implemented yet!")
   ndrop <- lapply(seq_along(scope), function(i){ match(scope[[i]], tl[[i]]) })
 
 
-  
+ 
   if(object$parametrization == "common"){
     names(asgn) <- names(tl) <- names(scope) <- names(ndrop) <- attr(object$Y, "dim.names")
   } else {
     names(asgn) <- names(tl) <- names(scope) <- names(ndrop) <- c("Mean", "Precision")
   }
 
-  
+
   ns <- lapply(scope, length)
   chisq <- -2*object$logLik
   dfs <- lapply(ns, numeric)
   dev <- lapply(ns, numeric)
-  
+
 
 
 
 
   for(comp in seq_along(ns)){
     for(subterm in seq_len(ns[[comp]])){
-      z <- update(object, 
+
+      z <- update(object,
         as.formula(paste0(".~", paste(rep(".|", comp - 1L), collapse=""), ".-", (tl[[comp]])[(ndrop[[comp]][subterm])]))
       )
       dfs[[comp]][subterm] <- z$npar
       dev[[comp]][subterm] <- -2*z$logLik
+
     }
   }
-  
+
 
   if(object$parametrization == "alternative"){
     if(length(scope[[1L]]) == 0L){ scope[1L] <- list(NULL) } else { scope[[1L]] <- paste("Mean:", scope[[1L]]) }
@@ -126,7 +123,7 @@ stop("not implemented yet!")
       if(length(scope[[i]]) == 0L){ scope[i] <- list(NULL) } else { scope[[i]] <- paste0(names(asgn)[i], ": ", scope[[i]]) }
     }
   } else { stop("unexpected error!") }
-  
+
   scope <- c("<none>",    unlist(scope))
   dfs   <- c(object$npar, unlist(dfs))
   dev   <- c(chisq,       unlist(dev))
@@ -138,7 +135,7 @@ stop("not implemented yet!")
 
   aod <- data.frame(Df = dfs, Deviance = dev, AIC = aic, row.names = scope, check.names = FALSE)
   if(all(is.na(aic))) aod <- aod[, -3]
-  
+
   if(test == "LRT"){
       dev <- pmax(0, dev - dev[1L])
       dev[1L] <- NA
@@ -149,11 +146,13 @@ stop("not implemented yet!")
       aod[, "Pr(>Chi)"] <- dev
   }
   heading <- c("Single term deletions", "\nModel:", deparse(formula(object)))
-  
+
   class(aod) <- c("anova", "data.frame")
-  
+
   attr(aod, "heading") <- heading
-  
+
   return(aod)
-  
+
 }
+
+

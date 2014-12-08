@@ -84,6 +84,8 @@ mod1 <- DirichReg(AL ~ depth + I(depth^2) | depth, data = ALake, model="alternat
 update(mod1, . ~ . | . + I(depth^2), evaluate = FALSE)
 mod1
 
+drop1(mod1)   ### issues a caveat when used for the first time in an R session
+
 summary(mod1)
 
 head(fitted(mod1))
