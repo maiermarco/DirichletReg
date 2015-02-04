@@ -94,7 +94,7 @@ plot_DRdata_3d <- function(x,
 
     text(c3.grid[,3L]+(1/30),c3.grid[,4],labels=rev(tk.lab),cex=.8, col=colorz[1])
     text(c1.grid[,1L]-(1/60),c1.grid[,2]+1/(20*sqrt(3)),labels=rev(tk.lab),cex=.8, col=colorz[2])
-    text(c3.grid[,1L]-(1/60),-1/(20*sqrt(3)),labels=rev(tk.lab),cex=.8, col=colorz[3])
+    text(c3.grid[,1L]-(1/60),-1/(20*sqrt(3)),labels=tk.lab,cex=.8, col=colorz[3])
   }
 
  
