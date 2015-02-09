@@ -1,8 +1,9 @@
 Package: DirichletReg
 Type: Package
-Version: 0.6-1
-Date: 2014-12-12
+Version: 0.6-2
+Date: 2015-02-09
 Title: Dirichlet Regression in R
+Description: Implements Dirichlet regression models in R.
 Authors@R: person(given  = c("Marco", "Johannes"),
                   family = "Maier",
                   email  = "marco.maier@wu.ac.at",
@@ -11,7 +12,6 @@ Encoding: UTF-8
 Depends: R (>= 3.0.0), Formula, rgl
 Imports: stats, graphics, methods, maxLik
 Suggests: testthat
-Description: Implements the Dirichlet Regression in R
 License: GPL (>= 2)
 URL: http://dirichletreg.r-forge.r-project.org/
   http://r-forge.r-project.org/projects/dirichletreg/

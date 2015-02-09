@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package \pkg{DirichletReg}}
 \encoding{UTF-8}
+\section{Changes in Version 0.6-2}{
+  \itemize{
+    \item Fixed an error in the ternary plot (bottom axis tick labels were printed in reversed order; pointed out by Emilio A. Laca).
+		\item Changed the \code{Description} field to eliminate the note \dQuote{Malformed Description field: should contain one or more complete sentences.} when checking the package.
+  }
+}
 \section{Changes in Version 0.6-1}{
   \itemize{
     \item Re-derived gradients/Hessians, optimized C-code, and tweaked computation of starting values which leads to considerably better performance.

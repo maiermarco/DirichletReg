@@ -1,7 +1,7 @@
 .*.dumptruck
 src\/.*\.R$
 src\/altlasten.*
-inst/NEWSRd2txt\.R
+inst\/NEWSRd2txt\.R
 .*\.aux$
 .*\.log$
 .*\.bat$
