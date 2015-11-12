@@ -4,6 +4,7 @@
 \section{Changes in Version 0.6-2}{
   \itemize{
     \item Fixed an error in the ternary plot (bottom axis tick labels were printed in reversed order; pointed out by Emilio A. Laca).
+		\item Imports functions from default packages, as required by the new CRAN-check.
 		\item Changed the \code{Description} field to eliminate the note \dQuote{Malformed Description field: should contain one or more complete sentences.} when checking the package.
   }
 }
