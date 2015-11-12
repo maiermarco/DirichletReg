@@ -1,7 +1,7 @@
 Package: DirichletReg
 Type: Package
-Version: 0.6-2
-Date: 2015-02-09
+Version: 0.6-3
+Date: 2015-11-12
 Title: Dirichlet Regression in R
 Description: Implements Dirichlet regression models in R.
 Authors@R: person(given  = c("Marco", "Johannes"),

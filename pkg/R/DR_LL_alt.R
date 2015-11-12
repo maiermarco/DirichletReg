@@ -1,7 +1,7 @@
-DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, bx, gi, NR){
-
-
-
+DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, bx, gi, NR, h_dims, h_vars){
+################################################################################
+### PREPARATION ################################################################
+################################################################################
 
   B <- matrix(0.0, nrow = k, ncol = d)
   B[bi] <- x[bx]
@@ -20,17 +20,17 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
 
 
 
-
-
-
+################################################################################
+### LOG-LIKELIHOOD & GRADIENT ##################################################
+################################################################################
 
   LL <- .Call("wght_LL_grad_alternative", logY, A, mu, phi, digamma_A, digamma_phi, X, ncolX, Z, ncolZ, n, d, base, npar, w)
 
 
 
-
-
-
+################################################################################
+### HESSIAN ####################################################################
+################################################################################
 
   if(NR){
 
@@ -38,21 +38,19 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
 
   hessian <- matrix(NA_real_, nrow=npar, ncol=npar)
 
-  hessian.ind <- rbind(as.matrix(expand.grid(seq_len(k), seq_len(d)[-base])[,2:1]), cbind(-1, seq_len(ncolZ)))
-
   for(hess.j in seq_len(npar)){
     for(hess.i in seq_len(npar)){
       if(hess.i < hess.j){ next }
 
-      v1 <- hessian.ind[hess.i, 2L]
-      v2 <- hessian.ind[hess.j, 2L]
+      v1 <- h_vars[hess.i]
+      v2 <- h_vars[hess.j]
 
-      derv <- hessian.ind[c(hess.i, hess.j), 1L]
+      derv <- h_dims[c(hess.i, hess.j)]
       d1 <- derv[1L]
       d2 <- derv[2L]
 
-     
-     
+      ##########################################################################
+      ############################################### BETAs - SAME RESPONSES ###
       if((derv[1L] == derv[2L]) & all(derv != -1L)) {
         derv <- derv[1L]
 
@@ -70,8 +68,8 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
               )
             )
           ))
-     
-     
+      ##########################################################################
+      ########################################## BETAs - DIFFERENT RESPONSES ###
       } else if((derv[1L] != derv[2L]) & all(derv != -1L)) {
         hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
           sum(w*(
@@ -89,8 +87,8 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
               )
             )
           ))
-     
-     
+      ##########################################################################
+      ######################################################### BETA / GAMMA ###
       } else if(any(derv != -1L) & any(derv == -1L)) {
         derv <- derv[which(derv != -1L)]
 
@@ -106,8 +104,8 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
               )
             )
           ))
-     
-     
+      ##########################################################################
+      ############################################################### GAMMAs ###
       } else if(all(derv == -1)){
         hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
           sum(w*(

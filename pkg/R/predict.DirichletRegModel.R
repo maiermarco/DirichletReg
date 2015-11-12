@@ -6,16 +6,16 @@ predict.DirichletRegModel <- function(object, newdata, mu = TRUE, alpha = FALSE,
   dims  <- ncol(object$Y)
 
   model_formula <- object$mf_formula
-  model_formula$formula <- as.Formula(deparse(model_formula$formula))
+  model_formula$formula <- as.Formula(deparse(model_formula$formula)) # circumvent problems with Formula objects
   model_formula$data <- as.name("newdata")
   model_formula$lhs <- 0
 
- 
+  # include intercept for repar-model w/o phi block
   if(repar && (length(model_formula$formula)[2L] == 1L)){
     model_formula$formula <- as.Formula(paste0(deparse(model_formula$formula), " | 1"))
   }
 
- 
+  # fill all rhs blocks if only one is specified
   if(!repar && (length(model_formula$formula)[2L] == 1L)){
     model_formula$formula <- as.Formula( paste0(deparse(model_formula$formula),
       " | ", paste0(rep(deparse(model_formula$formula[[3]]), dims - 1L), collapse=" | ")) )
@@ -24,10 +24,10 @@ predict.DirichletRegModel <- function(object, newdata, mu = TRUE, alpha = FALSE,
   model_formula[["drop.unused.levels"]] <- FALSE
   mf <- eval(model_formula)
 
-  if(!repar){
+  if(!repar){ ## COMMON
     X <- lapply(seq_len(dims), function(i){ model.matrix(Formula(terms(model_formula$formula, data=newdata, rhs=i)), mf) })
     Z <- NULL
-  } else {
+  } else { ## ALTERNATIVE
     X <- model.matrix(Formula(terms(model_formula$formula, data=newdata, rhs=1L)), mf)
     Z <- model.matrix(Formula(terms(model_formula$formula, data=newdata, rhs=2L)), mf)
   }

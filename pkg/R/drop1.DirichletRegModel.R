@@ -1,4 +1,4 @@
-
+### from stats for drop1
 safe_pchisq <- function(q, df, ...){
   df[df <= 0] <- NA
   pchisq(q = q, df = df, ...)
@@ -21,7 +21,7 @@ drop1.DirichletRegModel <- function(
   ...
 ){
 
-
+### print caveat
   if(!exists("._DirichletReg_drop1_warning", where = ".GlobalEnv")){
     .GlobalEnv$._DirichletReg_drop1_warning <- TRUE
 
@@ -36,7 +36,7 @@ drop1.DirichletRegModel <- function(
 
     if(interactive()) writeLines(paste(rep("-", getOption("width")), collapse = ""))
   }
-
+###
 
   if(!missing(scope)) stop("scope not implemented yet.")
 
@@ -67,7 +67,7 @@ drop1.DirichletRegModel <- function(
     )
   }
 
- 
+  # define scope for variables to drop
   if(missing(scope)){
     scope <- lapply(seq_along(tl), function(f_index){
       drop.scope(formula(Formula, rhs = f_index))
@@ -84,37 +84,37 @@ stop("not implemented yet!")
 
   ndrop <- lapply(seq_along(scope), function(i){ match(scope[[i]], tl[[i]]) })
 
-
- 
+###
+  # naming stuff
   if(object$parametrization == "common"){
     names(asgn) <- names(tl) <- names(scope) <- names(ndrop) <- attr(object$Y, "dim.names")
   } else {
     names(asgn) <- names(tl) <- names(scope) <- names(ndrop) <- c("Mean", "Precision")
   }
-
+###
 
   ns <- lapply(scope, length)
   chisq <- -2*object$logLik
   dfs <- lapply(ns, numeric)
   dev <- lapply(ns, numeric)
 
+#  y <- object$Y
+#  wt <- object$weights
 
-
-
-
+### refit and save values
   for(comp in seq_along(ns)){
     for(subterm in seq_len(ns[[comp]])){
-
+#cat("\ntrying ...", comp, (tl[[comp]])[(ndrop[[comp]][subterm])]); flush.console()
       z <- update(object,
         as.formula(paste0(".~", paste(rep(".|", comp - 1L), collapse=""), ".-", (tl[[comp]])[(ndrop[[comp]][subterm])]))
       )
       dfs[[comp]][subterm] <- z$npar
       dev[[comp]][subterm] <- -2*z$logLik
-
+#cat(" - DONE!\n")
     }
   }
 
-
+### add components in front of terms
   if(object$parametrization == "alternative"){
     if(length(scope[[1L]]) == 0L){ scope[1L] <- list(NULL) } else { scope[[1L]] <- paste("Mean:", scope[[1L]]) }
     if(length(scope[[2L]]) == 0L){ scope[2L] <- list(NULL) } else { scope[[2L]] <- paste("Prec:", scope[[2L]]) }
@@ -155,4 +155,4 @@ stop("not implemented yet!")
 
 }
 
-
+#drop1(mm)

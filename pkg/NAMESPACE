@@ -5,8 +5,10 @@ import("Formula")
 import("rgl")
 
 import("stats")
+import("grDevices")
 import("graphics")
 import("methods")
+importFrom("utils", "flush.console")
 
 export("rdirichlet")
 export("ddirichlet")

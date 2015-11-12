@@ -60,8 +60,8 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   print(x$resid.mat, print.gap=2)
   cat("\n")
 
-
-
+################################################################################
+################################################################### COMMON PARAM
 
   if(x$parametrization == "common"){
 
@@ -78,8 +78,8 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
     writeLines(signif_codes)
 
   } else {
-
-
+################################################################################
+############################################################## ALTERNATIVE PARAM
     printed.var <- 1L
     set.size    <- x$n.vars[1L]
 
@@ -114,8 +114,8 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
 
   }
 
-
-
+################################################################################
+############################################################################ FIN
 
   writeLines("")
   writeLines(paste0("Log-likelihood: ",format(x$logLik,digits=digits)," on ",x$npar," df (", x$optimization$bfgs.it," BFGS + ",x$optimization$iterations," NR Iterations)"))

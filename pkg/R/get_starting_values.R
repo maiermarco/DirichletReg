@@ -3,9 +3,9 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
   ops <- options(warn = -1L)
   on.exit(options(ops))
 
-  if(!repar){
+  if(!repar){###################################################### COMMON MODEL
 
-   
+    ### collinearity check begin
     exclude_par <- lapply(X.mats, function(list_el){
       lin_coef <- lm.fit(x = list_el, y = runif(nrow(list_el)))[["coefficients"]]
       if(any(na_pos <- is.na(lin_coef))){
@@ -17,7 +17,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
         return(NULL)
       }
     })
-   
+    ### collinearity check end
 
     beta.LL <- function(x, y, X, w){
       b <- matrix(x, ncol = 2L)
@@ -53,7 +53,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
       } else {
         correctX <- X.mats[[i]][ , -exclude_par[[i]], drop = FALSE]
       }
-     
+      #suppressWarnings(
         maxBFGS(beta.LL, beta.LL.deriv,
           start        = rep(0, 2*ncol(correctX)),
           tol          = 1e-05,
@@ -61,7 +61,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
           X            = correctX,
           y            = Y[,i],
           w            = weights)$estimate[seq_len(ncol(correctX))]
-     
+      #)
     })
 
     for(cmp in seq_len(ncol(Y))){
@@ -74,7 +74,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
 
     unidim_fit <- unlist(unidim_fit)
 
-  } else {
+  } else {#################################################### ALTERNATIVE MODEL
 
     Y_logr <- log(Y[,-base,drop=FALSE]/(Y[,base,drop=TRUE]))
     unidim_fit <- as.numeric(lm(Y_logr ~ X.mats[[1L]] - 1, weights = weights)[["coefficients"]])

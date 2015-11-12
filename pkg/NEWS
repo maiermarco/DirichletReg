@@ -5,6 +5,8 @@ Changes in Version 0.6-2:
   • Fixed an error in the ternary plot (bottom axis tick labels were
     printed in reversed order; pointed out by Emilio A. Laca).
 
+  • Imports functions from default packages, as required by the new
+    CRAN-check.
   • Changed the 'Description' field to eliminate the note "Malformed
     Description field: should contain one or more complete sentences."
     when checking the package.

@@ -1,4 +1,4 @@
-DReg <- function(x, logY, X, ncolX, n, d, k, w, npar, seq_along_d, bx, NR){
+DReg <- function(x, logY, X, ncolX, n, d, k, w, npar, seq_along_d, bx, NR, h_dims, h_vars){
 
   B <- lapply(bx, function(b_ind){ x[b_ind] })
 
@@ -12,34 +12,32 @@ DReg <- function(x, logY, X, ncolX, n, d, k, w, npar, seq_along_d, bx, NR){
 
 
 
-
-
-
+################################################################################
+### LOG-LIKELIHOOD & GRADIENT ##################################################
+################################################################################
 
   LL <- .Call("wght_LL_grad_common", logY, A, Aplus, digamma_A, digamma_Aplus, X, ncolX, c(n, d), npar, w)
 
 
 
-
-
-
+################################################################################
+### HESSIAN ####################################################################
+################################################################################
 
   if(NR){
 
     hessian <- matrix(NA_real_, nrow = npar, ncol = npar)
 
-    hessian.ind <- cbind(rep(seq_along_d, k), unlist(sapply(k, function(i) seq_len(i), simplify=FALSE)))
-
     for(hess.j in seq_len(npar)){
       for(hess.i in seq_len(npar)){
         if(hess.i < hess.j) next
 
-        derv <- hessian.ind[c(hess.i, hess.j), 1L]
+        derv <- h_dims[c(hess.i, hess.j)]
 
-        vars <- hessian.ind[c(hess.i, hess.j), 2L]
+        vars <- h_vars[c(hess.i, hess.j)]
 
-       
-       
+        ########################################################################
+        ##################################################### SAME RESPONSES ###
         if(derv[1L] == derv[2L]) {
           derv <- derv[1L]
 
@@ -51,8 +49,8 @@ DReg <- function(x, logY, X, ncolX, n, d, k, w, npar, seq_along_d, bx, NR){
               )
             )
           ))
-       
-       
+        ########################################################################
+        ################################################ DIFFERENT RESPONSES ###
         } else {
           hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
           sum(w*(

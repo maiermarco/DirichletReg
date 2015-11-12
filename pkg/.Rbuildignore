@@ -1,4 +1,3 @@
-.*.dumptruck
 src\/.*\.R$
 src\/altlasten.*
 inst\/NEWSRd2txt\.R
