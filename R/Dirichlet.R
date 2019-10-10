@@ -1,5 +1,5 @@
-rdirichlet <- function(n,      # a single integer specifying the sample size
-                       alpha   # alpha which can either be a single vector or a matrix (rows = n)
+rdirichlet <- function(n,      # single integer specifying the sample size
+                       alpha   # can be a single vector or a matrix (with exactly n rows)
                       ){
 
   # check if the sample size is an integer > 0
@@ -43,7 +43,10 @@ ddirichlet <- function(x, alpha, log = FALSE, sum.up = FALSE){
   # some checking!
   if(is.null(dim(x))) stop("x must be a matrix")
   x_dims <- dim(x)
-  if( any(alpha <= 0) ) stop('all values in alpha must be > 0.')
+  if(any(alpha <= 0)){
+    warning("all values in alpha must be > 0")
+    if(sum.up) return(NaN) else return(rep(NaN, x_dims[1L]))
+  }
 
   res <- if(is.vector(alpha)){
     .Call("ddirichlet_log_vector", x, alpha, dim(x))
@@ -70,7 +73,10 @@ ddirichlet_R <- function(x, alpha, log = FALSE, sum.up = FALSE){                
     alpha <- matrix(rep(alpha,nrow(x)),nrow(x),byrow=T)
   }
   if(any(dim(alpha) != dim(x))) stop("check if x and alpha are correctly specified")
-  if( any(alpha <= 0) ) stop('all values in alpha must be > 0.')
+  if(any(alpha <= 0)){
+    warning("all values in alpha must be > 0")
+    if(sum.up) return(NaN) else return(rep(NaN, nrow(x)))
+  }
 
   res <- lgamma(rowSums(alpha)) - rowSums(lgamma(alpha)) + rowSums((alpha-1)*log(x))
 

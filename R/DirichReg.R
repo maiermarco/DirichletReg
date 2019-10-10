@@ -42,7 +42,7 @@ if(verbosity > 0){
 
 #>>> get Y #####################################################################
   resp_lang <- oformula[[2L]]
-  resp_char <- deparse(resp_lang)
+  resp_char <- deparse_nocutoff(resp_lang)
 
   has_data    <- !missing(data)                                                 # "data" defined?
   Y_in_data   <- ifelse(has_data, resp_char %in% names(data), FALSE)   # response in data

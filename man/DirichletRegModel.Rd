@@ -48,7 +48,7 @@
 
 \method{update}{DirichletRegModel}(object, formula., \dots, evaluate = TRUE)
 
-\method{drop1}{DirichletRegModel}(object, scope, test = c("LRT", "none"), k = 2, \dots)
+\method{drop1}{DirichletRegModel}(object, scope, test = c("LRT", "none"), k = 2, sort = TRUE, \dots)
 }
 \arguments{
   \item{x}{an object of class \code{DirichletRegModel}}
@@ -65,10 +65,11 @@
   \item{level}{(a vector of) confidence level(s), defaults to \code{.95}}
   \item{exp}{logical; returns parameters in exponentiated form}
   \item{digits}{the number of digits in the output}
-  \item{formula.}{the new formula to be updated, see \code{\link[Formula]{update.Formula}}}
+  \item{formula.}{the new formula to be updated, see \code{\link[=update.formula]{update.formula}} and \code{\link[=update.Formula]{update.Formula}}}
   \item{evaluate}{if \code{FALSE} the updated call will be returned, but not evaluated}
-  \item{scope}{defines the scope of variables to be dropped, see \code{\link[stats]{drop1}}}
+  \item{scope}{defines the scope of variables to be dropped, see \code{\link[=drop1]{drop1}}}
   \item{test}{defines the type of test for \code{drop1}}
+  \item{sort}{if \code{TRUE}, p-values will be sorted in decreasing order.}
   \item{\dots}{further arguments}
 }
 %\details{

@@ -1,6 +1,17 @@
 \name{NEWS}
 \title{News for Package \pkg{DirichletReg}}
 \encoding{UTF-8}
+\section{Changes in Version 0.6-4}{
+  \itemize{
+    \item Fixed: Cutoff in formula-deparsing removed.
+    \item Removed \pkg{rgl} dependency (package will be loaded if necessary).
+  }
+}
+\section{Changes in Version 0.6-3}{
+  \itemize{
+    \item Instead of producing an error, density functions now return \code{NaN} with a warning if any element in \code{alpha} is <= 0.
+  }
+}
 \section{Changes in Version 0.6-2}{
   \itemize{
     \item Fixed an error in the ternary plot (bottom axis tick labels were printed in reversed order; pointed out by Emilio A. Laca).

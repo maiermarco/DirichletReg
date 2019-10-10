@@ -56,7 +56,7 @@ confint.DirichletRegModel <- function(object,
   }
 
 
-#  tt <- if(repar)
+
 
   if(e){
     for(ll in 1:length(rci)){

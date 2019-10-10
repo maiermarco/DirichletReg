@@ -90,7 +90,7 @@ plot_DRdata_3d <- function(x,
     segments(c3.grid[,1L],
              0,
              c3.grid[,1L]-(1/120),
-             -1/(40*sqrt(3)), col=colorz[3]) # sin(-60°)/60 and /30 for text
+             -1/(40*sqrt(3)), col=colorz[3]) # sin(-60 deg)/60 and /30 for text
 
     text(c3.grid[,3L]+(1/30),c3.grid[,4],labels=rev(tk.lab),cex=.8, col=colorz[1])
     text(c1.grid[,1L]-(1/60),c1.grid[,2]+1/(20*sqrt(3)),labels=rev(tk.lab),cex=.8, col=colorz[2])

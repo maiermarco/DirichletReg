@@ -1,8 +1,7 @@
-useDynLib("DirichletReg")
+useDynLib("DirichletReg", .registration = TRUE)
 
 import("maxLik")
 import("Formula")
-import("rgl")
 
 import("stats")
 import("grDevices")

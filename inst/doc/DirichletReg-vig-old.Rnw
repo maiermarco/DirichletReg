@@ -1,4 +1,4 @@
-%\VignetteIndexEntry{DirichletReg -- Article Sources}
+%\VignetteIndexEntry{DirichletReg -- Article Sources (TeX)}
 \SweaveOpts{keep.source=FALSE}
 <<global-settings, echo=FALSE, results=hide>>=
 options(
@@ -11,7 +11,7 @@ options(
 library("DirichletReg")
 @
 \documentclass[nojss]{jss}
-\usepackage[utf8]{inputenc}
+\usepackage[utf8]{inputenx}
 \usepackage[T1]{fontenc}
 
 \author{Marco J.\ Maier\\Wirtschaftsuniversit\"at Wien}
@@ -51,20 +51,20 @@ library("DirichletReg")
   Augasse 2--6\\
   1090 Vienna, Austria\\
   Telephone: +43/1/31336--4335\\
-  E-mail: \email{Marco.Maier@wu.ac.at}\\
+  E-mail: \email{Marco\_Maier@posteo.de}\\
   URL: \url{http://statmath.wu.ac.at/~maier/}
 }
 
 \usepackage{amsmath,amssymb,amsfonts,bm,lmodern}
-\usepackage{tabularx,booktabs,array,blkarray,multicol}
+\usepackage{graphicx,tabularx,booktabs,array,blkarray,multicol}
 
 \newcommand{\given}{\,\vert\,}
 \newcommand{\gnuR}{\proglang{R}}
 
 %\usepackage{Sweave}
-  \usepackage[rgb]{xcolor}
-  \definecolor{inputblue}{Hsb}{240, .8, .3}
-  \definecolor{outputred}{Hsb}{  0, .8, .3}
+  \usepackage{xcolor} % [rgb]
+  \definecolor{inputblue}{HTML}{383D93} % {Hsb}{240, .8, .3}
+  \definecolor{outputred}{HTML}{8D1125} % {Hsb}{  0, .8, .3}
   \usepackage{fancyvrb,textcomp}
   \makeatletter
   \begingroup
