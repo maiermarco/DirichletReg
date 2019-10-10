@@ -18,6 +18,7 @@ drop1.DirichletRegModel <- function(
   scope,
   test = c("LRT", "none"),
   k = 2,
+  sort = TRUE,
   ...
 ){
 
@@ -31,8 +32,6 @@ drop1.DirichletRegModel <- function(
       "CAVEAT: drop1() is still an experimental feature.",
       "If you plan to use this function, please double-check results, e.g., by comparing two models using anova()."
     , collapse = ""), width = getOption("width"), exdent = 8L))
-
-    writeLines(strwrap("Please don't hesitate to report any problems/doubts: marco.maier@wu.ac.at", width = getOption("width"), exdent = 8L, indent = 8L))
 
     if(interactive()) writeLines(paste(rep("-", getOption("width")), collapse = ""))
   }
@@ -145,7 +144,10 @@ stop("not implemented yet!")
       dev[nas] <- safe_pchisq(dev[nas], aod$Df[nas], lower.tail = FALSE)
       aod[, "Pr(>Chi)"] <- dev
   }
-  heading <- c("Single term deletions", "\nModel:", deparse(formula(object)))
+
+  heading <- c("Single term deletions", "\nModel:", deparse_nocutoff(formula(object)))
+
+  if(sort) aod <- aod[order(aod$`Pr(>Chi)`, decreasing = TRUE, na.last = FALSE), ]
 
   class(aod) <- c("anova", "data.frame")
 

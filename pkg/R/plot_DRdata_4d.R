@@ -51,9 +51,9 @@ plot_DRdata_4d <- function(x,
 
   if(rgl){
 
-    view3d(theta=theta, phi=phi)
+    rgl::view3d(theta=theta, phi=phi)
 
-    segments3d(x=as.vector(rbind(corners[corner.connect[,1],1], corners[corner.connect[,2],1])),
+    rgl::segments3d(x=as.vector(rbind(corners[corner.connect[,1],1], corners[corner.connect[,2],1])),
                y=as.vector(rbind(corners[corner.connect[,1],2], corners[corner.connect[,2],2])),
                z=as.vector(rbind(corners[corner.connect[,1],3], corners[corner.connect[,2],3])),
                aspect=1, xlim=1/sqrt(3)+c(-3, 3)/4, ylim=1/3+c(-3, 3)/4, zlim=.25+c(-3, 3)/4,
@@ -61,14 +61,14 @@ plot_DRdata_4d <- function(x,
                line_antialias=TRUE)
 
     # axes - references
-    segments3d(x=as.vector(rbind(ref_axes_xyz[,1],corners[,1])),
+    rgl::segments3d(x=as.vector(rbind(ref_axes_xyz[,1],corners[,1])),
                y=as.vector(rbind(ref_axes_xyz[,2],corners[,2])),
                z=as.vector(rbind(ref_axes_xyz[,3],corners[,3])), lwd=1, lty=2, col=rep(lab.col,each=2), line_antialias=TRUE)
 
     if(!is.null(ref.lines)){
     browser()
       for(i in ref.lines){
-      segments3d(t3d(.ref_pts[[i]],VTrans)$x, t3d(.ref_pts[[i]],VTrans)$y,
+      rgl::segments3d(t3d(.ref_pts[[i]],VTrans)$x, t3d(.ref_pts[[i]],VTrans)$y,
                t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col=paste(lab.col[i], transp, sep="", collapse=""))
     }}
 
@@ -76,9 +76,9 @@ plot_DRdata_4d <- function(x,
 #    segments(.ref_xy[[3]]$x,.ref_xy[[3]]$y, t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col="#BFBF0040")
 #    segments(.ref_xy[[4]]$x,.ref_xy[[4]]$y, t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col="#00000040")
 
-    points3d(xyz, cex=cex, col=cmyk2rgb(x$Y), point_antialias=TRUE)
+    rgl::points3d(xyz, cex=cex, col=cmyk2rgb(x$Y), point_antialias=TRUE)
 
-    text3d(x=coo.lab[,1], y=coo.lab[,2], z=coo.lab[,3], texts=dim.labels, font=2, col=lab.col, line_antialias=TRUE)
+    rgl::text3d(x=coo.lab[,1], y=coo.lab[,2], z=coo.lab[,3], texts=dim.labels, font=2, col=lab.col, line_antialias=TRUE)
 
   } else {
 

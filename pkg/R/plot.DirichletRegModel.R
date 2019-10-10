@@ -1,5 +1,7 @@
 plot.DirichletRegModel <- function(){
 
+warning("Not implemented yet.")
+
 ### residuals ~ fitted (line at y = 0)
 
 ### theoretical quantiles vs. std. residuals   QQ-plot of residuals. half-normal of abs-values?

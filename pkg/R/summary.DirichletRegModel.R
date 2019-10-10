@@ -54,7 +54,7 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   if(interactive()) writeLines("")
 
   writeLines("Call:")
-  writeLines(paste(strwrap(deparse(x$call, width.cutoff=500), .wd), sep="\n", collapse="\n"))
+  writeLines(paste(strwrap(deparse_nocutoff(x$call), .wd), sep="\n", collapse="\n"))
 
   cat("\nStandardized Residuals:\n")
   print(x$resid.mat, print.gap=2)

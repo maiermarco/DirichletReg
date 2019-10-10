@@ -23,12 +23,12 @@ DR_data <- function(Y,                                   # response (composition
 
 ### CONVENIENTLY HANDLE BETA-DISTRIBUTED VARIABLES
   if((!is.matrix(Y) && !is.data.frame(Y)) || ifelse(is.null(ncol(Y)), FALSE, ncol(Y) == 1L)){
-    if(any((na.delete(Y) < 0) || (na.delete(Y) > 1))){
+    if(any((na.delete(Y) < 0) | (na.delete(Y) > 1))){
       stop('only one variable supplied with values outside [0, 1].\nbeta distribution cannot safely be assumed.\nprepare your data first.')
     }
     Y <- cbind(1.0-Y, Y)
 
-    .name <- deparse(match.call()$Y)
+    .name <- deparse_nocutoff(match.call()$Y)
     .name <- gsub(".*\\$", "", .name)   # eliminate references to the object the variable comes from
     .name <- gsub("\\[.*", "", .name)   # eliminate indices
     if(length(.name) == 0L) .name <- "Y"

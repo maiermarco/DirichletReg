@@ -10,7 +10,7 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
   if(interactive()) writeLines("")
 
   writeLines("Call:")
-  writeLines(strwrap(deparse(x$call, width.cutoff=500), .wd))
+  writeLines(strwrap(deparse_nocutoff(x$call), .wd))
   writeLines(paste0("using the ", x$parametrization, " parametrization"))
 
   writeLines("")

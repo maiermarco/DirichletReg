@@ -1,6 +1,8 @@
+inst\/NEWSRd2txt\.R$
+inst\/doc\/DirichletReg\-vig\-old\.Rnw$
 src\/.*\.R$
 src\/altlasten.*
-inst\/NEWSRd2txt\.R
+tests\/testthat\/\_res.*\.R$
 .*\.aux$
 .*\.log$
 .*\.bat$
@@ -9,4 +11,3 @@ inst\/NEWSRd2txt\.R
 .*\.o$
 .*\.dll$
 .*\.bak$
-tests\/testthat\/\_res.*\.R$

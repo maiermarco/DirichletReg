@@ -2,12 +2,18 @@
 #  version <- read.dcf(file=system.file("DESCRIPTION", package=pkgname),
 #                      fields="Version")
 #  packageStartupMessage("This is ",paste(pkgname, version))
-#  packageStartupMessage(pkgname, " is BETA software\nPlease report any bugs to marco.maier@wu.ac.at")
+#  packageStartupMessage(pkgname, " is BETA software\nPlease report any bugs to marco_maier@posteo.de")
 #}
 
 
 
 blank.trim <- function(x){ paste(unlist(strsplit(x, "^\ +|\ +$")),sep="",collapse="") }
+
+
+
+deparse_nocutoff <- function(expr){ # deparse, paste, remove multiple blanks
+  gsub("[[:space:]]{2,}", " ", paste(deparse(expr), collapse = " "))
+}
 
 
 
