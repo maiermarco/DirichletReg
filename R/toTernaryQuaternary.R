@@ -3,8 +3,8 @@ toTernary <- function(abc){
   sqrt3     <- 1.732050807568877293527446341505872366942805253810380628055806979
 
   return(cbind(
-    x = (abc[,1L] + 2.0*abc[,3L]) / sqrt3,
-    y = abc[,1L]
+    x = (abc[, 1L] + 2.0*abc[, 3L]) / sqrt3,
+    y = abc[, 1L]
   ))
 
 }
@@ -16,9 +16,9 @@ toQuaternary <- function(abcd){
   sqrt3     <- 1.732050807568877293527446341505872366942805253810380628055806979
 
   return(cbind(
-    x = (abcd[,1L] + 2.0*abcd[,3L] + abcd[,4L]) / sqrt3,
-    y = abcd[,1L] + abcd[,4L]/3.0,
-    z = abcd[,4L]
+    x = (abcd[, 1L] + 2.0*abcd[, 3L] + abcd[, 4L]) / sqrt3,
+    y = abcd[, 1L] + abcd[, 4L]/3.0,
+    z = abcd[, 4L]
   ))
 
 }

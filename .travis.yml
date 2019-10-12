@@ -1,9 +1,31 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: r
-cache: packages
 
-r:
-  - oldrel
-  - release
-  - devel
+cache:
+  packages: true
+
+# addons needed for "rgl":
+addons:
+  apt:
+    packages:
+      - freeglut3
+      - freeglut3-dev
+      - libglew1.5
+      - libglew1.5-dev
+      - libglu1-mesa
+      - libglu1-mesa-dev
+      - libgl1-mesa-glx
+      - libgl1-mesa-dev
+      - libfreetype6-dev
+
+r_packages:
+  - covr
+
+matrix:
+  include:
+  - r: oldrel
+  - r: release
+    after_success:
+    - Rscript -e 'library(covr); codecov()'
+  - r: devel

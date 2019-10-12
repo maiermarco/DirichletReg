@@ -1,10 +1,12 @@
-confint.DirichletRegModel <- function(object,
-                                      parm,
-                                      level = .95,
-                                      ...,
-                                      type = c("all", "beta", "gamma"),
-                                      exp=FALSE){
-  e <- exp
+confint.DirichletRegModel <- function(
+  object
+, parm
+, level = .95
+, ...
+, type  = c("all", "beta", "gamma")
+, exp   = FALSE
+){
+  e    <- exp
   type <- match.arg(type)
 
   if(any(level <= 0) | any(level >= 1)) stop("level must be in (0, 1)")
@@ -18,10 +20,17 @@ confint.DirichletRegModel <- function(object,
   names(co) <- object$coefnames
   names(se) <- object$coefnames
 
-  res <- list(level=level, type=type, coefficients=coef(object), se=se, e=e, repar=repar)
+  res <- list(
+      level        = level
+    , type         = type
+    , coefficients = coef(object)
+    , se           = se
+    , e            = e
+    , repar        = repar
+    )
 
   rci <- lapply(level, function(L){
-    cbind(qnorm((1 - L)/2, co, se),
+    cbind(qnorm(    (1 - L)/2, co, se),
           qnorm(L + (1 - L)/2, co, se))
   })
 
@@ -38,10 +47,10 @@ confint.DirichletRegModel <- function(object,
           list(NULL)
         } else {
           inti <- inti + 1
-          list(rci[[ll]][Xc[inti]:(Xc[inti+1]-1),,drop=FALSE])
+          list(rci[[ll]][Xc[inti]:(Xc[inti+1]-1), , drop = FALSE])
         }
       }
-      res$ci[[ll]][[length(res$ci[[ll]]) + 1]] <- rci[[ll]][Zc[1]:Zc[2],,drop=FALSE]
+      res$ci[[ll]][[length(res$ci[[ll]]) + 1]] <- rci[[ll]][Zc[1]:Zc[2] , , drop = FALSE]
       names(res$ci[[ll]]) <- c(object$varnames, "gamma")
     }
   } else {
@@ -50,13 +59,10 @@ confint.DirichletRegModel <- function(object,
       inti <- 0L
       for(i in 1:object$dims){
         inti <- inti + 1L
-        res$ci[[ll]][[i]] <- rci[[ll]][Xc[inti]:(Xc[inti+1]-1),,drop=FALSE]
+        res$ci[[ll]][[i]] <- rci[[ll]][Xc[inti]:(Xc[inti+1]-1) , , drop = FALSE]
       }
     }
   }
-
-
-
 
   if(e){
     for(ll in 1:length(rci)){

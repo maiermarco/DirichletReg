@@ -69,18 +69,6 @@ if(verbosity > 0){
 
 
 
-#  if(ifelse(!missing(data), deparse(oformula[[2]]) %in% names(data), FALSE)){
-#    Y_full <- data[[deparse(oformula[[2]])]]                                    # GET THE FULL DRData OBJECT FOR INFORMATIONS (Y_full)
-#  } else {                                                                      # handle responses in .GlobalEnv
-#    Y_full <- get(deparse(oformula[[2]]), environment(oformula))
-#    if(missing(data)){
-#      data[[deparse(oformula[[2]])]] <- Y_full
-#    } else {
-#      assign(deparse(oformula[[2]]), Y_full)
-#    }
-#  }
-#  if(class(Y_full) != "DirichletRegData") stop("the response must be prepared by DR_data")
-
 #<<< get Y #####################################################################
 
   repar <- ifelse(model == "common", FALSE, TRUE)
@@ -114,8 +102,8 @@ if(verbosity > 0){
     y_in  <- (seq_len(ncol(Y)))[sub.comp]
     y_out <- (seq_len(ncol(Y)))[-sub.comp]
     y_in_labels <- colnames(Y)[y_in]
-    y_out_labels <- paste(colnames(Y)[y_out], sep="", collapse=" + ")
-    Y <- cbind(rowSums(Y[,y_out]), Y[,y_in])
+    y_out_labels <- paste(colnames(Y)[y_out], sep = "", collapse = " + ")
+    Y <- cbind(rowSums(Y[, y_out]), Y[, y_in])
     colnames(Y) <- c(y_out_labels, y_in_labels)
   }
 
@@ -137,12 +125,12 @@ if(verbosity > 0){
 
 
   if(!repar){
-    X.mats <- lapply(seq_len(ncol(Y)), function(i){ model.matrix(terms(formula, data=data, rhs=i), mf) })
+    X.mats <- lapply(seq_len(ncol(Y)), function(i){ model.matrix(terms(formula, data = data, rhs = i), mf) })
     Z.mat <- NULL
     n.vars <- unlist(lapply(X.mats, ncol))
   } else {
-    X.mats <- lapply(seq_len(ncol(Y)), function(i) model.matrix(terms(formula, data=data, rhs=1), mf) )
-    Z.mat  <- model.matrix(terms(formula, data=data, rhs=2), mf)
+    X.mats <- lapply(seq_len(ncol(Y)), function(i) model.matrix(terms(formula, data = data, rhs = 1), mf) )
+    Z.mat  <- model.matrix(terms(formula, data = data, rhs = 2), mf)
     n.vars <- c(unlist(lapply(X.mats, ncol))[-1], ncol(Z.mat))
   }
 
@@ -179,9 +167,9 @@ if(verbosity > 0){
 
   # compute starting values
   if(is.null(control$sv)){
-    starting.vals <- get_starting_values(Y=Y_fit, X.mats=X_fit,
-                       Z.mat={if(repar) as.matrix(Z.mat) else Z.mat},
-                       repar=repar, base=base, weights=weights) * if(repar){ 1 } else { 1/n.dim }
+    starting.vals <- get_starting_values(Y = Y_fit, X.mats = X_fit,
+                       Z.mat = {if(repar) as.matrix(Z.mat) else Z.mat},
+                       repar = repar, base = base, weights = weights) * if(repar){ 1 } else { 1/n.dim }
   } else {
     if(length(control$sv) != n.vars) stop("wrong number of starting values supplied.")
     starting.vals <- control$sv
@@ -213,7 +201,7 @@ if(verbosity > 0){
   coefs <- fit.res$estimate
 
   if(repar){
-    names(coefs) <- unlist(as.vector(c(rep(colnames(X.mats[[1]]),n.dim-1),colnames(Z.mat))))
+    names(coefs) <- unlist(as.vector(c(rep(colnames(X.mats[[1]]), n.dim-1), colnames(Z.mat))))
   } else {
     names(coefs) <- unlist(lapply(X.mats, colnames))
   }
@@ -223,9 +211,9 @@ if(verbosity > 0){
   if(repar){
 
     B <- matrix(0.0, nrow = n.vars[1L], ncol = n.dim)
-    B[cbind(rep(seq_len(n.vars[1L]), (n.dim-1L)), rep(seq_len(n.dim)[-base], each=n.vars[1]))] <- coefs[1:((n.dim-1)*n.vars[1])]
+    B[cbind(rep(seq_len(n.vars[1L]), (n.dim-1L)), rep(seq_len(n.dim)[-base], each = n.vars[1]))] <- coefs[1:((n.dim-1)*n.vars[1])]
 
-    g <- matrix(coefs[((n.dim-1)*n.vars[1]+1):length(coefs)], ncol=1)
+    g <- matrix(coefs[((n.dim-1)*n.vars[1]+1):length(coefs)], ncol = 1)
 
     XB <- exp(apply(B, 2L, function(b){ as.matrix(X.mats[[1L]]) %*% b }))
     MU <- apply(XB, 2L, function(x){ x /rowSums(XB) })
@@ -236,9 +224,9 @@ if(verbosity > 0){
 
   } else {
 
-    B <- sapply(seq_len(n.dim), function(i){ coefs[(cumsum(c(0,n.vars))[i]+1) : cumsum(n.vars)[i]] }, simplify = FALSE)
+    B <- sapply(seq_len(n.dim), function(i){ coefs[(cumsum(c(0, n.vars))[i]+1) : cumsum(n.vars)[i]] }, simplify = FALSE)
 
-    ALPHA <- sapply(seq_len(n.dim), function(i){ exp(as.matrix(X.mats[[i]]) %*% matrix(B[[i]], ncol=1)) })
+    ALPHA <- sapply(seq_len(n.dim), function(i){ exp(as.matrix(X.mats[[i]]) %*% matrix(B[[i]], ncol = 1)) })
 
     PHI <- rowSums(ALPHA)
     MU  <- apply(ALPHA, 2L, "/", PHI)
@@ -251,13 +239,13 @@ if(verbosity > 0){
   hessian <- fit.res$hessian
 
   vcov <- tryCatch(solve(-fit.res$hessian),
-                   error=function(x){ return(matrix(NA, nrow=nrow(hessian), ncol=ncol(hessian))) },
-                   silent=TRUE)
+                   error = function(x){ return(matrix(NA, nrow = nrow(hessian), ncol = ncol(hessian))) },
+                   silent = TRUE)
 
   if(!repar){   ## COMMON
-    coefnames <- apply(cbind(rep(varnames, n.vars), unlist(lapply(X.mats, colnames))), 1, paste, collapse=":")
+    coefnames <- apply(cbind(rep(varnames, n.vars), unlist(lapply(X.mats, colnames))), 1, paste, collapse = ":")
   } else {   ## ALTERNATIVE
-    coefnames <- apply(cbind(rep(c(varnames[-base], "(phi)"), n.vars), c(unlist(lapply(X.mats, colnames)[-base]), colnames(Z.mat))), 1, paste, collapse=":")
+    coefnames <- apply(cbind(rep(c(varnames[-base], "(phi)"), n.vars), c(unlist(lapply(X.mats, colnames)[-base]), colnames(Z.mat))), 1, paste, collapse = ":")
   }
 
   dimnames(hessian) <- list(coefnames, coefnames)
@@ -265,7 +253,7 @@ if(verbosity > 0){
   shortnames <- names(coefs)
   names(coefs) <- coefnames
 
-  se <- if(!any(is.na(vcov))) sqrt(diag(vcov)) else rep(NA,length(coefs))
+  se <- if(!any(is.na(vcov))) sqrt(diag(vcov)) else rep(NA, length(coefs))
 
   res <- structure(list(
     call            = this.call,
@@ -287,7 +275,7 @@ if(verbosity > 0){
     npar            = length(coefs),
     coefficients    = coefs,
     coefnames       = shortnames,
-    fitted.values   = list(mu=MU,phi=PHI,alpha=ALPHA),
+    fitted.values   = list(mu = MU, phi = PHI, alpha = ALPHA),
     logLik          = fit.res$maximum,
     vcov            = vcov,
     hessian         = hessian,
@@ -310,6 +298,5 @@ if(verbosity > 0){
   on.exit(gc(verbose = FALSE, reset = TRUE), add = TRUE)
 
   return(res)
-
 
 }

@@ -11,3 +11,12 @@ tests\/testthat\/\_res.*\.R$
 .*\.o$
 .*\.dll$
 .*\.bak$
+^\.travis\.yml$
+^\.codecov\.yml$
+^\.covrignore$
+.*/\.gitattributes$
+.*/\.gitignore$
+^README\.Rmd$
+^README\.md$
+^.*\.Rproj$
+^\.Rproj\.user$

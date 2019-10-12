@@ -1,10 +1,12 @@
 News for Package 'DirichletReg'
 
-Changes in Version 0.6-4:
+Changes in Version 0.7-0:
 
   • Fixed: Cutoff in formula-deparsing removed.
 
   • Removed 'rgl' dependency (package will be loaded if necessary).
+
+  • Moved to GitHub.
 
 Changes in Version 0.6-3:
 

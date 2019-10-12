@@ -1,10 +1,11 @@
 \name{NEWS}
 \title{News for Package \pkg{DirichletReg}}
 \encoding{UTF-8}
-\section{Changes in Version 0.6-4}{
+\section{Changes in Version 0.7-0}{
   \itemize{
     \item Fixed: Cutoff in formula-deparsing removed.
     \item Removed \pkg{rgl} dependency (package will be loaded if necessary).
+		\item Moved to GitHub.
   }
 }
 \section{Changes in Version 0.6-3}{
