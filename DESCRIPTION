@@ -1,13 +1,14 @@
 Package: DirichletReg
 Type: Package
 Version: 0.7-0
-Date: 2019-11-25
+Date: 2020-05-28
 Title: Dirichlet Regression in R
 Description: Implements Dirichlet regression models in R.
 Authors@R: person(given  = c("Marco", "Johannes"),
                   family = "Maier",
                   email  = "marco_maier@posteo.de",
-                  role   = c("cre", "aut"))
+                  role   = c("cre", "aut"),
+                  comment = c(ORCID = "0000-0002-1715-7456"))
 Encoding: UTF-8
 Depends: R (>= 3.0.0), Formula
 Imports: stats, graphics, methods, maxLik

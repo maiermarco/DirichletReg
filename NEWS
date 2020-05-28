@@ -54,9 +54,10 @@ Changes in Version 0.6-0:
     will fail.  This will be handled automatically in subsequent
     releases, but for now, please remove the respective terms.  If you
     fit a model and it says something like:
-    
+
     Error in prepareFixed(start = start, activePar = NULL, fixed = fixed) :
     At least one parameter must not be fixed using argument 'fixed'
+    
     you most likely have collinear terms or "empty" combinations of
     interaction terms.
 
