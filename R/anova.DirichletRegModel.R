@@ -49,7 +49,7 @@ print.anova_DirichletRegModel <- function(x, ...){
   writeLines("Analysis of Deviance Table\n")
 
   model_numbers <- sprintf("Model %s", format(x$sorting))
-  model_names   <- unlist(lapply(x$call[x$sorting], deparse_nocutoff))
+  model_names   <- unlist(lapply(x$calls[x$sorting], deparse_nocutoff))
 
   for(i in seq_len(x$n.mods)){
     writeLines(strwrap(paste0(model_numbers[[i]], ": ", model_names[[i]]),

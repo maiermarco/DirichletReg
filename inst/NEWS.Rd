@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package \pkg{DirichletReg}}
 \encoding{UTF-8}
+\section{Changes in Version 0.7-1}{
+  \itemize{
+    \item\code{summary.DirichletRegModel} now returns a \code{summary_DirichletRegModel}-class object without printing it (see \url{https://github.com/maiermarco/DirichletReg/issues/3}).
+    \item Moved \pkg{rmarkdown} to Suggests to comply with new version of \pkg{knitr} (see \url{https://github.com/yihui/knitr/issues/1864}).
+  }
+}
 \section{Changes in Version 0.7-0}{
   \itemize{
     \item Fixed: Cutoff in formula-deparsing removed.
@@ -64,7 +70,7 @@ At least one parameter must not be fixed using argument 'fixed'} you most likely
     \item Fixed a bug in the predict method.
     \item Started development of a comprehensive test-suite using \pkg{testthat}.
     \item Published a working paper on the package:\cr%
-          Maier, M. J. (2014). DirichletReg: Dirichlet Regression for Compositional Data in R. Research Report Series / Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. \url{http://epub.wu.ac.at/4077/}
+          Maier, M. J. (2014). DirichletReg: Dirichlet Regression for Compositional Data in R. Research Report Series / Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. \url{https://epub.wu.ac.at/4077/}
     \item Added vignette with code to the working paper.
     \item Added citation info.
   }

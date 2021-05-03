@@ -1,22 +1,18 @@
 citHeader('To cite package "DirichletReg" in publications use:')
-year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
-vers <- paste("R package version", meta$Version)
+year <- gsub(".*(2[[:digit:]]{3})\\-.*", "\\1", meta$Date)
+vers <- sprintf("R package version %s", meta$Version)
+ttle <- sprintf("%s: %s", meta$Package, meta$Title)
+urlg <- "https://github.com/maiermarco/DirichletReg"
 
 citEntry(header = "Current Version",
   entry  = "MANUAL",
-  title  = "DirichletReg: Dirichlet Regression in R",
+  title  = ttle,
   author = "Marco J. Maier",
   year   = year,
   note   = vers,
-  url    = "http://dirichletreg.r-forge.r-project.org/",
+  url    = urlg,
 
-  textVersion = paste0(
-    "Maier, M. J. (",
-    year,
-    "). DirichletReg: Dirichlet Regression in R. ",
-    vers,
-    ". http://dirichletreg.r-forge.r-project.org/"
-  )
+  textVersion = sprintf("Maier, M. J. (%s). %s. %s. %s", year, ttle, vers, urlg)
 )
 
 citEntry(header = "Technical Report (2014)",
@@ -29,13 +25,13 @@ citEntry(header = "Technical Report (2014)",
   type        = "{Research Report Series{\\slash}Department of Statistics and Mathematics}",
   number      = "125",
   month       = "January",
-  url         = "http://epub.wu.ac.at/4077/",
+  url         = "https://epub.wu.ac.at/4077/",
 
   textVersion = paste0(
     "Maier, M. J. (2014). ",
     "DirichletReg: Dirichlet Regression for Compositional Data in R. ",
     "Research Report Series / Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. ",
-    "http://epub.wu.ac.at/4077/"
+    "https://epub.wu.ac.at/4077/"
   ),
   
   footer = 'To get BibTeX citations, type:\ntoBibtex(citation("DirichletReg"))'

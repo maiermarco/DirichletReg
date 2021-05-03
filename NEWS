@@ -1,5 +1,14 @@
 News for Package 'DirichletReg'
 
+Changes in Version 0.7-1:
+
+  • 'summary.DirichletRegModel' now returns a
+    'summary_DirichletRegModel'-class object without printing it (see
+    <URL: https://github.com/maiermarco/DirichletReg/issues/3>).
+
+  • Moved 'rmarkdown' to Suggests to comply with new version of 'knitr'
+    (see <URL: https://github.com/yihui/knitr/issues/1864>).
+
 Changes in Version 0.7-0:
 
   • Fixed: Cutoff in formula-deparsing removed.
@@ -100,7 +109,7 @@ Changes in Version 0.5-0:
     Maier, M. J. (2014). DirichletReg: Dirichlet Regression for
     Compositional Data in R. Research Report Series / Department of
     Statistics and Mathematics, 125. WU Vienna University of Economics
-    and Business, Vienna. <URL: http://epub.wu.ac.at/4077/>
+    and Business, Vienna. <URL: https://epub.wu.ac.at/4077/>
 
   • Added vignette with code to the working paper.
 

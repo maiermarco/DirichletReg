@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 Full R-Code for:
 
-Maier, M. J. (2014). DirichletReg: Dirichlet Regression for Compositional Data in R. Research Report Series/Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. [http://epub.wu.ac.at/4077/](http://epub.wu.ac.at/4077/)
+Maier, M. J. (2014). DirichletReg: Dirichlet Regression for Compositional Data in R. Research Report Series/Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. [https://epub.wu.ac.at/4077/](https://epub.wu.ac.at/4077/)
 
 ## 4. Application examples
 

@@ -36,8 +36,7 @@ summary.DirichletRegModel <- function(object, ...) {
 
   res$coef.mat <- coef.mat
 
-  print(res, ...)
-  invisible(res)
+  return(res)
 
 }
 
