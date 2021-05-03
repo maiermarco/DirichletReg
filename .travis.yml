@@ -21,6 +21,7 @@ addons:
 
 r_packages:
   - covr
+  - rmarkdown
 
 matrix:
   include:
