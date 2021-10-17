@@ -1,4 +1,4 @@
-useDynLib("DirichletReg", .registration = TRUE)
+useDynLib("DirichletReg", .registration = TRUE, .fixes = "C_")
 
 import("maxLik")
 import("Formula")
@@ -24,7 +24,7 @@ export("plot.DirichletRegData")     ; S3method("plot", "DirichletRegData")
 
 export("DirichReg")
 export("print.DirichletRegModel")     ; S3method("print", "DirichletRegModel")
-export("summary.DirichletRegModel")   ; S3method("summary", "DirichletRegModel")   ; S3method("print", "summary_DirichletRegModel")
+export("summary.DirichletRegModel")   ; S3method("summary", "DirichletRegModel")   ; S3method("print", "summary_DirichletRegModel"); S3method("coef", "summary_DirichletRegModel")
 export("fitted.DirichletRegModel")    ; S3method("fitted", "DirichletRegModel")
 export("predict.DirichletRegModel")   ; S3method("predict", "DirichletRegModel")
 export("residuals.DirichletRegModel") ; S3method("residuals", "DirichletRegModel")

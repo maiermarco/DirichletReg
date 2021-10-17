@@ -4,8 +4,19 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
 
   names(x$coefficients) <- x$coefnames
 
-  if(x$optimization$convergence == 3) cat("\n",strwrap("CAUTION! Possible convergence problems!",.wd),"\n",sep="")
-  if(x$optimization$convergence > 3) stop("\n",paste(strwrap(paste("\nOptimization did not converge in",x$optimization$bfgs.it,"+",x$optimization$iterations,"iterations and exited with code",x$optimization$convergence),.wd),sep="\n",collapse="\n"))
+         if(x$optimization$convergence %in% c(1L, 2L, 8L)){ # normal convergence
+  } else if(x$optimization$convergence ==   3L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Try changing \"steptol\"!",.wd),"\n",sep="")
+  } else if(x$optimization$convergence ==   4L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Iteration limit exceeded!",.wd),"\n",sep="")
+  } else if(x$optimization$convergence ==   5L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Infinite log-likelihood value!",.wd),"\n",sep="")
+  } else if(x$optimization$convergence ==   6L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Infinite gradient!",.wd),"\n",sep="")
+  } else if(x$optimization$convergence ==   7L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Infinite Hessian!",.wd),"\n",sep="")
+  } else if(x$optimization$convergence ==   9L){ cat("\n",strwrap("CAUTION! Possible convergence problems: BFGS-Hessian approx. could not be improved!",.wd),"\n",sep="")
+  } else if(x$optimization$convergence == 100L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Initial value out of range!",.wd),"\n",sep="")
+  } else { cat("\n",strwrap("CAUTION! Possible UNKNOWN convergence problems: Please report this.",.wd),"\n",sep="") }
+
+  if(!(x$optimization$convergence %in% c(1L, 2L, 8L))){
+    warning(paste(strwrap(paste("\nOptimization did (most likely) not converge in",x$optimization$bfgs.it,"+",x$optimization$iterations,"iterations and exited with code",x$optimization$convergence),.wd),sep="\n",collapse="\n"))
+  }
 
   if(interactive()) writeLines("")
 

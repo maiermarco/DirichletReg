@@ -1,7 +1,7 @@
 Package: DirichletReg
 Type: Package
-Version: 0.7-1
-Date: 2021-04-29
+Version: 0.7-1.9000
+Date: 2021-10-16
 Title: Dirichlet Regression
 Description: Implements Dirichlet regression models.
 Authors@R: person(given  = c("Marco", "Johannes"),
@@ -14,8 +14,8 @@ Depends: R (>= 3.0.0), Formula
 Imports: stats, graphics, methods, maxLik
 Suggests: rgl, knitr, rmarkdown, formatR, testthat
 License: GPL (>= 2)
-URL: https://github.com/maiermarco/DirichletReg
-     https://CRAN.R-project.org/package=DirichletReg
+URL: https://CRAN.R-project.org/package=DirichletReg, https://github.com/maiermarco/DirichletReg
+BugReports: https://github.com/maiermarco/DirichletReg/issues
 ByteCompile: yes
 LazyLoad: yes
 LazyData: yes

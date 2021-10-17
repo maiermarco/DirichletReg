@@ -24,7 +24,7 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
 ### LOG-LIKELIHOOD & GRADIENT ##################################################
 ################################################################################
 
-  LL <- .Call("wght_LL_grad_alternative", logY, A, mu, phi, digamma_A, digamma_phi, X, ncolX, Z, ncolZ, n, d, base, npar, w)
+  LL <- .Call(C_wght_LL_grad_alternative, logY, A, mu, phi, digamma_A, digamma_phi, X, ncolX, Z, ncolZ, n, d, base, npar, w)
 
 
 

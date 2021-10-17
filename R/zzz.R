@@ -1,3 +1,9 @@
+.onUnload <- function(libpath){
+  library.dynam.unload("DirichletReg", libpath)
+}
+
+
+
 blank.trim <- function(x){
   x_split <- unlist(strsplit(x, "^\\s+|\\s+$")) # trim leading/trailing space
   paste(x_split[x_split != ""], collapse = " ") # combine w/o empty char. elements
@@ -5,8 +11,8 @@ blank.trim <- function(x){
 
 
 
-deparse_nocutoff <- function(expr){ # deparse, paste, remove multiple blanks
-  gsub("[[:space:]]{2,}", " ", paste(deparse(expr), collapse = " "))
+deparse_nocutoff <- function (expr, collapse = " ", width.cutoff = 500L, ...){ # identical to deparse1 added in R 4.0.0, will be removed in subsequent releases
+  paste(deparse(expr, width.cutoff, ...), collapse = collapse)
 }
 
 

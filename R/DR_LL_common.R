@@ -16,7 +16,7 @@ DReg <- function(x, logY, X, ncolX, n, d, k, w, npar, seq_along_d, bx, NR, h_dim
 ### LOG-LIKELIHOOD & GRADIENT ##################################################
 ################################################################################
 
-  LL <- .Call("wght_LL_grad_common", logY, A, Aplus, digamma_A, digamma_Aplus, X, ncolX, c(n, d), npar, w)
+  LL <- .Call(C_wght_LL_grad_common, logY, A, Aplus, digamma_A, digamma_Aplus, X, ncolX, c(n, d), npar, w)
 
 
 
