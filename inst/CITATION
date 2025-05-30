@@ -4,19 +4,23 @@ vers <- sprintf("R package version %s", meta$Version)
 ttle <- sprintf("%s: %s", meta$Package, meta$Title)
 urlg <- "https://github.com/maiermarco/DirichletReg"
 
-citEntry(header = "Current Version",
-  entry  = "MANUAL",
-  title  = ttle,
-  author = "Marco J. Maier",
-  year   = year,
-  note   = vers,
-  url    = urlg,
+bibentry(
+  header = "Current Version",
+
+  bibtype = "MANUAL",
+  title   = ttle,
+  author  = "Marco J. Maier",
+  year    = year,
+  note    = vers,
+  url     = urlg,
 
   textVersion = sprintf("Maier, M. J. (%s). %s. %s. %s", year, ttle, vers, urlg)
 )
 
-citEntry(header = "Technical Report (2014)",
-  entry       = "TECHREPORT",
+bibentry(
+  header      = "Technical Report (2014)",
+
+  bibtype     = "TECHREPORT",
   title       = "DirichletReg: Dirichlet Regression for Compositional Data in R",
   author      = "Marco J. Maier",
   year        = "2014",

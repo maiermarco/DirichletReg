@@ -1,7 +1,7 @@
 Package: DirichletReg
 Type: Package
-Version: 0.7-1
-Date: 2021-04-29
+Version: 0.7-2
+Date: 2025-05-30
 Title: Dirichlet Regression
 Description: Implements Dirichlet regression models.
 Authors@R: person(given  = c("Marco", "Johannes"),

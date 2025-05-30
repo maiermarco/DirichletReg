@@ -59,7 +59,7 @@ if(verbosity > 0){
   }
   formula <- as.Formula(oformula)
 
-  if(class(Y_full) != "DirichletRegData") stop("the response must be prepared by DR_data")
+  if(!inherits(Y_full, "DirichletRegData")) stop("the response must be prepared by DR_data")
 
   if(has_data){
     assign(resp_char, Y_full)

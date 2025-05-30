@@ -1,65 +1,69 @@
 News for Package 'DirichletReg'
 
+Changes in Version 0.7-2:
+
+  * Implemented CRAN-Notes.
+
 Changes in Version 0.7-1:
 
-  • 'summary.DirichletRegModel' now returns a
-    'summary_DirichletRegModel'-class object without printing it (see
-    <URL: https://github.com/maiermarco/DirichletReg/issues/3>).
+  * â€˜summary.DirichletRegModelâ€™ now returns a
+    â€˜summary_DirichletRegModelâ€™-class object without printing it (see
+    <https://github.com/maiermarco/DirichletReg/issues/3>).
 
-  • Moved 'rmarkdown' to Suggests to comply with new version of 'knitr'
-    (see <URL: https://github.com/yihui/knitr/issues/1864>).
+  * Moved â€˜rmarkdownâ€™ to Suggests to comply with new version of â€˜knitrâ€™
+    (see <https://github.com/yihui/knitr/issues/1864>).
 
 Changes in Version 0.7-0:
 
-  • Fixed: Cutoff in formula-deparsing removed.
+  * Fixed: Cutoff in formula-deparsing removed.
 
-  • Removed 'rgl' dependency (package will be loaded if necessary).
+  * Removed â€˜rglâ€™ dependency (package will be loaded if necessary).
 
-  • Moved to GitHub.
+  * Moved to GitHub.
 
 Changes in Version 0.6-3:
 
-  • Instead of producing an error, density functions now return 'NaN'
-    with a warning if any element in 'alpha' is <= 0.
+  * Instead of producing an error, density functions now return â€˜NaNâ€™
+    with a warning if any element in â€˜alphaâ€™ is <= 0.
 
 Changes in Version 0.6-2:
 
-  • Fixed an error in the ternary plot (bottom axis tick labels were
+  * Fixed an error in the ternary plot (bottom axis tick labels were
     printed in reversed order; pointed out by Emilio A. Laca).
 
-  • Imports functions from default packages, as required by the new
+  * Imports functions from default packages, as required by the new
     CRAN-check.
 
-  • Changed the 'Description' field to eliminate the note "Malformed
-    Description field: should contain one or more complete sentences."
+  * Changed the â€˜Descriptionâ€™ field to eliminate the note â€œMalformed
+    Description field: should contain one or more complete sentences.â€
     when checking the package.
 
 Changes in Version 0.6-1:
 
-  • Re-derived gradients/Hessians, optimized C-code, and tweaked
+  * Re-derived gradients/Hessians, optimized C-code, and tweaked
     computation of starting values which leads to considerably better
     performance.
 
-  • Fixed some bugs in 'drop1'.
+  * Fixed some bugs in â€˜drop1â€™.
 
-  • Expanded 'testthat' checks.
+  * Expanded â€˜testthatâ€™ checks.
 
 Changes in Version 0.6-0:
 
-  • All likelihood and gradient functions are now written in C (all
-    called via '.Call()' now instead of '.C()') which leads to a
+  * All likelihood and gradient functions are now written in C (all
+    called via â€˜.Call()â€™ now instead of â€˜.C()â€™) which leads to a
     considerable gain in speed.
 
-  • A 'drop1' method for Dirichlet regression models was added.  As it
+  * A â€˜drop1â€™ method for Dirichlet regression models was added.  As it
     is still experimental and will probably change, use it with care.
-    Options such as 'scope' will be added in one of the next releases.
+    Options such as â€˜scopeâ€™ will be added in one of the next releases.
 
-  • Fixed a bug in the 'print' method for confidence intervals and one
-    in 'confint.DirichletRegModel()'.
+  * Fixed a bug in the â€˜printâ€™ method for confidence intervals and one
+    in â€˜confint.DirichletRegModel()â€™.
 
-  • Expanded the 'testthat' check- and test-suite.
+  * Expanded the â€˜testthatâ€™ check- and test-suite.
 
-  • Known issue: If you have collinear (aliased) terms, the estimation
+  * Known issue: If you have collinear (aliased) terms, the estimation
     will fail.  This will be handled automatically in subsequent
     releases, but for now, please remove the respective terms.  If you
     fit a model and it says something like:
@@ -67,90 +71,90 @@ Changes in Version 0.6-0:
     Error in prepareFixed(start = start, activePar = NULL, fixed = fixed) :
     At least one parameter must not be fixed using argument 'fixed'
     
-    you most likely have collinear terms or "empty" combinations of
+    you most likely have collinear terms or â€œemptyâ€ combinations of
     interaction terms.
 
 Changes in Version 0.5-2:
 
-  • Fixed checking functions in 'tests/testthat'.
+  * Fixed checking functions in â€˜tests/testthatâ€™.
 
 Changes in Version 0.5-1:
 
-  • Fixed a bug when using the 'subset' argument.
+  * Fixed a bug when using the â€˜subsetâ€™ argument.
 
-  • Added tolerance for normalization check to 'DR_data'.
+  * Added tolerance for normalization check to â€˜DR_dataâ€™.
 
-  • moved 'NEWS' to the new fancy 'NEWS.Rd' file/format.
+  * moved â€˜NEWSâ€™ to the new fancy â€˜NEWS.Rdâ€™ file/format.
 
-  • Added the possibility to do quick analyses and transforming data
-    "on the fly", like 'DirichReg(DR_data(A) ~ 1)'.  However this is
+  * Added the possibility to do quick analyses and transforming data
+    â€œon the flyâ€, like â€˜DirichReg(DR_data(A) ~ 1)â€™.  However this is
     only intended for quick checking purposes and may be removed at any
     time.
 
 Changes in Version 0.5-0:
 
-  • Transformation in 'DR_data' is now not only 'TRUE'/'FALSE', but, by
+  * Transformation in â€˜DR_dataâ€™ is now not only â€˜TRUEâ€™/â€˜FALSEâ€™, but, by
     default, a small numeric value to avoid troubles with floating
     point numbers close to 0 or 1.
 
-  • Time-critical routines were implemented in 'C' (pure R versions are
-    available, see '?ddirichlet').
+  * Time-critical routines were implemented in â€˜Câ€™ (pure R versions are
+    available, see â€˜?ddirichletâ€™).
 
-  • 'anova.DirichletRegModel' now invisibly returns results as an
+  * â€˜anova.DirichletRegModelâ€™ now invisibly returns results as an
     object that is printed by a method.
 
-  • Optimized estimation routines.
+  * Optimized estimation routines.
 
-  • Fixed a bug in the predict method.
+  * Fixed a bug in the predict method.
 
-  • Started development of a comprehensive test-suite using 'testthat'.
+  * Started development of a comprehensive test-suite using â€˜testthatâ€™.
 
-  • Published a working paper on the package:
+  * Published a working paper on the package:
     Maier, M. J. (2014). DirichletReg: Dirichlet Regression for
     Compositional Data in R. Research Report Series / Department of
     Statistics and Mathematics, 125. WU Vienna University of Economics
-    and Business, Vienna. <URL: https://epub.wu.ac.at/4077/>
+    and Business, Vienna. <https://epub.wu.ac.at/4077/>
 
-  • Added vignette with code to the working paper.
+  * Added vignette with code to the working paper.
 
-  • Added citation info.
+  * Added citation info.
 
 Changes in Version 0.4-1:
 
-  • The 'trafo' Argument of 'DR_data' has been changed, because it has
+  * The â€˜trafoâ€™ Argument of â€˜DR_dataâ€™ has been changed, because it has
     lead to problems in practical applications when numbers very close
     to 0 or 1 were present.
 
-  • 'DR_data' checks for negative values and generates an appropriate
+  * â€˜DR_dataâ€™ checks for negative values and generates an appropriate
     error message.
 
-  • 'DR_data' has been made more robust in the presence of 'NA's.
+  * â€˜DR_dataâ€™ has been made more robust in the presence of â€˜NAâ€™s.
 
 Changes in Version 0.4-0:
 
-  • Data structure generated by 'DR_data' has changed – the new objects
+  * Data structure generated by â€˜DR_dataâ€™ has changed â€“ the new objects
     can now be integrated into data frames.
 
-  • Formula processing is now handled by the package 'Formula'.
+  * Formula processing is now handled by the package â€˜Formulaâ€™.
 
-  • New methods have been implemented, especially for the class
-    'DirichletRegModel'.
+  * New methods have been implemented, especially for the class
+    â€˜DirichletRegModelâ€™.
 
-  • The documentation is now quite complete.
+  * The documentation is now quite complete.
 
-  • Some speed improvements could be achieved.
+  * Some speed improvements could be achieved.
 
-  • Lots of minor (invisible) changes.
+  * Lots of minor (invisible) changes.
 
 Changes in Version 0.002:
 
-  • Added the analytical Gradient and Hessian for both
+  * Added the analytical Gradient and Hessian for both
     parametrizations.
 
-  • Optimization: preliminary results by BFGS that become starting
+  * Optimization: preliminary results by BFGS that become starting
     values for Newton-Raphson optimization computing the final results.
 
-  • Implemented some residuals
+  * Implemented some residuals
 
-  • Updated help entries
+  * Updated help entries
 

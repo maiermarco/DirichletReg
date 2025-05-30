@@ -1,6 +1,11 @@
 \name{NEWS}
 \title{News for Package \pkg{DirichletReg}}
 \encoding{UTF-8}
+\section{Changes in Version 0.7-2}{
+  \itemize{
+    \item Implemented CRAN-Notes.
+  }
+}
 \section{Changes in Version 0.7-1}{
   \itemize{
     \item\code{summary.DirichletRegModel} now returns a \code{summary_DirichletRegModel}-class object without printing it (see \url{https://github.com/maiermarco/DirichletReg/issues/3}).
