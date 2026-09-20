@@ -14,7 +14,7 @@ extern SEXP rdirichlet_vector(SEXP, SEXP);
 extern SEXP wght_LL_grad_alternative(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP wght_LL_grad_common(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
-static const R_CallMethodDef CallEntries[] = {
+static const R_CallMethodDef callMethods[] = {
     {"ddirichlet_log_matrix",    (DL_FUNC) &ddirichlet_log_matrix,     4},
     {"ddirichlet_log_vector",    (DL_FUNC) &ddirichlet_log_vector,     3},
     {"rdirichlet_matrix",        (DL_FUNC) &rdirichlet_matrix,         3},
@@ -26,6 +26,7 @@ static const R_CallMethodDef CallEntries[] = {
 
 void R_init_DirichletReg(DllInfo *dll)
 {
-    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_registerRoutines(dll, NULL, callMethods, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
+    R_forceSymbols(dll, TRUE);
 }

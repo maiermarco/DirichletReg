@@ -20,3 +20,5 @@ tests\/testthat\/\_res.*\.R$
 ^README\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.tgitconfig$
+^revdep$

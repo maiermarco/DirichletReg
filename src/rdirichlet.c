@@ -12,6 +12,7 @@
 
 
 #include <R.h>
+#include"c_msg_translation.h"
 #include <Rinternals.h>
 #include <Rmath.h>
 
@@ -32,7 +33,7 @@ SEXP rdirichlet_vector(SEXP n, SEXP alpha){
   
   // check alphas ...
   for(int i = 0; i < dims; ++i){
-    if(p_alpha[i] <= 0.0) error("alphas must be > 0");
+    if(p_alpha[i] <= 0.0) error(_("all values of \"alpha\" must be > 0"));
   }
   
   // output vector and pointer
@@ -78,9 +79,9 @@ SEXP rdirichlet_matrix(SEXP n, SEXP alpha, SEXP alpha_rc){
   double *p_alpha = REAL(real_alpha);
   
   // check alphas ...
-  if(v_n != INTEGER(alpha_rc)[0]) error("n and alpha do not match");
+  if(v_n != INTEGER(alpha_rc)[0]) error(_("\"n\" and \"alpha\" do not match"));
   for(int i = 0; i < length(real_alpha); ++i){
-    if(p_alpha[i] <= 0.0) error("alphas must be > 0");
+    if(p_alpha[i] <= 0.0) error(_("all values of \"alpha\" must be > 0"));
   }
   
   // output vector and pointer

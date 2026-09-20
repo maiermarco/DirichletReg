@@ -129,3 +129,11 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   if(interactive()) writeLines("")
 
 }
+
+
+
+coef.summary_DirichletRegModel <- function(object, ...){
+  coefmat <- as.matrix(object$coef.mat)
+  rownames(coefmat) <- names(object$coefficients)
+  coefmat
+}

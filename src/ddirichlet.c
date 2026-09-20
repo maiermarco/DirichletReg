@@ -12,6 +12,7 @@
 
 
 #include<R.h>
+#include"c_msg_translation.h"
 #include<Rinternals.h>
 #include<Rmath.h>
 
@@ -35,9 +36,9 @@ SEXP ddirichlet_log_vector(SEXP y, SEXP alpha, SEXP rc){
   double *p_alpha = REAL(real_alpha);
   
   // check input
-  if(length(int_rc) != 2) error("wrong specification of rc");
-  if(length(y) != v_r * v_c) error("y does not match r and c");
-  if((length(y)/v_r) != length(alpha)) error("alpha does not match y");
+  if(length(int_rc) != 2) error(_("wrong specification of \"rc\""));
+  if(length(y) != v_r * v_c) error(_("\"y\" does not match \"r\" and \"c\""));
+  if((length(y)/v_r) != length(alpha)) error(_("\"alpha\" does not match \"y\""));
   
   // output vector and pointer
   SEXP result = PROTECT(allocVector(REALSXP, v_r));
@@ -85,11 +86,11 @@ SEXP ddirichlet_log_matrix(SEXP y, SEXP alpha, SEXP rc, SEXP alpha_rc){
   double *p_alpha = REAL(real_alpha);
   
   // check input
-  if(length(rc) != 2) error("wrong specification of rc");
-  if(length(alpha_rc) != 2) error("wrong specification of alpha_rc");
-  if(length(y) != v_r * v_c) error("y does not match r and c");
-  if(length(y) != length(alpha)) error("alpha does not match y");
-  if((v_r != INTEGER(int_alpha_rc)[0]) || (v_c != INTEGER(int_alpha_rc)[1])) error("dimensions do not match");
+  if(length(rc) != 2) error(_("wrong specification of \"rc\""));
+  if(length(alpha_rc) != 2) error(_("wrong specification of \"alpha_rc\""));
+  if(length(y) != v_r * v_c) error(_("\"y\" does not match \"r\" and \"c\""));
+  if(length(y) != length(alpha)) error(_("\"alpha\" does not match \"y\""));
+  if((v_r != INTEGER(int_alpha_rc)[0]) || (v_c != INTEGER(int_alpha_rc)[1])) error(_("dimensions do not match"));
   
   // output vector and pointer
   SEXP result = PROTECT(allocVector(REALSXP, v_r));
