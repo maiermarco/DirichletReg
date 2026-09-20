@@ -17,7 +17,7 @@ plot_DRdata_4d <- function(x,
   xyz <- toQuaternary(x$Y)
 
   corners <- toQuaternary(diag(4))
-  corner.connect <- structure(c(1,1,1,2,2,3,2,3,4,3,4,4), .Dim=c(6,2))
+  corner.connect <- structure(c(1,1,1,2,2,3,2,3,4,3,4,4), dim = c(6,2))
 
   coo.lab <- 2 * corners - toQuaternary(diag(4)*(.9-.1/3)+.1/3)
   lab.col <- cmyk2rgb(diag(4)+cbind(0,0,0,c(.2,.2,.2,0)))

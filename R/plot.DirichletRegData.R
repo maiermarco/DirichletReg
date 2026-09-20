@@ -48,7 +48,7 @@ plot.DirichletRegData <- function(x,
 
   if(missing(dims)) dims <- NULL
 
-  if(class(x) != "DirichletRegData") stop("data must be prepared by 'DR_data()'")
+  if(!inherits(x, "DirichletRegData")) stop("data must be prepared by 'DR_data()'")
 
   colored <- get_or_else("colored", TRUE, a2d)
   c.grid <- get_or_else("c.grid", TRUE, a2d)
@@ -120,7 +120,7 @@ plot.DirichletRegData <- function(x,
   } else if(x$dims == 4){
     if( !("rgl" %in% loadedNamespaces()) && !("rgl" %in% utils::installed.packages()[,"Package"]) ){ stop('The "rgl" package could not be found. You can try installing it using:\ninstall.packages("rgl")') }
     requireNamespace("rgl")
-  
+
     plot_DRdata_4d(x=x, dim.labels=dim.labels, ref.lines=ref.lines,
     main=.main,cex=.cex,
     args.3d=a3d, theta=theta, phi=phi

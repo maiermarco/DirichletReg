@@ -11,8 +11,8 @@ blank.trim <- function(x){
 
 
 
-deparse_nocutoff <- function (expr, collapse = " ", width.cutoff = 500L, ...){ # identical to deparse1 added in R 4.0.0, will be removed in subsequent releases
-  paste(deparse(expr, width.cutoff, ...), collapse = collapse)
+deparse_nocutoff <- function (expr){ # mostly identical to deparse1() (added in R 4.0.0), might be removed in subsequent releases
+  gsub("[[:space:]]{2,}", "\\ ", paste(deparse(expr, width.cutoff = 500L), collapse = " "))
 }
 
 
