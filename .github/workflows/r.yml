@@ -32,10 +32,13 @@ jobs:
         with:
           r-version: ${{ matrix.r-version }}
       - name: Install dependencies
-        run: |
-          install.packages(c("Formula", "maxLik", "rgl", "knitr", "rmarkdown", "formatR", "testthat"))
-          remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
-      - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
-        shell: Rscript {0}
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::Formula, any::maxLik, any::rgl, any::knitr, any::rmarkdown, any::formatR, any::testthat
+          needs: check
+      - name: R CMD check
+        uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--no-manual", "--as-cran", "--timings")'
+          error-on: '"error"'
+          check-dir: '"check"'
