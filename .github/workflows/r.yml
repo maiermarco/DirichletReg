@@ -15,6 +15,8 @@ jobs:
     strategy:
       matrix:
         r-version: ['release', 'devel']
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - name: Checkout
