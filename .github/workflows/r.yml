@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::Formula, any::maxLik, any::rgl, any::knitr, any::rmarkdown, any::formatR, any::testthat
+          extra-packages: any::rcmdcheck, any::Formula, any::maxLik, any::rgl, any::knitr, any::rmarkdown, any::formatR, any::testthat
           needs: check
       - name: R CMD check
         uses: r-lib/actions/check-r-package@v2
