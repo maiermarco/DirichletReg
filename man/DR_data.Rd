@@ -63,7 +63,7 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
     In case one row-entry (or more) is \code{NA}, the whole row will be returned as \code{NA}.
     Beta-distributed variables can be supplied as a single vector which, however, has to have values in the interval \eqn{[0,\,1]}{[0, 1]}.
     The second variable will be generated (\code{1 - Y}) and a \code{matrix} consisting of the columns \code{1 - Y} and \code{Y} will be returned.
-    A message will be issued that a beta-distributed variable was assumed and that this assumtion needs to be checked.
+    A message will be issued that a beta-distributed variable was assumed and that this assumption needs to be checked.
   }
   \subsection{\code{trafo}}{%
     The transformation (done if \code{trafo = TRUE}) is a generalization of that proposed by Smithson and Verkuilen (2006) that transforms each component \eqn{y}{y} of \eqn{Y}{Y} by computing \eqn{y^{*}=\frac{y(n-1)+\frac{1}{2}}{n}}{y*=[y(n-1)+1/2]/n} where \eqn{n}{n} is the number of observations in \eqn{Y}{Y} (this approach is also used in the package \pkg{betareg}, see Cribari-Neto & Zeileis, 2010).\cr

@@ -1,12 +1,14 @@
+NEWS               package:DirichletReg                R Documentation
+
 News for Package 'DirichletReg'
 
-Changes in Version 0.7-3:
+Changes in Version 0.8-0:
 
   • Fixed ‘print.DirichletRegModel’ which erroneously issued an error
     (convergence) when ‘maxLik’'s ‘maxNR’ returned convergence-code 8
     (see ‘help("maxNR", package = "maxLik")’; thanks to Nick Thieme).
-    Instead of stopping with an error, a warning is now issed with more
-    detailed diagnostic informations.
+    Instead of stopping with an error, a warning is now issued with
+    more detailed diagnostic informations.
 
   • ‘DirichReg()’ now evaluates the ‘formula’ object in the parent
     frame to ensure that character-to-formula and similar applications
@@ -27,6 +29,9 @@ Changes in Version 0.7-3:
 
   • Changed call to ‘structure()’ from the deprecated special name
     ‘.Dim’ to ‘dim’.
+
+  • General cleanup of the package (old CI-integrations, citations,
+    ...).
 
 Changes in Version 0.7-2:
 
