@@ -30,8 +30,21 @@ Changes in Version 0.8-0:
   • Changed call to ‘structure()’ from the deprecated special name
     ‘.Dim’ to ‘dim’.
 
+  • Fixed a bug in ‘DirichReg’ that prevented users from supplying
+    starting values via ‘control = list(sv = c(...))’.  An example of
+    how to use it has been added to ‘?DirichReg’.
+
+  • Rewrote the ‘update.DirichletRegModel’ method to address issues
+    with scoping.
+
+  • Verbosity now defaults to ‘getOptions("verbose")’ if not specified
+    otherwise.
+
   • General cleanup of the package (old CI-integrations, citations,
-    ...).
+    ...).  Unused old unexported functions are now deprecated with a
+    warning and will be removed in subsequent versions.
+
+  • Adapted the tests for the third edition of ‘testthat’.
 
 Changes in Version 0.7-2:
 

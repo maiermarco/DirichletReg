@@ -5,25 +5,28 @@
 
 
 blank.trim <- function(x){
+  .Deprecated(msg = "This function is unused and will be removed in future versions.")
   x_split <- unlist(strsplit(x, "^\\s+|\\s+$")) # trim leading/trailing space
   paste(x_split[x_split != ""], collapse = " ") # combine w/o empty char. elements
 }
 
 
 
-deparse_nocutoff <- function (expr){ # mostly identical to deparse1() (added in R 4.0.0), might be removed in subsequent releases
+deparse_nocutoff <- function(expr){ # mostly identical to deparse1() (added in R 4.0.0), might be removed in subsequent releases
   gsub("[[:space:]]{2,}", "\\ ", paste(deparse(expr, width.cutoff = 500L), collapse = " "))
 }
 
 
 
 inv.logit <- function(x){
+  .Deprecated(new = "qlogis()")
   log(x) - log(1.0 - x)
 }
 
 
 
 swrap <- function(text, type = c("stop", "warning", "message"), xdent){
+  .Deprecated(msg = "This function is unused and will be removed in future versions.")
   if(missing(xdent)) xdent <- ifelse(match.arg(type) == "message", 0, 4)
   width <- ifelse(getOption("width") < 40L, 40L, getOption("width"))
 
@@ -46,6 +49,7 @@ na.delete <- function(x){
 
 
 make.symmetric <- function(x){
+  .Deprecated(msg = "This function is unused and will be removed in future versions.")
   if(nrow(x) != ncol(x)) stop("x must be a square matrix")
 
   cell.ind <- which(is.na(x), arr.ind = TRUE)

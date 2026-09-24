@@ -4,6 +4,8 @@ safe_pchisq <- function(q, df, ...){
   pchisq(q = q, df = df, ...)
 }
 
+
+
 extractAIC.DirichletRegModel <- function(fit, scale = 0, k = 2, ...){
   n <- nobs(fit)
   npar <- fit$npar
@@ -156,5 +158,3 @@ stop("not implemented yet!")
   return(aod)
 
 }
-
-#drop1(mm)

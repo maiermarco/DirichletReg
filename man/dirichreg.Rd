@@ -7,7 +7,7 @@
 }
 \usage{
 DirichReg(formula, data, model = c("common", "alternative"),
-          subset, sub.comp, base, weights, control, verbosity = 0)
+          subset, sub.comp, base, weights, control, verbosity = getOption("verbose"))
 }
 \arguments{
   \item{formula}{the model formula (for different specifications see \dQuote{Details})}
@@ -69,11 +69,13 @@ DirichReg(formula, data, model = c("common", "alternative"),
   \subsection{Optimization and Verbosity}{
     Using the \code{control} argument, the settings passed to the optimizers can be altered.
     This argument takes a named list.
-    To supply user-defined starting values, use \code{control = list(sv=c(...))} and supply a vector containing initial values for all parameters.
+    To supply user-defined starting values, use \code{control = list(sv = c(...))} and supply a vector containing starting values for all parameters.
+    An example of how to extract and use starting values in provided below.
     Optimizer-specific options include the number of iterations (\code{iterlim = 1000}) and convergence criteria for the BFGS- and NR-optimization ((\code{tol1 = 1e-5}) and (\code{tol2 = 1e-10})).
     
     Verbosity takes integer values from \code{0} to \code{4}.
-    \code{0}, no information is printed (default).
+    If the argument is not specified, it defaults to the \code{"verbose"} option setting and is either off (\code{FALSE}) or at level \code{1} (\code{TRUE}).
+    In case of \code{verbosity = 0}, no information is printed during estimation.
     \code{1} prints information about 3 stages (preparation, starting values, estimation).
     \code{2} prints little information about optimization (\code{verbosity} values greater than one are passed to \code{print.default = verbosity - 1} of \code{\link[maxLik]{maxBFGS}} and \code{\link[maxLik]{maxNR}}).
     \code{3} prints more information about optimization.
@@ -111,20 +113,47 @@ DirichReg(formula, data, model = c("common", "alternative"),
 \author{Marco J. Maier}
 \examples{
 ALake <- ArcticLake
+# because row sums are not 1, a warning is issued that they will be normalized
 ALake$Y <- DR_data(ALake[,1:3])
 
-# fit a quadratic Dirichlet regression models ("common")
+# fit a "common" Dirichlet regression model with linear and quadratic predictors
 res1 <- DirichReg(Y ~ depth + I(depth^2), ALake)
 
-# fit a Dirichlet regression with quadratic predictor for the mean and
-# a linear predictor for precision ("alternative")
-res2 <- DirichReg(Y ~ depth + I(depth^2) | depth, ALake, model="alternative")
+# fit an "alternative" model with linear and quadratic terms for the mean but
+# just depth for precisions
+res2 <- DirichReg(Y ~ depth + I(depth^2) | depth, ALake, model = "alternative")
 
 # test both models
 anova(res1, res2)
 
+# the print method shows basic informations
 res1
+
+# the summary method contains more details
 summary(res2)
+
+
+
+\dontrun{
+# Starting values can substantially speed up computation
+
+# In this example, the ArcticLake dataset is repeated a thousandfold (39000 x 4)
+huge_lake <- ArcticLake[rep(seq_len(nrow(ArcticLake)), each = 1000L), ]
+huge_lake$ssc <- DR_data(huge_lake[, 1:3])
+
+system.time(big1 <- DirichReg(ssc ~ depth + I(depth^2), huge_lake))
+#  user  system elapsed
+# 15.72    0.17   15.83
+
+system.time(big2 <- DirichReg(ssc ~ depth + I(depth^2), huge_lake,
+    control = list(sv = big1$coefficients)))
+#  user  system elapsed
+#  1.78    0.06    1.85
+
+# Elapsed time drops from 15.83 to 1.85 seconds and the coefficients are equal
+all.equal(big1$coefficients, big2$coefficients)
+# [1] TRUE
+}
 }
 \keyword{multivariate}
 \keyword{models}

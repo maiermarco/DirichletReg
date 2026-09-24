@@ -5,135 +5,128 @@
 
 tol3 <- .Machine$double.eps^(1/3)
 
-#cat("================================================================================\n")
-#cat("=== Arctic Lake Data Tests =====================================================\n")
-#cat("================================================================================\n")
-
-context("  AL: Original Data\n   ")
-
-test_that("Arctic Lake - Original Data Structure", {
+test_that("Arctic Lake - Check the Original Data", {
   expect_true(exists("ArcticLake"))
   expect_identical(dim(ArcticLake), c(39L, 4L))
   expect_identical(names(ArcticLake), c("sand", "silt", "clay", "depth"))
-  expect_true(all(unlist(lapply(ArcticLake, function(colElement){ class(colElement) == "numeric" }))))
+  expect_true(all(unlist(lapply(ArcticLake, is.numeric))))
 })
 
-context("  AL: Transformation\n   ")
-
-AL <- ArcticLake[, 4, drop=FALSE]
+# Extract only "depth" keeping the data.frame's structure
+AL <- ArcticLake["depth"]
 
 test_that("Arctic Lake - Data Transformation", {
   expect_identical(dim(AL), c(39L, 1L))
-  expect_identical(class(AL), "data.frame")
-  expect_warning(AL$Y <<- DR_data(ArcticLake[, 1:3]), ".*normalization forced.*")
+  expect_s3_class(AL, "data.frame", exact = TRUE)
+  expect_warning(AL$Y <<- DR_data(ArcticLake[, 1L:3L]), regexp = "normalization\\ forced$")
   expect_equal(unname(rowSums(AL$Y)), rep(1.0, 39L))
 })
 
-#cat("\n  --- Checks: Alternative Model ------------------------------------------------")
+#--- Checks: Alternative Model -------------------------------------------------
 
-##                                                                             #
-##                                                                            ##
-##                                                                             #
-##                                                                             #
-##                                                                             #
+#                                                                              #
+#                                                                             ##
+#                                                                              #
+#                                                                              #
+#                                                                              #
 
-context("  AL: Alternative - Null Model ( Y ~ 1 ), base = 1\n   ")
-
-resA1_1 <- DirichReg(Y ~ 1, AL, model = "alternative", base = 1L)
+test_that("Text-to-formula conversion", {
+  expect_no_error(resA1_1 <<- DirichReg(as.formula("Y ~ 1"), data = AL, model = "alternative", base = 1L))
+})
 
 load("testdata/resA1_1.RData")
 
 test_that("Model Estimation", {
-  expect_equal(resA1_1_mathematica$MLE, resA1_1$logLik)
-  expect_equal(resA1_1_mathematica$DEV, -2.0*resA1_1$logLik)
-  expect_equal(resA1_1_mathematica$COEFS, unname(resA1_1$coefficients), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$SE, unname(resA1_1$se), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$Z, unname(resA1_1$coefficients / resA1_1$se), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$P, 2*pnorm(-abs(unname(resA1_1$coefficients / resA1_1$se))), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$HESSIAN, unname(resA1_1$hessian), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$VCOV, unname(resA1_1$vcov), check.attributes = FALSE)
+  expect_equal(resA1_1_mathematica$MLE    , resA1_1$logLik)
+  expect_equal(resA1_1_mathematica$DEV    , -2.0 * resA1_1$logLik)
+  expect_equal(resA1_1_mathematica$COEFS  , unname(resA1_1$coefficients))
+  expect_equal(resA1_1_mathematica$SE     , unname(resA1_1$se))
+  expect_equal(resA1_1_mathematica$Z      , unname(resA1_1$coefficients / resA1_1$se))
+  expect_equal(resA1_1_mathematica$P      , 2*pnorm(-abs(unname(resA1_1$coefficients / resA1_1$se))))
+  expect_equal(resA1_1_mathematica$HESSIAN, unname(resA1_1$hessian))
+  expect_equal(resA1_1_mathematica$VCOV   , unname(resA1_1$vcov))
 })
 
 test_that("Methods", {
-  expect_equal(resA1_1_mathematica$NOBS, nobs(resA1_1), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$MLE, unclass(logLik(resA1_1)), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$NPAR, attributes(logLik(resA1_1))$df, check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$AIC, AIC(resA1_1), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$BIC, BIC(resA1_1), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$COEFS, unlist(coef(resA1_1)), check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$VCOV, vcov(resA1_1), check.attributes = FALSE)
-
-  expect_equal(resA1_1_mathematica$PREDICT$ALPHA, unname(fitted(resA1_1, alpha=T, phi=F, mu=F))[1,], check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$PREDICT$PHI,   unname(fitted(resA1_1, alpha=F, phi=T, mu=F))[1], check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$PREDICT$MU,    unname(fitted(resA1_1, alpha=F, phi=F, mu=T))[1,], check.attributes = FALSE)
-
-  expect_equal(resA1_1_mathematica$PREDICT$ALPHA, unname(predict(resA1_1, data.frame("depth"=0), alpha=T, phi=F, mu=F))[1,], check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$PREDICT$PHI,   unname(predict(resA1_1, data.frame("depth"=0), alpha=F, phi=T, mu=F))[1,], check.attributes = FALSE)
-  expect_equal(resA1_1_mathematica$PREDICT$MU,    unname(predict(resA1_1, data.frame("depth"=0), alpha=F, phi=F, mu=T))[1,], check.attributes = FALSE)
-
+  expect_equal(resA1_1_mathematica$NOBS , nobs(resA1_1))
+  expect_equal(resA1_1_mathematica$MLE  , as.numeric(logLik(resA1_1)))
+  expect_equal(resA1_1_mathematica$NPAR , attr(logLik(resA1_1), "df", exact = TRUE))
+  expect_equal(resA1_1_mathematica$AIC  , AIC(resA1_1))
+  expect_equal(resA1_1_mathematica$BIC  , BIC(resA1_1))
+  expect_equal(resA1_1_mathematica$COEFS, unname(unlist(coef(resA1_1))))
+  expect_equal(resA1_1_mathematica$VCOV , unname(vcov(resA1_1)))
+  
+  expect_equal(resA1_1_mathematica$PREDICT$ALPHA, unname(fitted(resA1_1, alpha=TRUE , phi=FALSE, mu=FALSE)[1L,]))
+  expect_equal(resA1_1_mathematica$PREDICT$PHI,   unname(fitted(resA1_1, alpha=FALSE, phi=TRUE , mu=FALSE)[1L] ))
+  expect_equal(resA1_1_mathematica$PREDICT$MU,    unname(fitted(resA1_1, alpha=FALSE, phi=FALSE, mu=TRUE )[1L,]))
+  
+  expect_equal(resA1_1_mathematica$PREDICT$ALPHA, unname(predict(resA1_1, data.frame("depth" = 0), alpha=TRUE , phi=FALSE, mu=FALSE)[1L,]))
+  expect_equal(resA1_1_mathematica$PREDICT$PHI,   unname(predict(resA1_1, data.frame("depth" = 0), alpha=FALSE, phi=TRUE , mu=FALSE)[1L,]))
+  expect_equal(resA1_1_mathematica$PREDICT$MU,    unname(predict(resA1_1, data.frame("depth" = 0), alpha=FALSE, phi=FALSE, mu=TRUE )[1L,]))
+  
   conf_ints <- confint(resA1_1, level = c(.99, .95))
   conf_ints$coefficients[[1L]][4L] <- conf_ints$coefficients[[2L]]
   conf_ints <- lapply(c(2L, 3L, 4L), function(listelement){ sort(unlist(lapply(c(conf_ints$coefficients[1L], conf_ints$ci), `[[`, listelement))) })
-  conf_ints <- unname(t(matrix(unlist(conf_ints), 5)))
+  conf_ints <- unname(t(matrix(unlist(conf_ints), 5L)))
   expect_equal(resA1_1_mathematica$CONFINT, conf_ints)
 })
 
-##                                                                          ###
-##                                                                         #   #
-##                                                                            #
-##                                                                          # 
-##                                                                         #####
+#                                                                           ###
+#                                                                          #   #
+#                                                                             #
+#                                                                           # 
+#                                                                          #####
 
-context("  AL: Alternative - Linear/Constant Model ( Y ~ depth | 1 ), base = 1\n   ")
-
-resA2_1 <- DirichReg(Y ~ depth | 1, AL, model = "alternative", base = 1L)
+test_that("Text-to-formula conversion", {
+  expect_no_error(resA2_1 <<- DirichReg(as.formula("Y ~ depth | 1"), data = AL, model = "alternative", base = 1L))
+})
 
 load("testdata/resA2_1.RData")
 
 test_that("Model Estimation", {
-  expect_equal(resA2_1_mathematica$MLE, resA2_1$logLik)
-  expect_equal(resA2_1_mathematica$DEV, -2.0*resA2_1$logLik)
-  expect_equal(resA2_1_mathematica$COEFS, unname(resA2_1$coefficients), check.attributes = FALSE)
-  expect_equal(resA2_1_mathematica$SE, unname(resA2_1$se), check.attributes = FALSE)
-  expect_equal(resA2_1_mathematica$Z, unname(resA2_1$coefficients / resA2_1$se), check.attributes = FALSE, tolerance = tol3)
-  expect_equal(resA2_1_mathematica$P, 2*pnorm(-abs(unname(resA2_1$coefficients / resA2_1$se))), check.attributes = FALSE, tolerance = tol3)
-  expect_equal(resA2_1_mathematica$HESSIAN, unname(resA2_1$hessian), check.attributes = FALSE, tolerance = tol3)
-  expect_equal(resA2_1_mathematica$VCOV, unname(resA2_1$vcov), check.attributes = FALSE, tolerance = tol3)
+  expect_equal(resA2_1_mathematica$MLE    , resA2_1$logLik)
+  expect_equal(resA2_1_mathematica$DEV    , -2.0*resA2_1$logLik)
+  expect_equal(resA2_1_mathematica$COEFS  , unname(resA2_1$coefficients))
+  expect_equal(resA2_1_mathematica$SE     , unname(resA2_1$se))
+  expect_equal(resA2_1_mathematica$Z      , unname(resA2_1$coefficients / resA2_1$se))
+  expect_equal(resA2_1_mathematica$P      , 2*pnorm(-abs(unname(resA2_1$coefficients / resA2_1$se))))
+  expect_equal(resA2_1_mathematica$HESSIAN, unname(resA2_1$hessian))
+  expect_equal(resA2_1_mathematica$VCOV   , unname(resA2_1$vcov))
 })
 
 test_that("Methods", {
-  expect_equal(resA2_1_mathematica$NOBS, nobs(resA2_1), check.attributes = FALSE)
-  expect_equal(resA2_1_mathematica$MLE, unclass(logLik(resA2_1)), check.attributes = FALSE)
-  expect_equal(resA2_1_mathematica$NPAR, attributes(logLik(resA2_1))$df, check.attributes = FALSE)
-  expect_equal(resA2_1_mathematica$AIC, AIC(resA2_1), check.attributes = FALSE)
-  expect_equal(resA2_1_mathematica$BIC, BIC(resA2_1), check.attributes = FALSE)
-  expect_equal(resA2_1_mathematica$COEFS, unlist(coef(resA2_1)), check.attributes = FALSE)
-  expect_equal(resA2_1_mathematica$VCOV, vcov(resA2_1), check.attributes = FALSE, tolerance = tol3)
-
-#  expect_equal(resA2_1_mathematica$PREDICT$ALPHA, unname(fitted(resA2_1, alpha=T, phi=F, mu=F))[1,], check.attributes = FALSE)
-#  expect_equal(resA2_1_mathematica$PREDICT$PHI,   unname(fitted(resA2_1, alpha=F, phi=T, mu=F))[1], check.attributes = FALSE)
-#  expect_equal(resA2_1_mathematica$PREDICT$MU,    unname(fitted(resA2_1, alpha=F, phi=F, mu=T))[1,], check.attributes = FALSE)
-
-  expect_equal(resA2_1_mathematica$PREDICT$ALPHA, unname(predict(resA2_1, data.frame("depth"=0:150), alpha=T, phi=F, mu=F)), check.attributes = FALSE, tolerance = tol3)
-  expect_equal(resA2_1_mathematica$PREDICT$PHI[1L],   unname(predict(resA2_1, data.frame("depth"=0:150), alpha=F, phi=T, mu=F))[1L], check.attributes = FALSE, tolerance = tol3)
-  expect_equal(resA2_1_mathematica$PREDICT$MU,    unname(predict(resA2_1, data.frame("depth"=0:150), alpha=F, phi=F, mu=T)), check.attributes = FALSE)
-
+  expect_equal(resA2_1_mathematica$NOBS , nobs(resA2_1))
+  expect_equal(resA2_1_mathematica$MLE  , as.numeric(logLik(resA2_1)))
+  expect_equal(resA2_1_mathematica$NPAR , attr(logLik(resA2_1), "df", exact = TRUE))
+  expect_equal(resA2_1_mathematica$AIC  , AIC(resA2_1))
+  expect_equal(resA2_1_mathematica$BIC  , BIC(resA2_1))
+  expect_equal(resA2_1_mathematica$COEFS, unname(unlist(coef(resA2_1))))
+  expect_equal(resA2_1_mathematica$VCOV , unname(vcov(resA2_1)))
+  
+ #expect_equal(resA2_1_mathematica$PREDICT$ALPHA, unname(fitted(resA2_1, alpha=T, phi=F, mu=F))[1,], ignore_attr = TRUE)
+ #expect_equal(resA2_1_mathematica$PREDICT$PHI,   unname(fitted(resA2_1, alpha=F, phi=T, mu=F))[1], ignore_attr = TRUE)
+ #expect_equal(resA2_1_mathematica$PREDICT$MU,    unname(fitted(resA2_1, alpha=F, phi=F, mu=T))[1,], ignore_attr = TRUE)
+  
+  expect_equal(resA2_1_mathematica$PREDICT$ALPHA, unname(predict(resA2_1, data.frame("depth" = 0:150), alpha=TRUE , phi=FALSE, mu=FALSE)))
+  expect_equal(resA2_1_mathematica$PREDICT$PHI  , unname(predict(resA2_1, data.frame("depth" = 0:150), alpha=FALSE, phi=TRUE , mu=FALSE)[,1L]))
+  expect_equal(resA2_1_mathematica$PREDICT$MU   , unname(predict(resA2_1, data.frame("depth" = 0:150), alpha=FALSE, phi=FALSE, mu=TRUE )))
+  
   conf_ints <- confint(resA2_1, level = c(.99, .95))
   conf_ints$coefficients[[1L]][4L] <- conf_ints$coefficients[[2L]]
   conf_ints <- lapply(c(2L, 3L, 4L), function(listelement){ sort(unlist(lapply(c(conf_ints$coefficients[1L], conf_ints$ci), `[[`, listelement))) })
-  conf_ints <- unname(t(matrix(unlist(conf_ints), 5)))
+  conf_ints <- unname(t(matrix(unlist(conf_ints), 5L)))
   expect_equal(resA2_1_mathematica$CONFINT, conf_ints)
 })
 
-##                                                                         ####
-##                                                                             #
-##                                                                           ##
-##                                                                             #
-##                                                                         ####
+#                                                                          ####
+#                                                                              #
+#                                                                            ##
+#                                                                              #
+#                                                                          ####
 
-context("  AL: Alternative - Linear/Constant Model ( Y ~ 1 | depth ), base = 2\n   ")
-
-resA3_2 <- DirichReg(Y ~ 1 | depth, AL, model = "alternative", base = 2L)
+test_that("Text-to-formula conversion", {
+  expect_no_error(resA3_2 <<- DirichReg(as.formula(sprintf("Y ~ 1 | `%s`", "depth")), data = AL, model = "alternative", base = 2L))
+})
 
 resA3_2_mathematica <- list(
   MLE     =  51.71895090427818151113,
@@ -158,33 +151,33 @@ resA3_2_mathematica <- list(
 )
 
 test_that("Model Estimation", {
-  expect_equal(resA3_2_mathematica$MLE, resA3_2$logLik)
-  expect_equal(resA3_2_mathematica$DEV, -2.0*resA3_2$logLik)
-  expect_equal(resA3_2_mathematica$COEFS, unname(resA3_2$coefficients), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$SE, unname(resA3_2$se), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$Z, unname(resA3_2$coefficients / resA3_2$se), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$P, 2*pnorm(-abs(unname(resA3_2$coefficients / resA3_2$se))), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$HESSIAN, unname(resA3_2$hessian), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$VCOV, unname(resA3_2$vcov), check.attributes = FALSE)
+  expect_equal(resA3_2_mathematica$MLE    , resA3_2$logLik)
+  expect_equal(resA3_2_mathematica$DEV    , -2.0*resA3_2$logLik)
+  expect_equal(resA3_2_mathematica$COEFS  , unname(resA3_2$coefficients))
+  expect_equal(resA3_2_mathematica$SE     , unname(resA3_2$se))
+  expect_equal(resA3_2_mathematica$Z      , unname(resA3_2$coefficients / resA3_2$se))
+  expect_equal(resA3_2_mathematica$P      , 2*pnorm(-abs(unname(resA3_2$coefficients / resA3_2$se))))
+  expect_equal(resA3_2_mathematica$HESSIAN, unname(resA3_2$hessian))
+  expect_equal(resA3_2_mathematica$VCOV   , unname(resA3_2$vcov))
 })
 
 test_that("Methods", {
-  expect_equal(resA3_2_mathematica$NOBS, nobs(resA3_2), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$MLE, unclass(logLik(resA3_2)), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$NPAR, attributes(logLik(resA3_2))$df, check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$AIC, AIC(resA3_2), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$BIC, BIC(resA3_2), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$COEFS, unlist(coef(resA3_2)), check.attributes = FALSE)
-  expect_equal(resA3_2_mathematica$VCOV, vcov(resA3_2), check.attributes = FALSE)
-
-#  expect_equal(resA3_2_mathematica$PREDICT$ALPHA, unname(fitted(resA3_2, alpha=T, phi=F, mu=F))[1,], check.attributes = FALSE)
-#  expect_equal(resA3_2_mathematica$PREDICT$PHI,   unname(fitted(resA3_2, alpha=F, phi=T, mu=F))[1], check.attributes = FALSE)
-#  expect_equal(resA3_2_mathematica$PREDICT$MU,    unname(fitted(resA3_2, alpha=F, phi=F, mu=T))[1,], check.attributes = FALSE)
-#
-#  expect_equal(resA3_2_mathematica$PREDICT$ALPHA, unname(predict(resA3_2, data.frame("depth"=0), alpha=T, phi=F, mu=F))[1,], check.attributes = FALSE)
-#  expect_equal(resA3_2_mathematica$PREDICT$PHI,   unname(predict(resA3_2, data.frame("depth"=0), alpha=F, phi=T, mu=F))[1,], check.attributes = FALSE)
-#  expect_equal(resA3_2_mathematica$PREDICT$MU,    unname(predict(resA3_2, data.frame("depth"=0), alpha=F, phi=F, mu=T))[1,], check.attributes = FALSE)
-
+  expect_equal(resA3_2_mathematica$NOBS , nobs(resA3_2))
+  expect_equal(resA3_2_mathematica$MLE  , as.numeric(logLik(resA3_2)))
+  expect_equal(resA3_2_mathematica$NPAR , attr(logLik(resA3_2), "df", exact = TRUE))
+  expect_equal(resA3_2_mathematica$AIC  , AIC(resA3_2))
+  expect_equal(resA3_2_mathematica$BIC  , BIC(resA3_2))
+  expect_equal(resA3_2_mathematica$COEFS, unname(unlist(coef(resA3_2))))
+  expect_equal(resA3_2_mathematica$VCOV , unname(vcov(resA3_2)))
+  
+ #expect_equal(resA3_2_mathematica$PREDICT$ALPHA, unname(fitted(resA3_2, alpha=T, phi=F, mu=F))[1,], ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$PHI,   unname(fitted(resA3_2, alpha=F, phi=T, mu=F))[1], ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$MU,    unname(fitted(resA3_2, alpha=F, phi=F, mu=T))[1,], ignore_attr = TRUE)
+ #
+ #expect_equal(resA3_2_mathematica$PREDICT$ALPHA, unname(predict(resA3_2, data.frame("depth"=0), alpha=T, phi=F, mu=F))[1,], ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$PHI,   unname(predict(resA3_2, data.frame("depth"=0), alpha=F, phi=T, mu=F))[1,], ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$MU,    unname(predict(resA3_2, data.frame("depth"=0), alpha=F, phi=F, mu=T))[1,], ignore_attr = TRUE)
+  
   conf_ints <- confint(resA3_2, level = c(.99, .95))
   conf_ints <- unname(rbind(
     sort(c(conf_ints$coefficients$beta[[1L]], unlist(lapply(conf_ints$ci, `[`, 1L)))),

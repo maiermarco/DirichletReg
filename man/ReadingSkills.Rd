@@ -13,5 +13,5 @@
     \item{\code{iq}}{non-verbal \acronym{IQ} (\eqn{z}{z}-scores; \eqn{\mu=0}{mean = 0}, \eqn{\sigma^2=1}{sigma² = 1})}
   }
 }
-\source{Example 3 from \url{http://www.michaelsmithson.online/stats/betareg/betareg.html}}
+\source{Example 3 from \url{https://www.michaelsmithson.online/stats/betareg/betareg.html}}
 \keyword{datasets}

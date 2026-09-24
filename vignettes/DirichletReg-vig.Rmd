@@ -13,11 +13,11 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-    collapse = TRUE
-  , comment = "##"
-  , tidy = TRUE
-  , fig.width=7
-  , fig.height=7
+    collapse   = TRUE
+  , comment    = "##"
+  , tidy       = TRUE
+  , fig.width  = 7L
+  , fig.height = 7L
 )
 ```
 
@@ -38,17 +38,17 @@ AL <- DR_data(ArcticLake[,1:3])
 AL[1:6,]
 ```
 
-Code for Fig. 1 (left):
-```{r, fig.show='hold', fig.cap = "Figure 1: Arctic lake: Ternary plot and depth vs. composition. (left)"}
+Code for Fig. 4 (left):
+```{r, fig.cap = "Figure 4: Arctic lake: Ternary plot (left) and a scatter plot of depth vs. composition (right)."}
 plot(AL, cex=.5, a2d=list(colored=FALSE, c.grid=FALSE))
 ```
 
-Code for Fig. 1 (right):
-```{r, fig.show='hold', fig.cap = "Figure 1: Arctic lake: Ternary plot and depth vs. composition. (right)"}
+Code for Fig. 4 (right):
+```{r, fig.cap = "Figure 4: Arctic lake: Ternary plot (left) and a scatter plot of depth vs. composition (right)."}
 plot(rep(ArcticLake$depth,3),as.numeric(AL), pch=21, bg=rep(c("#E495A5", "#86B875", "#7DB0DD"),each=39), xlab="Depth (m)", ylab="Proportion", ylim=0:1)
 ```
 
-```{r, tidy=TRUE}
+```{r}
 lake1 <- DirichReg(AL~depth, ArcticLake)
 lake1
 
@@ -63,8 +63,8 @@ summary(lake2)
 
 
 
-Code for Fig. 2:
-```{r, fig.show='hold', fig.cap = "Figure 2: Arctic lake: Fitted values of the quadratic model."}
+Code for Fig. 5:
+```{r, fig.show='hold', fig.cap = "Figure 5: Arctic lake: Fitted values of the quadratic model."}
 par(mar=c(4, 4, 4, 4)+0.1)
 plot(rep(ArcticLake$depth,3),as.numeric(AL),
      pch=21, bg=rep(c("#E495A5", "#86B875", "#7DB0DD"),each=39),
@@ -78,7 +78,7 @@ par(new=TRUE)
 plot(cbind(Xnew, predict(lake2, Xnew, F,F,T)), lty="24", type="l",ylim=c(0,max(predict(lake2, Xnew, F,F,T))),axes=F,ann=F,lwd=2)
 axis(4)
 mtext(expression(paste("Precision (",phi,")",sep="")), 4, line=3)
-legend("top",legend=c(expression(hat(mu[c]==hat(alpha)[c]/hat(alpha)[0])),expression(hat(phi)==hat(alpha)[0])),lty=c(1,2),lwd=c(3,2),bty="n")
+legend("top",legend=c(expression(hat(mu)[c]==hat(alpha)[c]/hat(alpha)[0]),expression(hat(phi)==hat(alpha)[0])),lty=c(1,2),lwd=c(3,2),bty="n")
 ```
 
 ```{r}
@@ -92,8 +92,8 @@ pp <- predict(DirichReg(AL~depth+I(depth^2),AL), X)
 ```
 
 
-Code for Fig. 3:
-```{r, fig.cap = "Figure 3: Arctic lake: OLS (dashed) vs. Dirichlet regression (solid) predictions."}
+Code for Fig. 6:
+```{r, fig.cap = "Figure 6: Arctic lake: OLS (dashed) vs. Dirichlet regression (solid) predictions."}
 plot(AL$AL, cex=.1, reset_par=FALSE)
 points(toSimplex(AL$AL), pch=16, cex=.5, col=gray(.5))
 
@@ -122,8 +122,8 @@ anova(blood1, blood2)
 summary(blood1)
 ```
 
-Code for Fig.~\ref{fig:blood:boxfitted}:
-```{r, fig.cap="Blood samples: Box plots and fitted values (dashed lines indicate the fitted values for each group)."}
+Code for Fig. 7:
+```{r, fig.cap="Figure 7: Blood samples: Box plots and fitted values (dashed lines indicate the fitted values for each group)."}
 par(mfrow=c(1,4), mar=c(4,4,4,2)+.25)
 for(i in 1:4){
   boxplot(Bld$Smp[,i]~Bld$Disease, ylim=range(Bld$Smp[,1:4]), main=paste(names(Bld)[i]), xlab="Disease Type", ylab="Proportion")
@@ -141,8 +141,8 @@ dimnames(LP) <- list(paste("C",1:6), c("A", "B"))
 print(data.frame(round(LP * 100, 1),"pred."=as.factor(ifelse(LP[,1]>LP[,2], "==> A", "==> B"))),print.gap=2)
 ```
 
-Code for Fig.~\ref{fig:blood:predictions}:
-```{r, fig.cap = "Blood samples: Observed values and predictions"}
+Code for Fig. 8:
+```{r, fig.cap = "Figure 8: Blood samples: Observed values and predictions."}
 B2 <- DR_data(BloodSamples[,c(1,2,4)])
 plot(B2, cex=.001, reset_par=FALSE)
 
@@ -175,8 +175,8 @@ rs2 <- DirichReg(acc ~ dyslexia*iq | dyslexia+iq, RS, model="alternative")
 anova(rs1,rs2)
 ```
 
-Code for Fig.~\ref{fig:ReadingSkills}:
-```{r, fig.cap="Reading skills: Predicted values of Dirichlet regression and OLS regression."}
+Code for Fig. 9:
+```{r, fig.cap="Figure 9: Reading skills: Predicted values of Dirichlet regression and OLS regression."}
 g.ind <- as.numeric(RS$dyslexia)
 g1 <- g.ind == 1   # normal
 g2 <- g.ind != 1   # dyslexia
@@ -223,8 +223,8 @@ confint(rs2)
 confint(rs2, exp=TRUE)
 ```
 
-Code for Fig.~\ref{fig:readingskills.residplot}:
-```{r, fig.height=7/2*3, fig.cap="Reading skills: residual plots of OLS and Dirichlet regression models."}
+Code for 10:
+```{r, fig.height=7/2*3, fig.cap="Figure 10: Reading skills: Various residual plots of OLS and Dirichlet regression models. The left columns shows OLS, the right column Dirichlet models. In the first row, QQ-plots show deviation from a normal distribution of residuals. The second row plots residuals against the covariate IQ. The third row plots residuals against fitted values."}
 gcol <- c("#E495A5", "#39BEB1")[3-as.numeric(RS$dyslexia)]
 tmt <- c(-3,3)
 

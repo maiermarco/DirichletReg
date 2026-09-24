@@ -1,13 +1,14 @@
-DirichReg <- function(formula,
-                      data,
-                      model = c("common", "alternative"),
-                      subset,
-                      sub.comp,                                                 # subcompositions
-                      base,
-                      weights,
-                      control,
-                      verbosity = 0
-                      ){
+DirichReg <- function(
+  formula,
+  data,
+  model = c("common", "alternative"),
+  subset,
+  sub.comp,                           # subcompositions
+  base,
+  weights,
+  control,
+  verbosity = getOption("verbose")
+){
 
   this.call <- match.call()
   this.call[["formula"]] <- eval(this.call[["formula"]], parent.frame()) # eval in parent frame and replace formula
@@ -171,10 +172,10 @@ if(verbosity > 0){
   # compute starting values
   if(is.null(control$sv)){
     starting.vals <- get_starting_values(Y = Y_fit, X.mats = X_fit,
-                       Z.mat = {if(repar) as.matrix(Z.mat) else Z.mat},
+                       Z.mat = if(repar) as.matrix(Z.mat) else Z.mat,
                        repar = repar, base = base, weights = weights) * if(repar){ 1 } else { 1/n.dim }
   } else {
-    if(length(control$sv) != n.vars) stop("wrong number of starting values supplied.")
+    if(length(control$sv) != sum(n.vars)) stop("wrong number of starting values supplied.")
     starting.vals <- control$sv
   }
 

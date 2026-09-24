@@ -6,3 +6,9 @@ src/*.o
 src/*.so
 src/*.dll
 .tgitconfig
+
+DirichletRegMixture.Rd
+DirichMixture.Rd
+AIC.DirichletRegMixture.R
+DirichMixture.R
+print.DirichletRegMixture.R

@@ -22,3 +22,4 @@ LazyData: yes
 ZipData: yes
 VignetteBuilder: knitr
 Language: en-US
+Config/testthat/edition: 3
