@@ -13,7 +13,7 @@
 %
 %
 \usage{
-DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
+DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1L,
     norm_tol = sqrt(.Machine$double.eps))
 
 \method{print}{DirichletRegData}(x, type = c("processed", "original"), \dots)
@@ -98,10 +98,22 @@ Cribari-Neto, F. & Zeileis, A. (2010). Beta Regression in R. \emph{Journal of St
 }
 \author{Marco J. Maier}
 \examples{
-# create a DirichletRegData object from the Arctic Lake data
+# inspect the raw data
 head(ArcticLake[, 1:3])
+
+# create a DirichletRegData object from the Arctic Lake data
 AL <- DR_data(ArcticLake[, 1:3])
+
+# print a summary
 summary(AL)
+
+# here are the first few rows of the transformed data
 head(AL)
+
+# you can also supply a vector in [0, 1]
+rand_data <- DR_data(runif(10))
+
+# since no names were supplied, DR_data guessed the names
+rand_data
 }
 \keyword{manip}
