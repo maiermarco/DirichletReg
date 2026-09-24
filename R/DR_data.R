@@ -1,9 +1,9 @@
 DR_data <- function(
   Y,                                       # response (compositional variable)
   trafo       = sqrt(.Machine$double.eps), # transform (compress) the data?
-  base        = 1L,                        # base variable for the reparametrized (alternative) model
+  base        = 1,                         # base variable for the reparametrized (alternative) model
   norm_tol    = sqrt(.Machine$double.eps), # tolerance for normalization [0, ?]
-  no_guessing                              # disables "name guessing" when Y is a vector
+  no_guessing = FALSE                      # disables "name guessing" when Y is a vector
 ){
   
   # initialization
@@ -71,7 +71,7 @@ DR_data <- function(
   # more checks
   if(is.null(dim(Y))) stop('"Y" must be either a matrix or a data.frame.') # this should not be possible
   if(ncol(Y) < 2L) stop('"Y" must at least have two columns.') # neither should this
-  if(!is.integer(base) || (base < 1L) || (base > ncol(Y))) stop('"base" must be an integer in the range of variables.') # check base category
+  if(((base %% 1) != 0) || (base < 1L) || (base > ncol(Y))) stop('"base" must be an integer in the range of variables.') # check base category
   if(length(norm_tol) != 1L || is.na(norm_tol) || (norm_tol <= 0)) stop('"norm_tol" must be a small number > 0. See ?DR_data')
   if(is.null(colnames(Y))) colnames(Y) <- paste0("v", seq_len(ncol(Y))) # if Y has no column names, assign a sequence v1, v2, v3, ...
   
@@ -82,7 +82,7 @@ DR_data <- function(
   
   if(
     force.norm || # either forced by the user or
-    isTRUE(all.equal(na.delete(row.sums), rep(1.0, length(na.delete(row.sums))), tolerance = norm_tol, check.attributes = FALSE))
+    (force.norm.su1 <- !isTRUE(all.equal(na.delete(row.sums), rep(1.0, length(na.delete(row.sums))), tolerance = norm_tol, check.attributes = FALSE)))
   ){
     Y <- Y / row.sums # normalize rows
     force.norm.gt1 <- any(Y > 1, na.rm = TRUE) # was normalization necessary because of values over 1
@@ -108,24 +108,24 @@ DR_data <- function(
   
   # Object definition
   res <- structure(
-    ".Data"       = as.matrix(Y),                 # the final, possible normalized/transformed data
-    "Y.original"  = as.data.frame(Y.original),    # the original data
-    "dims"        = ncol(Y),                      # the number of dimensions/components
-    "dim.names"   = colnames(Y),                  # names of dimensions/components
-    "obs"         = nrow(Y),                      # number of observations (including NAs)
-    "valid_obs"   = length(na.delete(row.sums)),  # number of valid observations
-    "normalized"  = force.norm || force.norm.gt1, # normalizations?
-    "transformed" = force.tran || state.tran,     # transformation?
-    "base"        = base,                         # index of the base category
-    "class"       = "DirichletRegData"            # class definition
+    ".Data"       = as.matrix(Y),                                   # the final, possible normalized/transformed data
+    "Y.original"  = as.data.frame(Y.original),                      # the original data
+    "dims"        = ncol(Y),                                        # the number of dimensions/components
+    "dim.names"   = colnames(Y),                                    # names of dimensions/components
+    "obs"         = nrow(Y),                                        # number of observations (including NAs)
+    "valid_obs"   = length(na.delete(row.sums)),                    # number of valid observations
+    "normalized"  = force.norm || force.norm.gt1 || force.norm.su1, # normalizations?
+    "transformed" = force.tran || state.tran,                       # transformation?
+    "base"        = as.integer(base),                               # index of the base category
+    "class"       = "DirichletRegData"                              # class definition
   )
   
   
     
   # Issue warnings
-  if((force.norm || force.norm.gt1) && (force.tran || state.tran)){
+  if((force.norm || force.norm.gt1 || force.norm.su1) && (force.tran || state.tran)){
     warning("not all rows sum up to 1 => normalization forced\n  some entries are 0 or 1 => transformation forced")
-  } else if(force.norm || force.norm.gt1){
+  } else if(force.norm || force.norm.gt1 || force.norm.su1){
     warning("not all rows sum up to 1 => normalization forced")
   } else if(force.tran || state.tran){
     warning("some entries are 0 or 1 => transformation forced")

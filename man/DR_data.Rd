@@ -13,8 +13,8 @@
 %
 %
 \usage{
-DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1L,
-    norm_tol = sqrt(.Machine$double.eps))
+DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
+    norm_tol = sqrt(.Machine$double.eps), no_guessing = FALSE)
 
 \method{print}{DirichletRegData}(x, type = c("processed", "original"), \dots)
 
@@ -42,6 +42,10 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1L,
   \item{norm_tol}{%
     Due to numerical precision, row sums of \eqn{\mathbf{Y}} may not be \emph{exactly} equal to 1.
     Therefore, \code{norm_tol} is a small non-negative value (default: \ifelse{latex}{\eqn{\sqrt{\mathtt{.Machine\$double.eps}}}}{\code{sqrt(.Machine$double.eps)}}) which represents the tolerance when testing for \dQuote{near equality} to 1 (see \code{\link[base]{all.equal}}).
+  }%
+  \item{no_guessing}{%
+    A logical value that determines whether \code{DR_data()} will try to infer the variable name if \code{Y} is a single column or vector.
+    By default, \code{DR_data} will attempt to find a name, if \code{no_guessing = TRUE}, whatever is supplied to \code{Y} will be used as is.
   }%
   \item{x}{%
     A \code{DirichletRegData} object
@@ -114,6 +118,16 @@ head(AL)
 rand_data <- DR_data(runif(10))
 
 # since no names were supplied, DR_data guessed the names
-rand_data
+head(rand_data)
+
+# note that here, only one variable is supplied, therefore the variable name
+# would be ReadingSkills[["accuracy"]]
+read_acc <- DR_data(ReadingSkills[["accuracy"]])
+
+# however, since no_guessing = FALSE by default, DR_data() infers that the variable name is
+head(read_acc)
+
+# accuracy and names the columns accordingly. To prevent this, set no_guessing = TRUE
+head(DR_data(ReadingSkills[["accuracy"]], no_guessing = TRUE))
 }
 \keyword{manip}
