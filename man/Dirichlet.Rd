@@ -27,19 +27,19 @@ ddirichlet_R(x, alpha, log = FALSE, sum.up = FALSE)
   }{%
     D(\alpha)=[\Gamma(\sum\alpha)/\prod\Gamma(\alpha)]\prod y^(\alpha-1)%
   }
-
+  
   Usually, \code{alpha} is a vector thus the same parameters will be used for all observations.
   If \code{alpha} is a matrix, a complete set of \eqn{\alpha}{alpha}-parameters must be supplied for each observation.
-
-  \code{log} returns the logarithm of the densities (therefore the log-likelihood) and \code{sum.up} returns the product or sum and thereby the likelihood or log-likelihood.
-
-  Dirichlet (log-)densities are by default computed using C-routines (\code{ddirichlet_log_vector} and \code{ddirichlet_log_matrix}), a version only using R is provided by \code{ddirichlet_R}.
-  Caution: Although \code{.C()} can be used to call the C routines directly, R will crash or produce wrong values, if, e.g., data types are not set properly.
+  
+  The argument \code{log = TRUE} returns the logarithm of the densities (therefore the log-likelihood) and \code{sum.up = TRUE} returns the product or sum and thereby the likelihood or log-likelihood.
+  
+  Dirichlet (log-)densities are by default computed using \code{C}-routines (\code{C_ddirichlet_log_vector} and \code{C_ddirichlet_log_matrix}), an implementation in \R is provided by \code{ddirichlet_R()}.
+	Caution: Although \code{.Call()} can be used to call the \code{C}-routines directly, \R will crash or produce wrong values, if, e.g., data types are not set properly.
 }
 \value{
 \item{rdirichlet}{returns a matrix with random numbers according to the supplied alpha vector or matrix.}
 \item{ddirichlet}{returns a vector of densities (if \code{sum.up = FALSE}) or the (log-)likelihood (if \code{sum.up = TRUE}) for the given data and alphas. Returns \code{NaN} if any element of \code{alpha} is \eqn{\leq0}{<= 0}.}
-\item{ddirichlet_R}{as \code{ddirichlet}, only implemented purely in R.}
+\item{ddirichlet_R}{as \code{ddirichlet}, only implemented purely in \R.}
 }
 \author{Marco J. Maier}
 \examples{

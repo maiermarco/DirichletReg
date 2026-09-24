@@ -4,18 +4,23 @@
 \docType{package}
 \alias{DirichletReg}
 \title{The \pkg{DirichletReg} Package}
-\description{%
-This package provides a functions to analyze compositional data using Dirichlet regression methods.
+\description{\Sexpr[stage=build]{packageDescription("DirichletReg")$Description}
 \tabular{ll}{%
-Package:\tab{}DirichletReg\cr%
-Type:   \tab{}Package\cr%
-Version:\tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$Version}\cr%
-Date:   \tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$Date}\cr%
-License:\tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$License}\cr%
+Package:   \tab{}\pkg{DirichletReg}\cr%
+Type:      \tab{}Package\cr%
+Version:   \tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$Version}\cr%
+Date:      \tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$Date}\cr%
+License:   \tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$License}\cr%
+Depends:   \tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$Depends}\cr%
+Imports:   \tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$Imports}\cr%
+Suggests:  \tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$Suggests}\cr%
+URL:       \tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$URL}\cr%
+BugReports:\tab{}\Sexpr[stage=build]{packageDescription("DirichletReg")$BugReports}\cr%
 }}
-\author{Marco J. Maier}
+\author{\Sexpr[stage=build]{format(eval(parse(text = packageDescription("DirichletReg")$`Authors@R`)), style = "text")}}
 \examples{
-  example(plot.DirichletRegData)
-  example(DirichReg)
-}
-\keyword{package}
+example(DR_data)
+example(DirichReg)
+example(plot.DirichletRegData)
+}%
+\keyword{package}%

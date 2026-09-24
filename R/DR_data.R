@@ -19,9 +19,9 @@ DR_data <- function(
   # set up beta-distributed matrix if a variables with values in [0, 1] is supplied
   if(is.null(dim(Y)) || (ncol(Y) == 1L)){ # if Y is a vector
     if(!is.null(dim(Y)) && ncol(Y) == 1L){ # handle Y with only 1 column
-      if(!is.null(colnames(Y)) && nchar(colnames(Y)) > 1L) .name <- col # if that single column has a non-empty name, store it in .name
+      if(!is.null(colnames(Y)) && nchar(colnames(Y)) > 1L) .name <- colnames(Y) # if that single column has a non-empty name, store it in .name
       Y <- Y[, 1L, drop = TRUE] # store the column in a vector format
-    }    
+    }
     
     if((length(na.delete(Y)) < 1L) || any((na.delete(Y) < 0) | (na.delete(Y) > 1))){ # error if no non-missing or just values outside [0, 1] supplied
       stop('only one variable with values outside [0, 1] supplied.\nbeta distribution cannot safely be assumed.\ncheck and prepare your data first.')
@@ -39,8 +39,8 @@ DR_data <- function(
       .name <- gsub("\\s", "", .name) # remove whitespace
       if(grepl("^.+\\[?\\[\\,?[0-9]+L?\\]\\]?$", .name)) return(.name) # shortening is too risky, returning as is
       .name <- gsub("^.+\\$", "", .name) # eliminate any references to the object the variable comes from (e.g., object$variable)
-      if(grepl("^.+\\[\\[?.+\\]\\]?$", .name)){ # if .name looks something like object[["variables"]], ob['name'] etc.
-        .name <- paste(strsplit(.name, split = "^.+\\[\\[?[\"']?|[\"']?\\]\\]?$")[[1L]], collapse = "") # split the string and try to extract the variable
+      if(grepl("^.+\\[{1,2}.+\\]{1,2}$", .name)){ # if .name looks something like object[["variables"]], ob['name'] etc.
+        .name <- paste(strsplit(.name, split = "^.+\\[{1,2}\\,?[\"']?|[\"']?\\]{1,2}$")[[1L]], collapse = "") # split the string and try to extract the variable
       }
       if(grepl("^`(.+)`$", .name)) .name <- gsub("^`|`$", "", .name) # if Y was supplied as object$`variable` remove the backticks
       if(grepl("[[:alpha:]]+", .name)) return(.name) else return(.original.name) # if .name looks good, return it, else return the original

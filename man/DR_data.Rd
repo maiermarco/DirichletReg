@@ -98,7 +98,7 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
 \references{
 Smithson, M. & Verkuilen, J. (2006). A Better Lemon Squeezer? Maximum-Likelihood Regression With Beta-Distributed Dependent Variables. \emph{Psychological Methods, 11}(1), 54--71.
 
-Cribari-Neto, F. & Zeileis, A. (2010). Beta Regression in R. \emph{Journal of Statistical Software, 34}(2), 1--24.
+Cribari-Neto, F. & Zeileis, A. (2010). Beta Regression in \R. \emph{Journal of Statistical Software, 34}(2), 1--24.
 }
 \author{Marco J. Maier}
 \examples{

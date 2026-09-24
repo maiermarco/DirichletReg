@@ -51,7 +51,7 @@ DirichReg(formula, data, model = c("common", "alternative"),
       As in multinomial logistic regression, one response variable is omitted (by default the first, but this can be changed by the \code{base} argument in \code{\link{DR_data}} or \code{DirichReg}) and for the rest a set of predictors is used with a multinomial logit-link.
       For precisions, a different set of predictors can be set up using a log-link.
       
-      \code{DV ~ p1 * p2 | p1 + p2} will set up a model where the expected values are predicted by \code{p1 * p2} and precision are modeled using \code{p1 + p2}.
+      \code{DV ~ p1 * p2 | p1 + p2} will set up a model where the expected values are predicted by \code{p1 * p2} and precision is modeled using \code{p1 + p2}.
     }
   }
   \subsection{Data Preparation}{
@@ -71,7 +71,7 @@ DirichReg(formula, data, model = c("common", "alternative"),
     This argument takes a named list.
     To supply user-defined starting values, use \code{control = list(sv = c(...))} and supply a vector containing starting values for all parameters.
     An example of how to extract and use starting values in provided below.
-    Optimizer-specific options include the number of iterations (\code{iterlim = 1000}) and convergence criteria for the BFGS- and NR-optimization ((\code{tol1 = 1e-5}) and (\code{tol2 = 1e-10})).
+    Optimizer-specific options include the number of iterations (\code{iterlim = 1000}) and convergence criteria for the BFGS- and NR-optimization (\code{tol1 = 1e-5} and \code{tol2 = 1e-10}).
     
     Verbosity takes integer values from \code{0} to \code{4}.
     If the argument is not specified, it defaults to the \code{"verbose"} option setting and is either off (\code{FALSE}) or at level \code{1} (\code{TRUE}).

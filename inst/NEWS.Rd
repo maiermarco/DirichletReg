@@ -4,6 +4,7 @@
 \encoding{UTF-8}
 \section{Changes in Version 0.8-0}{
   \itemize{
+    \item Bumped up the required \R-version to 4.0.0.
     \item Fixed \code{print.DirichletRegModel} which erroneously issued an error (convergence) when \pkg{maxLik}'s \code{maxNR} returned convergence-code 8 (see \code{help("maxNR", package = "maxLik")}; thanks to Nick Thieme).
           Instead of stopping with an error, a warning is now issued with more detailed diagnostic informations.
     \item\code{DirichReg()} now evaluates the \code{formula} object in the parent frame to ensure that character-to-formula and similar applications can be processed correctly (see \url{https://github.com/maiermarco/DirichletReg/issues/4}).
@@ -18,6 +19,8 @@
     \item Verbosity now defaults to \code{getOptions("verbose")} if not specified otherwise.
     \item General cleanup of the package (old CI-integrations, citations, \ldots).
           Unused old unexported functions are now deprecated with a warning and will be removed in subsequent versions.
+    \item Revision of the documentation.
+		\item Better code documentation.
     \item Adapted the tests for the third edition of \pkg{testthat}.
   }
 }
@@ -53,14 +56,14 @@
 }
 \section{Changes in Version 0.6-1}{
   \itemize{
-    \item Re-derived gradients/Hessians, optimized C-code, and tweaked computation of starting values which leads to considerably better performance.
+    \item Re-derived gradients/Hessians, optimized \code{C}-code, and tweaked computation of starting values which leads to considerably better performance.
     \item Fixed some bugs in \code{drop1}.
     \item Expanded \pkg{testthat} checks.
   }
 }
 \section{Changes in Version 0.6-0}{
   \itemize{
-    \item All likelihood and gradient functions are now written in C (all called via \code{.Call()} now instead of \code{.C()}) which leads to a considerable gain in speed.
+    \item All likelihood and gradient functions are now written in \code{C} (all called via \code{.Call()} now instead of \code{.C()}) which leads to a considerable gain in speed.
     \item A \code{drop1} method for Dirichlet regression models was added.
           As it is still experimental and will probably change, use it with care.
           Options such as \code{scope} will be added in one of the next releases.
@@ -95,7 +98,7 @@ At least one parameter must not be fixed using argument 'fixed'} you most likely
     \item Fixed a bug in the predict method.
     \item Started development of a comprehensive test-suite using \pkg{testthat}.
     \item Published a working paper on the package:\cr%
-          Maier, M. J. (2014). DirichletReg: Dirichlet Regression for Compositional Data in R. Research Report Series / Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. \url{https://epub.wu.ac.at/4077/}
+          Maier, M. J. (2014). \emph{\pkg{DirichletReg}: Dirichlet Regression for Compositional Data in \R.} Research Report Series / Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. \url{https://epub.wu.ac.at/4077/}
     \item Added vignette with code to the working paper.
     \item Added citation info.
   }

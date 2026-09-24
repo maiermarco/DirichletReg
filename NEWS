@@ -4,6 +4,8 @@ News for Package 'DirichletReg'
 
 Changes in Version 0.8-0:
 
+  • Bumped up the required R-version to 4.0.0.
+
   • Fixed ‘print.DirichletRegModel’ which erroneously issued an error
     (convergence) when ‘maxLik’'s ‘maxNR’ returned convergence-code 8
     (see ‘help("maxNR", package = "maxLik")’; thanks to Nick Thieme).
@@ -43,6 +45,10 @@ Changes in Version 0.8-0:
   • General cleanup of the package (old CI-integrations, citations,
     ...).  Unused old unexported functions are now deprecated with a
     warning and will be removed in subsequent versions.
+
+  • Revision of the documentation.
+
+  • Better code documentation.
 
   • Adapted the tests for the third edition of ‘testthat’.
 
@@ -86,7 +92,7 @@ Changes in Version 0.6-2:
 
 Changes in Version 0.6-1:
 
-  • Re-derived gradients/Hessians, optimized C-code, and tweaked
+  • Re-derived gradients/Hessians, optimized ‘C’-code, and tweaked
     computation of starting values which leads to considerably better
     performance.
 
@@ -96,7 +102,7 @@ Changes in Version 0.6-1:
 
 Changes in Version 0.6-0:
 
-  • All likelihood and gradient functions are now written in C (all
+  • All likelihood and gradient functions are now written in ‘C’ (all
     called via ‘.Call()’ now instead of ‘.C()’) which leads to a
     considerable gain in speed.
 
@@ -156,8 +162,8 @@ Changes in Version 0.5-0:
   • Started development of a comprehensive test-suite using ‘testthat’.
 
   • Published a working paper on the package:
-    Maier, M. J. (2014). DirichletReg: Dirichlet Regression for
-    Compositional Data in R. Research Report Series / Department of
+    Maier, M. J. (2014). _‘DirichletReg’: Dirichlet Regression for
+    Compositional Data in R._ Research Report Series / Department of
     Statistics and Mathematics, 125. WU Vienna University of Economics
     and Business, Vienna. <https://epub.wu.ac.at/4077/>
 
