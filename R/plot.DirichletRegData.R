@@ -64,7 +64,7 @@ plot.DirichletRegData <- function(x,
    .col <- get_or_else("col", NULL, dotlist)  ; if(length(.col) == full_obs) .col <- .col[include]
    .pch <- get_or_else("pch", 16L, dotlist)   ; if(length(.pch) == full_obs) .pch <- .pch[include]
    .cex <- get_or_else("cex", 1.0, dotlist)   ; if(length(.cex) == full_obs) .cex <- .cex[include]
-   .lwd <- get_or_else("lwd", 1L, dotlist)
+   .lwd <- get_or_else("lwd", 1.0, dotlist)
    .lty <- get_or_else("lty", 1L, dotlist)
 
       theta <- get_or_else("theta", NULL, dotlist)

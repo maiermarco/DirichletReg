@@ -7,13 +7,14 @@ DR_data <- function(
 ){
   
   # initialization
-  force.norm     <- isTRUE(norm_tol) # was normalization forced?
-  force.norm.gt1 <- FALSE            # normalization because of the data
-  state.tran     <- FALSE            # was Y transformed?
-  force.tran     <- isTRUE(trafo)    # was transformation forced?
+  force_norm_usr <- isTRUE(norm_tol) # was normalization forced by the user? (i.e., is norm_tol == TRUE)
+  force_norm_gt1 <- FALSE            # normalization because some Y were > 1.0
+  force_norm_su1 <- FALSE            # normalization because some row sums were != 1.0
+  force_tran     <- isTRUE(trafo)    # was transformation forced? (i.e., trafo TRUE)
+  state_tran     <- FALSE            # was Y transformed?
   
   if(length(trafo) != 1L || is.na(trafo) || !(is.logical(trafo) || (trafo > 0))){
-    stop('"trafo" must be a small value > 0 or TRUE/FALSE. See ?DR_data') # error if trafo is not specified correctly
+    stop("\"trafo\" must be a small value > 0 or TRUE/FALSE. See ?DR_data") # error if trafo is not specified correctly
   }
   
   # set up beta-distributed matrix if a variables with values in [0, 1] is supplied
@@ -24,7 +25,7 @@ DR_data <- function(
     }
     
     if((length(na.delete(Y)) < 1L) || any((na.delete(Y) < 0) | (na.delete(Y) > 1))){ # error if no non-missing or just values outside [0, 1] supplied
-      stop('only one variable with values outside [0, 1] supplied.\nbeta distribution cannot safely be assumed.\ncheck and prepare your data first.')
+      stop("only one variable with values outside [0, 1] supplied.\nbeta distribution cannot safely be assumed.\ncheck and prepare your data first.")
     }
     
     Y <- cbind(1.0 - Y, Y) # create a two-column matrix
@@ -53,17 +54,17 @@ DR_data <- function(
     colnames(Y) <- c(paste0("(1 - ", .name, ")"), .name) # name the columns accordingly
     
     # print a message how the vector was processed
-    message('only one variable in [0, 1] supplied - beta-distribution assumed.\ncheck this assumption.')
+    message("only one variable in [0, 1] supplied - beta-distribution assumed.\ncheck this assumption.")
   }
   
   # set all rows containing NAs to NA
   if(anyNA(Y)){ Y[which(rowSums(is.na(Y)) > 0L), ] <- NA }
   
   # check if remaining matrix has at least 1 row
-  if(nrow(na.delete(Y)) < 1L) stop('"Y" has no valid rows.')
+  if(nrow(na.delete(Y)) < 1L) stop("\"Y\" has no valid rows.")
   
   # check for negative values in Y
-  if(any(na.delete(Y) < 0)) stop('"Y" contains values < 0.')
+  if(any(na.delete(Y) < 0)) stop("\"Y\" contains values < 0.")
   
   # save the original data for reference
   Y.original <- Y
@@ -71,65 +72,63 @@ DR_data <- function(
   
   
   # more checks
-  if(is.null(dim(Y))) stop('"Y" must be either a matrix or a data.frame.') # this should not be possible
-  if(ncol(Y) < 2L) stop('"Y" must at least have two columns.') # neither should this
-  if(((base %% 1) != 0) || (base < 1L) || (base > ncol(Y))) stop('"base" must be an integer in the range of variables.') # check base category
-  if(length(norm_tol) != 1L || is.na(norm_tol) || (norm_tol <= 0)) stop('"norm_tol" must be a small number > 0. See ?DR_data')
+  if(is.null(dim(Y))) stop("\"Y\" must be either a matrix or a data.frame.") # this should not be possible
+  if(ncol(Y) < 2L) stop("\"Y\" must at least have two columns.") # neither should this
+  if(((base %% 1) != 0) || (base < 1L) || (base > ncol(Y))) stop("\"base\" must be an integer in the range of variables.") # check base category
+  if((length(norm_tol) != 1L) || is.na(norm_tol) || (norm_tol <= 0)) stop("\"norm_tol\" must be a small number > 0. See ?DR_data")
   if(is.null(colnames(Y))) colnames(Y) <- paste0("v", seq_len(ncol(Y))) # if Y has no column names, assign a sequence v1, v2, v3, ...
   
   
   
   # Normalization - either by user-request or forced if row sums != 1 (with tolerance = norm_tol)
   row.sums <- rowSums(Y) # na.rm is irrelevant, because rows containing NAs have been set to NA above
+  check_row_sum_noNA <- all.equal(na.delete(row.sums), rep(1.0, length(na.delete(row.sums))), tolerance = norm_tol, check.attributes = FALSE)
   
-  if(
-    force.norm || # either forced by the user or
-    (force.norm.su1 <- !isTRUE(all.equal(na.delete(row.sums), rep(1.0, length(na.delete(row.sums))), tolerance = norm_tol, check.attributes = FALSE)))
-  ){
+  if(force_norm_usr || (force_norm_su1 <- !isTRUE(check_row_sum_noNA))){ # either forced by the user or some row sums are != 1.0
     Y <- Y / row.sums # normalize rows
-    force.norm.gt1 <- any(Y > 1, na.rm = TRUE) # was normalization necessary because of values over 1
+    force_norm_gt1 <- any(Y > 1.0, na.rm = TRUE) # was normalization necessary because of values over 1.0
   }
   
   
   
   # Transformation
   if(
-    force.tran || # if either transformation is forced by the user or
-    (is.numeric(trafo) && (any(Y < trafo, na.rm = TRUE) || any(Y > (1.0 - trafo), na.rm = TRUE))) # values are too close to 0 or 1 -- should be state.tran?
+    force_tran || # if either transformation is forced by the user or
+    (is.numeric(trafo) && (any(Y < trafo, na.rm = TRUE) || any(Y > (1.0 - trafo), na.rm = TRUE))) # values are too close to 0 or 1 -- should be state_tran?
   ){
     n.obs      <- length(na.delete(row.sums))                 # number of valid observations
     Y          <- (Y * (n.obs - 1.0) + 1.0 / ncol(Y)) / n.obs # Smithson, M. & Verkuilen, J. (2006)
-    state.tran <- TRUE                                        # was Y transformed?
+    state_tran <- TRUE                                        # was Y transformed?
   }
   
-  if(any(Y <= 0, na.rm = TRUE) || any(Y >= 1, na.rm = TRUE)){ # this should not happen, checking anyways
-    stop('"trafo" was suppressed, yet values on the boundary of the support are present (0 and 1).\nConsider setting "trafo" = TRUE or to a threshold.\nSee ?DR_data')
+  if(any(Y <= 0.0, na.rm = TRUE) || any(Y >= 1.0, na.rm = TRUE)){ # this should not happen, checking anyways
+    stop("\"trafo\" was suppressed, yet values on the boundary of the support are present (0 and 1).\nConsider setting \"trafo\" = TRUE or to a threshold.\nSee ?DR_data")
   }
   
   
   
   # Object definition
   res <- structure(
-    ".Data"       = as.matrix(Y),                                   # the final, possible normalized/transformed data
-    "Y.original"  = as.data.frame(Y.original),                      # the original data
-    "dims"        = ncol(Y),                                        # the number of dimensions/components
-    "dim.names"   = colnames(Y),                                    # names of dimensions/components
-    "obs"         = nrow(Y),                                        # number of observations (including NAs)
-    "valid_obs"   = length(na.delete(row.sums)),                    # number of valid observations
-    "normalized"  = force.norm || force.norm.gt1 || force.norm.su1, # normalizations?
-    "transformed" = force.tran || state.tran,                       # transformation?
-    "base"        = as.integer(base),                               # index of the base category
-    "class"       = "DirichletRegData"                              # class definition
+    ".Data"       = as.matrix(Y),                                       # the final, possible normalized/transformed data
+    "Y.original"  = as.data.frame(Y.original),                          # the original data
+    "dims"        = ncol(Y),                                            # the number of dimensions/components
+    "dim.names"   = colnames(Y),                                        # names of dimensions/components
+    "obs"         = nrow(Y),                                            # number of observations (including NAs)
+    "valid_obs"   = length(na.delete(row.sums)),                        # number of valid observations
+    "normalized"  = force_norm_usr || force_norm_gt1 || force_norm_su1, # normalizations?
+    "transformed" = force_tran || state_tran,                           # transformation?
+    "base"        = as.integer(base),                                   # index of the base category
+    "class"       = "DirichletRegData"                                  # class definition
   )
   
   
   
   # Issue warnings
-  if((force.norm || force.norm.gt1 || force.norm.su1) && (force.tran || state.tran)){
+  if((force_norm_usr || force_norm_gt1 || force_norm_su1) && (force_tran || state_tran)){
     warning("not all rows sum up to 1 => normalization forced\n  some entries are 0 or 1 => transformation forced")
-  } else if(force.norm || force.norm.gt1 || force.norm.su1){
+  } else if(force_norm_usr || force_norm_gt1 || force_norm_su1){
     warning("not all rows sum up to 1 => normalization forced")
-  } else if(force.tran || state.tran){
+  } else if(force_tran || state_tran){
     warning("some entries are 0 or 1 => transformation forced")
   }
   

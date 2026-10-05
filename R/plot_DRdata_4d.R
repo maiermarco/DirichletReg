@@ -88,8 +88,7 @@ plot_DRdata_4d <- function(x,
     xy.coo.lab <- t3d(coo.lab,VTrans)
 
     par(mai=rep(0,4))
-    plot(NULL, xlim=range(xy.coo.lab$x), ylim=range(xy.coo.lab$y), asp=1,
-         axes=FALSE, xlab="", ylab="")
+    plot(NULL, xlim=range(xy.coo.lab$x), ylim=range(xy.coo.lab$y), asp=1, axes=FALSE, xlab="", ylab="")
 
     segments(xy.corners[corner.connect[,1],1], xy.corners[corner.connect[,1],2],
              xy.corners[corner.connect[,2],1], xy.corners[corner.connect[,2],2])
