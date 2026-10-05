@@ -14,7 +14,7 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
   } else if(x$optimization$convergence == 100L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Initial value out of range!",.wd),"\n",sep="")
   } else { cat("\n",strwrap("CAUTION! Possible UNKNOWN convergence problems: Please report this.",.wd),"\n",sep="") }
 
-  if(!(x$optimization$convergence %in% c(1L, 2L, 8L))){
+  if(!(x$optimization$convergence %in% c(1L, 2L, 8L))){ # will become (... %notin% ...) in future releases
     warning(paste(strwrap(paste("\nOptimization did (most likely) not converge in",x$optimization$bfgs.it,"+",x$optimization$iterations,"iterations and exited with code",x$optimization$convergence),.wd),sep="\n",collapse="\n"))
   }
 
@@ -34,7 +34,7 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
 
   if(x$parametrization == "common"){
 
-    for(i in 1:length(x$varnames)){
+    for(i in seq_along(x$varnames)){
       writeLines(paste0(rep("-", min(41L, .wd)),collapse=""))
       writeLines(paste0("Coefficients for variable no. ",i,": ",x$varnames[i]))
       print.default(format(x$coefficients[ifelse(i==1,1,coef.ind[i-1]+1):coef.ind[i]], digits = digits), print.gap = 2L, quote = FALSE)
@@ -48,7 +48,7 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
 
     writeLines("MEAN MODELS:")
 
-    for(i in 1:length(x$varnames)){
+    for(i in seq_along(x$varnames)){
       if(i == x$base){
         writeLines(paste0(rep("-", min(41L, .wd)),collapse=""))
         writeLines(paste0("Coefficients for variable no. ",i , ": ", x$varnames[i]))
@@ -56,7 +56,7 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
       } else {
         writeLines(paste0(rep("-", min(41L, .wd)),collapse=""))
         writeLines(paste0("Coefficients for variable no. ",i , ": ", x$varnames[i]))
-        print.default(format(x$coefficients[printed.var:(printed.var+set.size-1)], digits=digits), print.gap=2, quote=F)
+        print.default(format(x$coefficients[printed.var:(printed.var+set.size-1)], digits=digits), print.gap=2, quote=FALSE)
 
         printed.var <- printed.var + set.size
       }
@@ -69,10 +69,11 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
     writeLines("PRECISION MODEL:")
 
     writeLines(paste0(rep("-", min(41L, .wd)), collapse=""))
-    print.default(format(x$coefficients[printed.var:length(x$coefficients)], digits=digits), print.gap=2, quote=F)
+    print.default(format(x$coefficients[printed.var:length(x$coefficients)], digits=digits), print.gap=2, quote=FALSE)
     writeLines(paste0(rep("-", min(41L, .wd)), collapse=""))
   }
 
   if(interactive()) writeLines("")
-
+  
+  invisible(x)
 }

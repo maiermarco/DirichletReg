@@ -4,7 +4,8 @@
 \docType{package}
 \alias{DirichletReg}
 \title{The \pkg{DirichletReg} Package}
-\description{\Sexpr[stage=build]{packageDescription("DirichletReg")$Description}
+\description{%
+\Sexpr[stage=build]{packageDescription("DirichletReg")$Description}
 \tabular{ll}{%
 Package:   \tab{}\pkg{DirichletReg}\cr%
 Type:      \tab{}Package\cr%

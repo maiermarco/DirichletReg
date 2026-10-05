@@ -75,6 +75,15 @@
 %\details{
 %.
 %}
+\value{%
+  \code{\link{DirichReg}} returns an object of \code{\link{class}} \code{"DirichletRegModel"}.
+  The \code{print} method displays the results and returns the object invisibly.
+  
+  \code{summary} generates a more detailed object of class \code{"summary_DirichletRegModel"} that is displayed with its own \code{print} method that also returns the object invisibly.
+  A matrix of model parameters can be generated with the \code{coef} method (parameters will be prefixed with the components' names and a colon, e.g., \code{silt:(Intercept)} and for the alternative parametrization, \code{(phi):} is used).
+  
+  
+}
 \author{Marco J. Maier}
 \examples{
 ALake <- ArcticLake
@@ -88,6 +97,7 @@ mod1
 drop1(mod1)   ### issues a caveat when used for the first time in an R session
 
 summary(mod1)
+coef(summary(mod1))
 
 head(fitted(mod1))
 

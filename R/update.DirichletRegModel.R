@@ -16,7 +16,7 @@ update.DirichletRegModel <- function(
   if(length(extras)){ # if any extra arguments were specified
     existing <- names(extras) %in% names(call) # elements in extras that already exists in  
     for(a in names(extras)[existing]) call[[a]] <- extras[[a]] # replace the already existing elements in call with new ones from extras
-    if(any(!existing)){ # if there are any elements in extras that do not exists in call
+    if(!all(existing)){ # if there are any elements in extras that do not exists in call
       call <- as.call(c(as.list(call), extras[!existing])) # convert the call to a list, append the remaining extras and convert everything in to a call again
     }
   }

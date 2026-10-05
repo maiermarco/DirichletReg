@@ -6,6 +6,9 @@ src/*.o
 src/*.so
 src/*.dll
 .tgitconfig
+NEWS.md
+*.pot
+man/macros
 
 DirichletRegMixture.Rd
 DirichMixture.Rd

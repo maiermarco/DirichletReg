@@ -64,7 +64,7 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
 
   if(x$parametrization == "common"){
 
-    for(i in seq_len(length(x$varnames))){
+    for(i in seq_along(x$varnames)){
       writeLines(paste0(rep("-", min(66L, .wd)), collapse=""))
       writeLines(paste0("Beta-Coefficients for variable no. ", i, ": ", x$varnames[i]))
 
@@ -84,7 +84,7 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
 
     cat("MEAN MODELS:\n",sep="",collapse="")
 
-    for(i in seq_len(length(x$varnames))){
+    for(i in seq_along(x$varnames)){
       if(i == x$base){
         writeLines(paste0(rep("-", min(66L, .wd)), collapse=""))
         writeLines(paste0("Coefficients for variable no. ",i,": ",x$varnames[i]))
@@ -127,7 +127,8 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   }
 
   if(interactive()) writeLines("")
-
+  
+  invisible(x)
 }
 
 

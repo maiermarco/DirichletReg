@@ -1,5 +1,6 @@
 ### from stats for drop1
 safe_pchisq <- function(q, df, ...){
+  .Deprecated("pchisq(q, ifelse(df <= 0.0, NA_real_, df), ...)")
   df[df <= 0] <- NA
   pchisq(q = q, df = df, ...)
 }
@@ -7,6 +8,7 @@ safe_pchisq <- function(q, df, ...){
 
 
 extractAIC.DirichletRegModel <- function(fit, scale = 0, k = 2, ...){
+  .Deprecated()
   n <- nobs(fit)
   npar <- fit$npar
   dev <- -2*fit$logLik
@@ -74,13 +76,13 @@ drop1.DirichletRegModel <- function(
       drop.scope(formula(Formula, rhs = f_index))
     })
   } else {
-stop("not implemented yet!")
+stop("not implemented yet!") # nolint start
     if(!is.character(scope)){
       scope <- attr(terms(update.formula(object, scope)),  "term.labels")
     }
     if(!all(match(scope, tl, 0L) > 0L)){
       stop("scope is not a subset of term labels")
-    }
+    } # nolint end
   }
 
   ndrop <- lapply(seq_along(scope), function(i){ match(scope[[i]], tl[[i]]) })
@@ -143,7 +145,7 @@ stop("not implemented yet!")
       nas <- !is.na(dev)
       LRT <- "LRT"
       aod[, LRT] <- dev
-      dev[nas] <- safe_pchisq(dev[nas], aod$Df[nas], lower.tail = FALSE)
+      dev[nas] <- pchisq(dev[nas], ifelse(aod$Df[nas] <= 0.0, NA_real_, aod$Df[nas]), lower.tail = FALSE)
       aod[, "Pr(>Chi)"] <- dev
   }
 

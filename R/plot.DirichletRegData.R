@@ -21,8 +21,8 @@ plot.DirichletRegData <- function(x,
 
 ## ADAPT TO THE NEW DATA STRUCTURE
   full_obs <- nrow(x)
-  if(any(is.na(x))){
-    include <- which(rowSums(is.na(x)) == 0)
+  if(anyNA(x)){
+    include <- which(rowSums(is.na(x)) == 0L)
     .x <- x
 
     x <- as.matrix(x[include,])
@@ -37,13 +37,13 @@ plot.DirichletRegData <- function(x,
 
     rm(.x)
   } else {
-    include <- 1:nrow(x)
+    include <- seq_len(nrow(x))
   }
 
   nx <- x
   x <- attributes(x)
   x$Y <- as.data.frame(unclass(nx))
-  x$dim.names <- x$dimnames[[2]]
+  x$dim.names <- x$dimnames[[2L]]
   class(x) <- "DirichletRegData"
 
   if(missing(dims)) dims <- NULL
@@ -62,10 +62,10 @@ plot.DirichletRegData <- function(x,
   .xlim <- get_or_else("xlim", NULL, dotlist)
   .ylim <- get_or_else("ylim", NULL, dotlist)
    .col <- get_or_else("col", NULL, dotlist)  ; if(length(.col) == full_obs) .col <- .col[include]
-   .pch <- get_or_else("pch", 16, dotlist)    ; if(length(.pch) == full_obs) .pch <- .pch[include]
-   .cex <- get_or_else("cex", 1, dotlist)     ; if(length(.cex) == full_obs) .cex <- .cex[include]
-   .lwd <- get_or_else("lwd", 1, dotlist)
-   .lty <- get_or_else("lty", 1, dotlist)
+   .pch <- get_or_else("pch", 16L, dotlist)   ; if(length(.pch) == full_obs) .pch <- .pch[include]
+   .cex <- get_or_else("cex", 1.0, dotlist)   ; if(length(.cex) == full_obs) .cex <- .cex[include]
+   .lwd <- get_or_else("lwd", 1L, dotlist)
+   .lty <- get_or_else("lty", 1L, dotlist)
 
       theta <- get_or_else("theta", NULL, dotlist)
         phi <- get_or_else("phi", NULL, dotlist)
@@ -74,17 +74,17 @@ plot.DirichletRegData <- function(x,
   .marginal <- FALSE
 
   if(is.null(dims)){
-    if(x$dims > 4){
-      x$Y         <- x$Y[, 1:4]
-      x$dims      <- 4
-      x$dim.names <- x$dim.names[1:4]
+    if(x$dims > 4L){
+      x$Y         <- x$Y[, seq_len(4)]
+      x$dims      <- 4L
+      x$dim.names <- x$dim.names[seq_len(4)]
       warning("data contains > 4 variables. the first four are being used. to change this, set the 'dims' argument appropriately.")
       .marginal <- TRUE
     } else {
-      dims <- 1:x$dims
+      dims <- seq_len(x$dims)
     }
   } else {
-    if((length(dims) < 2) | (length(dims) > 4)) stop("the argument 'dims' must have 2, 3 or 4 elements")
+    if((length(dims) < 2L) || (length(dims) > 4L)) stop("the argument 'dims' must have 2, 3 or 4 elements")
     x$Y         <- x$Y[, dims]
     x$dims      <- length(dims)
     x$dim.names <- x$dim.names[dims]
@@ -101,11 +101,11 @@ plot.DirichletRegData <- function(x,
 
 
 
-  if(x$dims == 2){
+  if(x$dims == 2L){
     if(is.null(.main)) .main <- "Density Plot of a Beta-Distributed Variable"
-    plot_DRdata_2d(y = x$Y[,2], rug=rug, main=.main, ylim=.ylim, colr=.col, lwd=.lwd, lty=.lty)
+    plot_DRdata_2d(y = x$Y[,2L], rug=rug, main=.main, ylim=.ylim, colr=.col, lwd=.lwd, lty=.lty)
 
-  } else if(x$dims == 3) {
+  } else if(x$dims == 3L) {
     if(!all(is.null(c(.xlim,.ylim)))) warning("xlim and ylim not useable in a ternary plot. arguments ignored.")
     if(is.null(.main)) .main <- "Ternary Plot"
 
@@ -117,7 +117,7 @@ plot.DirichletRegData <- function(x,
     plot_DRdata_3d(x=x, entropy.contours=entropy.contours, colored=colored, c.grid=c.grid, ticks=ticks, dim.labels=dim.labels, col.scheme=col.scheme,
     .main=.main, .col=.col, .pch=.pch, .cex=.cex, .lwd=.lwd, .lty=.lty)
 
-  } else if(x$dims == 4){
+  } else if(x$dims == 4L){
     if( !("rgl" %in% loadedNamespaces()) && !("rgl" %in% utils::installed.packages()[,"Package"]) ){ stop('The "rgl" package could not be found. You can try installing it using:\ninstall.packages("rgl")') }
     requireNamespace("rgl")
 

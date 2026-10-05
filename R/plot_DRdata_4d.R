@@ -16,14 +16,14 @@ plot_DRdata_4d <- function(x,
 
   xyz <- toQuaternary(x$Y)
 
-  corners <- toQuaternary(diag(4))
-  corner.connect <- structure(c(1,1,1,2,2,3,2,3,4,3,4,4), dim = c(6,2))
+  corners <- toQuaternary(diag(4L))
+  corner.connect <- structure(c(1,1,1,2,2,3,2,3,4,3,4,4), dim = c(6L,2L))
 
   coo.lab <- 2 * corners - toQuaternary(diag(4)*(.9-.1/3)+.1/3)
-  lab.col <- cmyk2rgb(diag(4)+cbind(0,0,0,c(.2,.2,.2,0)))
+  lab.col <- cmyk2rgb(diag(4L) + cbind(0,0,0,c(.2,.2,.2,0)))
 
   # reference - axes
-  ref_axes                 <- matrix(1/3, ncol=4, nrow=4)
+  ref_axes                 <- matrix(1/3, ncol=4L, nrow=4L)
   ref_axes[cbind(1:4,1:4)] <- 0
   ref_axes_xyz             <- toQuaternary(ref_axes)
 
@@ -31,22 +31,22 @@ plot_DRdata_4d <- function(x,
 # reference points orthogonal to the planes
     .ref_pts <- list(xyz, xyz, xyz, xyz)
 
-    .ref_pts[[1]] <- xyz + toQuaternary(cbind(1-x$Y[,1],
-                                               x$Y[,1]/3,
-                                               x$Y[,1]/3,
-                                               x$Y[,1]/3)) - toQuaternary(matrix(rep(c(1,0,0,0),nrow(x$Y)),ncol=4,byrow=T))
-    .ref_pts[[2]] <- xyz + toQuaternary(cbind(  x$Y[,2]/3,
-                                             1-x$Y[,2],
-                                               x$Y[,2]/3,
-                                               x$Y[,2]/3)) - toQuaternary(matrix(rep(c(0,1,0,0),nrow(x$Y)),ncol=4,byrow=T))
-    .ref_pts[[3]] <- xyz + toQuaternary(cbind(  x$Y[,3]/3,
-                                               x$Y[,3]/3,
-                                             1-x$Y[,3],
-                                               x$Y[,3]/3)) - toQuaternary(matrix(rep(c(0,0,1,0),nrow(x$Y)),ncol=4,byrow=T))
-    .ref_pts[[4]] <- xyz + toQuaternary(cbind(  x$Y[,4]/3,
-                                               x$Y[,4]/3,
-                                               x$Y[,4]/3,
-                                             1-x$Y[,4])) - toQuaternary(matrix(rep(c(0,0,0,1),nrow(x$Y)),ncol=4,byrow=T))
+    .ref_pts[[1L]] <- xyz + toQuaternary(cbind(1.0 - x$Y[,1L],
+                                                     x$Y[,1L]/3.0,
+                                                     x$Y[,1L]/3.0,
+                                                     x$Y[,1L]/3.0)) - toQuaternary(matrix(rep(c(1,0,0,0),nrow(x$Y)),ncol=4,byrow=TRUE))
+    .ref_pts[[2L]] <- xyz + toQuaternary(cbind(      x$Y[,2L]/3.0,
+                                               1.0 - x$Y[,2L],
+                                                     x$Y[,2L]/3.0,
+                                                     x$Y[,2L]/3.0)) - toQuaternary(matrix(rep(c(0,1,0,0),nrow(x$Y)),ncol=4,byrow=TRUE))
+    .ref_pts[[3L]] <- xyz + toQuaternary(cbind(      x$Y[,3L]/3.0,
+                                                     x$Y[,3L]/3.0,
+                                               1.0 - x$Y[,3L],
+                                                     x$Y[,3L]/3.0)) - toQuaternary(matrix(rep(c(0,0,1,0),nrow(x$Y)),ncol=4,byrow=TRUE))
+    .ref_pts[[4L]] <- xyz + toQuaternary(cbind(      x$Y[,4L]/3.0,
+                                                     x$Y[,4L]/3.0,
+                                                     x$Y[,4L]/3.0,
+                                               1.0 - x$Y[,4L]))     - toQuaternary(matrix(rep(c(0,0,0,1),nrow(x$Y)),ncol=4,byrow=TRUE))
 
 
   if(rgl){
@@ -66,7 +66,7 @@ plot_DRdata_4d <- function(x,
                z=as.vector(rbind(ref_axes_xyz[,3],corners[,3])), lwd=1, lty=2, col=rep(lab.col,each=2), line_antialias=TRUE)
 
     if(!is.null(ref.lines)){
-    browser()
+      browser()
       for(i in ref.lines){
       rgl::segments3d(t3d(.ref_pts[[i]],VTrans)$x, t3d(.ref_pts[[i]],VTrans)$y,
                t3d(xyz,VTrans)$x,t3d(xyz,VTrans)$y, lwd=.5, col=paste(lab.col[i], transp, sep="", collapse=""))
@@ -89,7 +89,7 @@ plot_DRdata_4d <- function(x,
 
     par(mai=rep(0,4))
     plot(NULL, xlim=range(xy.coo.lab$x), ylim=range(xy.coo.lab$y), asp=1,
-         axes=F, xlab="", ylab="")
+         axes=FALSE, xlab="", ylab="")
 
     segments(xy.corners[corner.connect[,1],1], xy.corners[corner.connect[,1],2],
              xy.corners[corner.connect[,2],1], xy.corners[corner.connect[,2],2])

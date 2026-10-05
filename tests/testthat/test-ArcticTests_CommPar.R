@@ -29,7 +29,7 @@ test_that("Arctic Lake - Data Transformation", {
 
 resC1 <- DirichReg(Y ~ 1, AL)
 
-load("testdata/resC1.RData")
+load(file.path("testdata", "resC1.RData"))
 
 test_that("Model Estimation", {
   expect_equal(resC1_mathematica$MLE    , resC1$logLik)
@@ -73,7 +73,7 @@ test_that("Methods", {
 
 resC2 <- DirichReg(Y ~ depth, AL)
 
-load("testdata/resC2.RData")
+load(file.path("testdata", "resC2.RData"))
 
 test_that("Model Estimation", {
   expect_equal(resC2_mathematica$MLE    , resC2$logLik)
@@ -121,7 +121,7 @@ test_that("Methods", {
 
 resC3 <- DirichReg(Y ~ depth + I(depth^2), AL)
 
-load("testdata/resC3.RData")
+load(file.path("testdata", "resC3.RData"))
 
 test_that("Model Estimation", {
   expect_equal(resC3_mathematica$MLE    , resC3$logLik)
@@ -171,7 +171,7 @@ test_that("Methods", {
 
 resC4 <- update(resC3, . ~ . - I(depth^2) | . | . - depth - I(depth^2))
 
-load("testdata/resC4.RData")
+load(file.path("testdata", "resC4.RData"))
 
 test_that("Model Estimation", {
   expect_equal(resC4_mathematica$MLE    , resC4$logLik)

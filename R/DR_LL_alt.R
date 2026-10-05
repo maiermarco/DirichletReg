@@ -51,7 +51,7 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
 
       ##########################################################################
       ############################################### BETAs - SAME RESPONSES ###
-      if((derv[1L] == derv[2L]) & all(derv != -1L)) {
+      if((derv[1L] == derv[2L]) && all(derv != -1L)) {
         derv <- derv[1L]
 
         hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
@@ -70,7 +70,7 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
           ))
       ##########################################################################
       ########################################## BETAs - DIFFERENT RESPONSES ###
-      } else if((derv[1L] != derv[2L]) & all(derv != -1L)) {
+      } else if((derv[1L] != derv[2L]) && all(derv != -1L)) {
         hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
           sum(w*(
             X[,v1] * X[,v2] * mu[,d1] * mu[,d2] * phi * (
@@ -89,7 +89,7 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
           ))
       ##########################################################################
       ######################################################### BETA / GAMMA ###
-      } else if(any(derv != -1L) & any(derv == -1L)) {
+      } else if(any(derv != -1L) && any(derv == -1L)) {
         derv <- derv[which(derv != -1L)]
 
         hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-

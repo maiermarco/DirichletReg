@@ -8,6 +8,9 @@
 ^inst\/(NEWSRd2txt\.R|WORDLIST)$
 ^src\/.+\.(R|o|dll)$
 
+.*\.pot$
+^man\/macros$
+
 DirichletRegMixture\.Rd$
 DirichMixture\.Rd$
 AIC\.DirichletRegMixture\.R$

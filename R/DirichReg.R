@@ -13,13 +13,13 @@ DirichReg <- function(
   this.call <- match.call()
   this.call[["formula"]] <- eval(this.call[["formula"]], parent.frame()) # eval in parent frame and replace formula
 
-  if(!(verbosity %in% 0:4)){
+  if(!(verbosity %in% 0L:4L)){ # will become (verbosity %notin% 0L:4L) in future releases
     verbosity <- 0L
     warning("invalid value for verbosity.")
   }
   storage.mode(verbosity) <- "integer"
 
-if(verbosity > 0){
+if(verbosity > 0L){
   cat("- PREPARING DATA\n")
   if(interactive()) flush.console()
 }
@@ -34,7 +34,7 @@ if(verbosity > 0){
   } else {
     oformula <- formula
   }
-  model <- match.arg(model)
+  model <- match.arg(arg = model, choices = c("common", "alternative"))
   if(missing(control)){
     control <- list(sv = NULL, iterlim = 10000L, tol1 = .Machine$double.eps^(1/2), tol2 = .Machine$double.eps^(3/4))
   } else {
@@ -56,7 +56,7 @@ if(verbosity > 0){
     Y_full <- data[[resp_char]]                                                 # get response from "data"
   } else if(has_DR_call){
     Y_full <- eval(resp_lang)                                                   # get response from an on the fly transformation --- NOT recommended
-    warning(paste0(strwrap("The response was transformed by DR_data() on the fly. This is not recommended, consider adapting your code.", width = getOption("width") - 9L, exdent = 9L), collapse = "\n"), call. = FALSE, immediate. = TRUE)
+    warning(paste0(strwrap("The response was transformed by DR_data() on the fly. This is not recommended, consider adapting your code.", width = getOption("width") - 9L, exdent = 9L), collapse = "\n"), call. = FALSE)
     oformula[[2L]] <- as.symbol("Y_full")
   } else {
     Y_full <- get(resp_char, environment(oformula))                             # get response from the parent frame
@@ -75,7 +75,7 @@ if(verbosity > 0){
 
 #<<< get Y #####################################################################
 
-  repar <- ifelse(model == "common", FALSE, TRUE)
+  repar <- model == "alternative"
 
   mf <- match.call(expand.dots = FALSE)
 # if response was produced by DR_data()
@@ -117,22 +117,22 @@ if(verbosity > 0){
   n.dim <- ncol(Y)
 
 ## SANITY CHECKS AND FORMULA EXPANSION
-  if(length(formula)[1] != 1) stop("the left hand side of the model must contain one object prepared by DR_data()")
+  if(length(formula)[1L] != 1L) stop("the left hand side of the model must contain one object prepared by DR_data()")
 
-  if(!repar){   # COMMON
-    if(length(formula)[2] == 1) for(i in 2:ncol(Y)) attr(formula, "rhs") <- lapply(seq_len(ncol(Y)), function(i) attr(formula, "rhs")[[1]])
-    if(length(formula)[2] > ncol(Y)) stop("the right hand side must contain specifications for either one or all variables")
+  if(!repar){   # nolint COMMON
+    if(length(formula)[2L] == 1L) for(i in 2L:ncol(Y)) attr(formula, "rhs") <- lapply(seq_len(ncol(Y)), function(i) attr(formula, "rhs")[[1]])
+    if(length(formula)[2L] > ncol(Y)) stop("the right hand side must contain specifications for either one or all variables")
   } else {   # ALTERNATIVE
-    if(length(formula)[2] == 1) formula <- as.Formula(formula(formula), ~ 1)
-    if(length(formula)[2] > 2) stop("the right hand side can only contain one or two specifications in the alternative parametrization")
+    if(length(formula)[2L] == 1L) formula <- as.Formula(formula(formula), ~ 1)
+    if(length(formula)[2L] > 2L) stop("the right hand side can only contain one or two specifications in the alternative parametrization")
   }
 
 
-  if(!repar){
+  if(!repar){ # nolint COMMON matrix setups
     X.mats <- lapply(seq_len(ncol(Y)), function(i){ model.matrix(terms(formula, data = data, rhs = i), mf) })
     Z.mat <- NULL
     n.vars <- unlist(lapply(X.mats, ncol))
-  } else {
+  } else { # ALTERNATIVE matrix setups
     X.mats <- lapply(seq_len(ncol(Y)), function(i) model.matrix(terms(formula, data = data, rhs = 1), mf) )
     Z.mat  <- model.matrix(terms(formula, data = data, rhs = 2), mf)
     n.vars <- c(unlist(lapply(X.mats, ncol))[-1], ncol(Z.mat))
@@ -164,7 +164,7 @@ if(verbosity > 0){
 
 
 
-if(verbosity > 0){
+if(verbosity > 0L){
   cat("- COMPUTING STARTING VALUES\n")
   if(interactive()) flush.console()
 }
@@ -228,9 +228,9 @@ if(verbosity > 0){
 
   } else {
 
-    B <- sapply(seq_len(n.dim), function(i){ coefs[(cumsum(c(0, n.vars))[i]+1) : cumsum(n.vars)[i]] }, simplify = FALSE)
+    B <- sapply(seq_len(n.dim), function(i){ coefs[(cumsum(c(0L, n.vars))[i]+1L) : cumsum(n.vars)[i]] }, simplify = FALSE)
 
-    ALPHA <- sapply(seq_len(n.dim), function(i){ exp(as.matrix(X.mats[[i]]) %*% matrix(B[[i]], ncol = 1)) })
+    ALPHA <- sapply(seq_len(n.dim), function(i){ exp(as.matrix(X.mats[[i]]) %*% matrix(B[[i]], ncol = 1L)) })
 
     PHI <- rowSums(ALPHA)
     MU  <- apply(ALPHA, 2L, "/", PHI)
@@ -243,21 +243,21 @@ if(verbosity > 0){
   hessian <- fit.res$hessian
 
   vcov <- tryCatch(solve(-fit.res$hessian),
-                   error = function(x){ return(matrix(NA, nrow = nrow(hessian), ncol = ncol(hessian))) },
+                   error = function(x){ return(matrix(NA_real_, nrow = nrow(hessian), ncol = ncol(hessian))) },
                    silent = TRUE)
-
-  if(!repar){   ## COMMON
-    coefnames <- apply(cbind(rep(varnames, n.vars), unlist(lapply(X.mats, colnames))), 1, paste, collapse = ":")
+  
+  if(!repar){   ## COMMON                              #nolint
+    coefnames <- apply(cbind(rep(varnames, n.vars), unlist(lapply(X.mats, colnames))), 1L, paste, collapse = ":")
   } else {   ## ALTERNATIVE
-    coefnames <- apply(cbind(rep(c(varnames[-base], "(phi)"), n.vars), c(unlist(lapply(X.mats, colnames)[-base]), colnames(Z.mat))), 1, paste, collapse = ":")
+    coefnames <- apply(cbind(rep(c(varnames[-base], "(phi)"), n.vars), c(unlist(lapply(X.mats, colnames)[-base]), colnames(Z.mat))), 1L, paste, collapse = ":")
   }
-
+  
   dimnames(hessian) <- list(coefnames, coefnames)
   dimnames(vcov)    <- list(coefnames, coefnames)
   shortnames        <- names(coefs)
   names(coefs)      <- coefnames
 
-  se <- if(!any(is.na(vcov))) sqrt(diag(vcov)) else rep(NA, length(coefs))
+  se <- if(!anyNA(vcov)) sqrt(diag(vcov)) else rep(NA_real_, length(coefs))
 
   res <- structure(list(
     call            = this.call,
@@ -299,7 +299,7 @@ if(verbosity > 0){
   used_objects <- ls(all.names = TRUE)
   rm(list = c("used_objects", used_objects[used_objects != "res"]))
   # ... and make some space
-  on.exit(gc(verbose = FALSE, reset = TRUE), add = TRUE)
+  on.exit(gc(verbose = FALSE, reset = TRUE, full = TRUE), add = TRUE)
 
   return(res)
 

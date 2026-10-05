@@ -32,20 +32,22 @@ DR_data <- function(
     # get the deparsed name from the call unless Y was a single column matrix with a column name
     if(!exists(".name")) .name <- deparse_nocutoff(match.call()$Y)
     
-    # loop to debug regex
-    # for(.name in c("ob[,1L]", "ob[ , 1L ]", "ob[[ 1L ]]", "ob$var", "ob$`var`", "ob[var]", "ob[[var]]", "ob[\"var\"]", "ob[[\"var\"]]", "ob['var']", "ob[['var']]")){
-    .name <- local({ # here, we try to guess the name from the call   o_O
-      .original.name <- .name # keep a backup in case anything goes wrong
-      .name <- gsub("\\s", "", .name) # remove whitespace
-      if(grepl("^.+\\[?\\[\\,?[0-9]+L?\\]\\]?$", .name)) return(.name) # shortening is too risky, returning as is
-      .name <- gsub("^.+\\$", "", .name) # eliminate any references to the object the variable comes from (e.g., object$variable)
-      if(grepl("^.+\\[{1,2}.+\\]{1,2}$", .name)){ # if .name looks something like object[["variables"]], ob['name'] etc.
-        .name <- paste(strsplit(.name, split = "^.+\\[{1,2}\\,?[\"']?|[\"']?\\]{1,2}$")[[1L]], collapse = "") # split the string and try to extract the variable
-      }
-      if(grepl("^`(.+)`$", .name)) .name <- gsub("^`|`$", "", .name) # if Y was supplied as object$`variable` remove the backticks
-      if(grepl("[[:alpha:]]+", .name)) return(.name) else return(.original.name) # if .name looks good, return it, else return the original
-    })
-    #writeLines(.name)} # debug loop end
+    if(!no_guessing){ # if no_guessing is false, try to guess the name if it resulted from being indexed from a data.frame or matrix
+      # loop to debug regex
+      # for(.name in c("ob[,1L]", "ob[ , 1L ]", "ob[[ 1L ]]", "ob$var", "ob$`var`", "ob[var]", "ob[[var]]", "ob[\"var\"]", "ob[[\"var\"]]", "ob['var']", "ob[['var']]")){
+      .name <- local({ # here, we try to guess the name from the call   o_O
+        .original.name <- .name # keep a backup in case anything goes wrong
+        .name <- gsub("\\s", "", .name) # remove whitespace
+        if(grepl("^.+\\[?\\[\\,?[0-9]+L?\\]\\]?$", .name)) return(.name) # shortening is too risky, returning as is
+        .name <- gsub("^.+\\$", "", .name) # eliminate any references to the object the variable comes from (e.g., object$variable)
+        if(grepl("^.+\\[{1,2}.+\\]{1,2}$", .name)){ # if .name looks something like object[["variables"]], ob['name'] etc.
+          .name <- paste(strsplit(.name, split = "^.+\\[{1,2}\\,?[\"']?|[\"']?\\]{1,2}$")[[1L]], collapse = "") # split the string and try to extract the variable
+        }
+        if(grepl("^`(.+)`$", .name)) .name <- gsub("^`|`$", "", .name) # if Y was supplied as object$`variable` remove the backticks
+        if(grepl("[[:alpha:]]+", .name)) return(.name) else return(.original.name) # if .name looks good, return it, else return the original
+      })
+      #writeLines(.name)} # debug loop end
+    }
     
     if(nchar(.name) < 1L) .name <- "Y" # fallback if, for some reason, .name is an empty string
     colnames(Y) <- c(paste0("(1 - ", .name, ")"), .name) # name the columns accordingly
@@ -93,11 +95,11 @@ DR_data <- function(
   # Transformation
   if(
     force.tran || # if either transformation is forced by the user or
-    (is.numeric(trafo) && (any(Y < trafo, na.rm = TRUE) || any(Y > (1 - trafo), na.rm = TRUE))) # values are too close to 0 or 1 -- should be state.tran?
+    (is.numeric(trafo) && (any(Y < trafo, na.rm = TRUE) || any(Y > (1.0 - trafo), na.rm = TRUE))) # values are too close to 0 or 1 -- should be state.tran?
   ){
-    n.obs      <- length(na.delete(row.sums))             # number of valid observations
-    Y          <- (Y * (n.obs - 1) + 1 / ncol(Y)) / n.obs # Smithson, M. & Verkuilen, J. (2006)
-    state.tran <- TRUE                                    # was Y transformed?
+    n.obs      <- length(na.delete(row.sums))                 # number of valid observations
+    Y          <- (Y * (n.obs - 1.0) + 1.0 / ncol(Y)) / n.obs # Smithson, M. & Verkuilen, J. (2006)
+    state.tran <- TRUE                                        # was Y transformed?
   }
   
   if(any(Y <= 0, na.rm = TRUE) || any(Y >= 1, na.rm = TRUE)){ # this should not happen, checking anyways
@@ -121,7 +123,7 @@ DR_data <- function(
   )
   
   
-    
+  
   # Issue warnings
   if((force.norm || force.norm.gt1 || force.norm.su1) && (force.tran || state.tran)){
     warning("not all rows sum up to 1 => normalization forced\n  some entries are 0 or 1 => transformation forced")

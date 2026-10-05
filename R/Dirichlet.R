@@ -3,9 +3,9 @@ rdirichlet <- function(
 , alpha   # can be a single vector or a matrix (with exactly n rows)
 ){
   # check if the sample size is an integer > 0
-  if( ((n %% 1) != 0) | (n <= 0)) stop("n must be an integer > 0")
+  if( ((n %% 1) != 0) || (n <= 0L)) stop("n must be an integer > 0")
   # check if any value in alpha is <= 0
-  if( any(alpha <= 0) ) stop("all values in alpha must be > 0")
+  if( any(alpha <= 0.0) ) stop("all values in alpha must be > 0")
 
   .vec <- is.vector(alpha)
   .mat <- is.matrix(alpha)
@@ -31,7 +31,7 @@ ddirichlet <- function(x, alpha, log = FALSE, sum.up = FALSE){
   # some checking!
   if(is.null(dim(x))) stop("x must be a matrix")
   x_dims <- dim(x)
-  if(any(alpha <= 0)){
+  if(any(alpha <= 0.0)){
     warning("all values in alpha must be > 0")
     if(sum.up) return(NaN) else return(rep(NaN, x_dims[1L]))
   }
@@ -62,7 +62,7 @@ ddirichlet_R <- function(x, alpha, log = FALSE, sum.up = FALSE){
     alpha <- matrix(rep(alpha, nrow(x)), nrow(x), byrow = TRUE)
   }
   if(any(dim(alpha) != dim(x))) stop("check if x and alpha are correctly specified")
-  if(any(alpha <= 0)){
+  if(any(alpha <= 0.0)){
     warning("all values in alpha must be > 0")
     if(sum.up) return(NaN) else return(rep(NaN, nrow(x)))
   }

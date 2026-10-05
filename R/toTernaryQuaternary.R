@@ -31,7 +31,7 @@ toSimplex <- function(x){
   if(is.null(dim(x))) stop('"x" must be a matrix-like object.')
   if((ncol(x) < 3L) || (ncol(x) > 4L)) stop('"x" must have 3 or 4 columns.')
   if(!isTRUE(all.equal(rowSums(x), rep(1.0, nrow(x)), check.attributes = FALSE))) stop('all values in "x" must be in [0, 1].')
-  if(any((x < 0) | (x > 1))) stop('all values in "x" must be in [0, 1].')
+  if(any((x < 0.0) | (x > 1.0))) stop('all values in "x" must be in [0, 1].')
 
   # transformations
   if(ncol(x) == 3L){

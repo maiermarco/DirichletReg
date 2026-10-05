@@ -1,4 +1,4 @@
-print.DirichletRegConfint <- function(x, digits=3, ...){
+print.DirichletRegConfint <- function(x, digits = 3L, ...){
 
   e <- x$e
   repar <- x$repar
@@ -10,7 +10,7 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
   if(repar){
 
     if(e){
-      for(v in 1:length(ctab)){
+      for(v in seq_along(ctab)){
         ctab[[v]] <- lapply(ctab[[v]], function(l) if(is.null(l)) NULL else exp(l))
       }
     }
@@ -83,5 +83,6 @@ print.DirichletRegConfint <- function(x, digits=3, ...){
       cat("\n")
     }
   }
-
+  
+  invisible(x)
 }

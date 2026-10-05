@@ -1,4 +1,8 @@
 library(testthat)
-library(DirichletReg)
+library(DirichletReg) # nolint
 
-test_check("DirichletReg", reporter = default_reporter())
+old_options <- options("warn" = 1L) # nolint
+
+test_check("DirichletReg") # , reporter = default_reporter()
+
+options(old_options) # nolint
