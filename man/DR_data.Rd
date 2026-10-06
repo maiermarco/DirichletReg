@@ -14,7 +14,7 @@
 %
 \usage{
 DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
-    norm_tol = sqrt(.Machine$double.eps), no_guessing = FALSE)
+    norm_tol = sqrt(.Machine$double.eps), fix_names = TRUE)
 
 \method{print}{DirichletRegData}(x, type = c("processed", "original"), \dots)
 
@@ -28,12 +28,11 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
     A \code{matrix} or \code{data.frame} with nonnegative values of all compositional variables (in some cases, a vector is also permissible, see \dQuote{Details}).
   }%
   \item{trafo}{%
-    Either a logical or numeric value.
+    Either a small numeric value in (0, .1] or \code{TRUE} (default: \ifelse{latex}{\eqn{\sqrt{\mathtt{.Machine\$double.eps}}\approx1.49\cdot10^8}}{\code{sqrt(.Machine$double.eps) = 1.49e-08}}).
     Transformation of variables causes the values to shrink away from extreme values of 0 and 1, see \dQuote{Details}.
-    \cr    
-    If logical, it will force (\code{TRUE}) or suppress (\code{FALSE}) transformation.
-    Suppressing transformation in the presence of extreme values (0 and 1) will result in an error.
-    \cr
+    \cr%
+    \code{TRUE} will force transformation, \code{FALSE} results in an error.
+    \cr%
     If \code{trafo} is numeric it is used as a \dQuote{threshold}, so transformation will be applied if values in \code{Y} are \eqn{y < \mathtt{trafo}}{y < trafo} or \eqn{y > \left(1-\mathtt{trafo}\right)}{y > (1 - trafo)}.
   }%
   \item{base}{%
@@ -41,11 +40,11 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
   }%
   \item{norm_tol}{%
     Due to numerical precision, row sums of \eqn{\mathbf{Y}} may not be \emph{exactly} equal to 1.
-    Therefore, \code{norm_tol} is a small non-negative value (default: \ifelse{latex}{\eqn{\sqrt{\mathtt{.Machine\$double.eps}}}}{\code{sqrt(.Machine$double.eps)}}) which represents the tolerance when testing for \dQuote{near equality} to 1 (see \code{\link[base]{all.equal}}).
+    Therefore, \code{norm_tol} is a small value in (0, .1] which represents the tolerance when testing for \dQuote{near equality} to 1 (default: \ifelse{latex}{\eqn{\sqrt{\mathtt{.Machine\$double.eps}}\approx1.49\cdot10^8}}{\code{sqrt(.Machine$double.eps) = 1.49e-08}}, see \code{\link[base]{all.equal}}).
   }%
-  \item{no_guessing}{%
+  \item{fix_names}{%
     A logical value that determines whether \code{DR_data()} will try to infer the variable name if \code{Y} is a single column or vector.
-    By default, \code{DR_data} will attempt to find a name, if \code{no_guessing = TRUE}, whatever is supplied to \code{Y} will be used as is.
+    By default, \code{DR_data} will attempt to find a name, if \code{fix_names = FALSE}, whatever is supplied to \code{Y} will be used as is.
   }%
   \item{x}{%
     A \code{DirichletRegData} object
@@ -96,9 +95,9 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
   \item{attr(*, "base")}{number of the variable used as the base in the reparametrized model}
 }
 \references{
-Smithson, M. & Verkuilen, J. (2006). A Better Lemon Squeezer? Maximum-Likelihood Regression With Beta-Distributed Dependent Variables. \emph{Psychological Methods, 11}(1), 54--71.
+Smithson, M. & Verkuilen, J. (2006). A Better Lemon Squeezer? Maximum-Likelihood Regression With Beta-Distributed Dependent Variables. \emph{Psychological Methods, 11}(1), 54--71. \doi{10.1037/1082-989X.11.1.54}
 
-Cribari-Neto, F. & Zeileis, A. (2010). Beta Regression in \R. \emph{Journal of Statistical Software, 34}(2), 1--24.
+Cribari-Neto, F. & Zeileis, A. (2010). Beta Regression in \R. \emph{Journal of Statistical Software, 34}(2), 1--24. \doi{10.18637/jss.v034.i02}
 }
 \author{Marco J. Maier}
 \examples{
@@ -124,10 +123,10 @@ head(rand_data)
 # would be ReadingSkills[["accuracy"]]
 read_acc <- DR_data(ReadingSkills[["accuracy"]])
 
-# however, since no_guessing = FALSE by default, DR_data() infers that the variable name is
+# however, since fix_names = TRUE by default, DR_data() infers that the variable name is
 head(read_acc)
 
-# accuracy and names the columns accordingly. To prevent this, set no_guessing = TRUE
-head(DR_data(ReadingSkills[["accuracy"]], no_guessing = TRUE))
+# accuracy and names the columns accordingly. To prevent this, set fix_names = FALSE
+head(DR_data(ReadingSkills[["accuracy"]], fix_names = FALSE))
 }
 \keyword{manip}

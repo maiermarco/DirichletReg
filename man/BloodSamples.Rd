@@ -16,7 +16,7 @@ These data (Aitchison, 2003) list blood samples' compositions of \emph{Albumin},
   }%
 }%
 \source{%
-Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.%
+  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.
 }
 \examples{
 head(BloodSamples)

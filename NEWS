@@ -12,6 +12,14 @@ Changes in Version 0.8-0:
     Instead of stopping with an error, a warning is now issued with
     more detailed diagnostic information.
 
+  • ‘DR_data()’ was rewritten to address some issues in the original
+    implementation.  ‘trafo’ and ‘norm_tol’ must now be in (0, .1].
+    ‘norm_tol’ must be numeric and ‘trafo’ can also be ‘TRUE’ (not
+    ‘FALSE’ because this would lead to errors when estimating the
+    models).  If the data are supplied as a single column or vector,
+    the function tries to fix the new column names if ‘fix_names =
+    TRUE’.
+
   • ‘DirichReg()’ now evaluates the ‘formula’ object in the parent
     frame to ensure that character-to-formula and similar applications
     can be processed correctly (see
@@ -51,6 +59,8 @@ Changes in Version 0.8-0:
   • Better code documentation.
 
   • Adapted the tests for the third edition of ‘testthat’.
+
+  • Many small improvements suggested by ‘lintr’.
 
 Changes in Version 0.7-2:
 

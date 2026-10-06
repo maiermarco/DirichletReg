@@ -3,19 +3,27 @@ DR_data <- function(
   trafo       = sqrt(.Machine$double.eps), # transform (compress) the data?
   base        = 1,                         # base variable for the reparametrized (alternative) model
   norm_tol    = sqrt(.Machine$double.eps), # tolerance for normalization [0, ?]
-  no_guessing = FALSE                      # disables "name guessing" when Y is a vector
+  fix_names   = TRUE                       # tries to "guess" and fix names when Y is a vector
 ){
   
   # initialization
-  force_norm_usr <- isTRUE(norm_tol) # was normalization forced by the user? (i.e., is norm_tol == TRUE)
-  force_norm_gt1 <- FALSE            # normalization because some Y were > 1.0
-  force_norm_su1 <- FALSE            # normalization because some row sums were != 1.0
   force_tran     <- isTRUE(trafo)    # was transformation forced? (i.e., trafo TRUE)
   state_tran     <- FALSE            # was Y transformed?
+# force_norm_usr <- isTRUE(norm_tol) # was normalization forced by the user? (i.e., is norm_tol == TRUE)
+  force_norm_gt1 <- FALSE            # normalization because some Y were > 1.0
+  force_norm_su1 <- FALSE            # normalization because some row sums were != 1.0
   
-  if(length(trafo) != 1L || is.na(trafo) || !(is.logical(trafo) || (trafo > 0))){
-    stop("\"trafo\" must be a small value > 0 or TRUE/FALSE. See ?DR_data") # error if trafo is not specified correctly
+  if((length(trafo) != 1L) || is.na(trafo) || isFALSE(trafo) || (is.numeric(trafo) && ((trafo <= 0.0) || (trafo > 0.01)))){
+    stop("\"trafo\" must be a small number > 0 or TRUE. See ?DR_data") # error if trafo is not specified correctly
   }
+  if((length(norm_tol) != 1L) || is.na(norm_tol) || (norm_tol <= 0) || (norm_tol > 0.01) || is.logical(norm_tol)){
+    stop("\"norm_tol\" must be a small number > 0. See ?DR_data") # error if norm_tol is not specified correctly
+  }
+  
+  
+  # save the original data for reference
+  Y.original <- Y
+  
   
   # set up beta-distributed matrix if a variables with values in [0, 1] is supplied
   if(is.null(dim(Y)) || (ncol(Y) == 1L)){ # if Y is a vector
@@ -33,9 +41,10 @@ DR_data <- function(
     # get the deparsed name from the call unless Y was a single column matrix with a column name
     if(!exists(".name")) .name <- deparse_nocutoff(match.call()$Y)
     
-    if(!no_guessing){ # if no_guessing is false, try to guess the name if it resulted from being indexed from a data.frame or matrix
+    if(fix_names){ # if fix_names is TRUE, try to guess the name if it resulted from being indexed from a data.frame or matrix
       # loop to debug regex
       # for(.name in c("ob[,1L]", "ob[ , 1L ]", "ob[[ 1L ]]", "ob$var", "ob$`var`", "ob[var]", "ob[[var]]", "ob[\"var\"]", "ob[[\"var\"]]", "ob['var']", "ob[['var']]")){
+# TODO: give up if name is something like dataframe[,1L]
       .name <- local({ # here, we try to guess the name from the call   o_O
         .original.name <- .name # keep a backup in case anything goes wrong
         .name <- gsub("\\s", "", .name) # remove whitespace
@@ -51,7 +60,7 @@ DR_data <- function(
     }
     
     if(nchar(.name) < 1L) .name <- "Y" # fallback if, for some reason, .name is an empty string
-    colnames(Y) <- c(paste0("(1 - ", .name, ")"), .name) # name the columns accordingly
+    colnames(Y) <- c(sprintf("1 - %s", .name), .name) # name the columns accordingly
     
     # print a message how the vector was processed
     message("only one variable in [0, 1] supplied - beta-distribution assumed.\ncheck this assumption.")
@@ -64,10 +73,7 @@ DR_data <- function(
   if(nrow(na.delete(Y)) < 1L) stop("\"Y\" has no valid rows.")
   
   # check for negative values in Y
-  if(any(na.delete(Y) < 0)) stop("\"Y\" contains values < 0.")
-  
-  # save the original data for reference
-  Y.original <- Y
+  if(any(na.delete(Y) < 0.0)) stop("\"Y\" contains values < 0.")
   
   
   
@@ -75,17 +81,17 @@ DR_data <- function(
   if(is.null(dim(Y))) stop("\"Y\" must be either a matrix or a data.frame.") # this should not be possible
   if(ncol(Y) < 2L) stop("\"Y\" must at least have two columns.") # neither should this
   if(((base %% 1) != 0) || (base < 1L) || (base > ncol(Y))) stop("\"base\" must be an integer in the range of variables.") # check base category
-  if((length(norm_tol) != 1L) || is.na(norm_tol) || (norm_tol <= 0)) stop("\"norm_tol\" must be a small number > 0. See ?DR_data")
   if(is.null(colnames(Y))) colnames(Y) <- paste0("v", seq_len(ncol(Y))) # if Y has no column names, assign a sequence v1, v2, v3, ...
   
   
   
   # Normalization - either by user-request or forced if row sums != 1 (with tolerance = norm_tol)
-  row.sums <- rowSums(Y) # na.rm is irrelevant, because rows containing NAs have been set to NA above
-  check_row_sum_noNA <- all.equal(na.delete(row.sums), rep(1.0, length(na.delete(row.sums))), tolerance = norm_tol, check.attributes = FALSE)
+  row_sums <- rowSums(Y) # na.rm is irrelevant, because rows containing NAs have been set to NA above
+  if(is.numeric(norm_tol)) check_row_sum_noNA <- all.equal(na.delete(row_sums), rep(1.0, length(na.delete(row_sums))), tolerance = norm_tol, check.attributes = FALSE)
   
-  if(force_norm_usr || (force_norm_su1 <- !isTRUE(check_row_sum_noNA))){ # either forced by the user or some row sums are != 1.0
-    Y <- Y / row.sums # normalize rows
+# if(force_norm_usr || (force_norm_su1 <- !isTRUE(check_row_sum_noNA))){ # either forced by the user or some row sums are != 1.0
+  if(                  (force_norm_su1 <- !isTRUE(check_row_sum_noNA))){ # either forced by the user or some row sums are != 1.0
+    Y <- Y / row_sums # normalize rows
     force_norm_gt1 <- any(Y > 1.0, na.rm = TRUE) # was normalization necessary because of values over 1.0
   }
   
@@ -96,7 +102,7 @@ DR_data <- function(
     force_tran || # if either transformation is forced by the user or
     (is.numeric(trafo) && (any(Y < trafo, na.rm = TRUE) || any(Y > (1.0 - trafo), na.rm = TRUE))) # values are too close to 0 or 1 -- should be state_tran?
   ){
-    n.obs      <- length(na.delete(row.sums))                 # number of valid observations
+    n.obs      <- length(na.delete(row_sums))                 # number of valid observations
     Y          <- (Y * (n.obs - 1.0) + 1.0 / ncol(Y)) / n.obs # Smithson, M. & Verkuilen, J. (2006)
     state_tran <- TRUE                                        # was Y transformed?
   }
@@ -114,8 +120,8 @@ DR_data <- function(
     "dims"        = ncol(Y),                                            # the number of dimensions/components
     "dim.names"   = colnames(Y),                                        # names of dimensions/components
     "obs"         = nrow(Y),                                            # number of observations (including NAs)
-    "valid_obs"   = length(na.delete(row.sums)),                        # number of valid observations
-    "normalized"  = force_norm_usr || force_norm_gt1 || force_norm_su1, # normalizations?
+    "valid_obs"   = length(na.delete(row_sums)),                        # number of valid observations
+    "normalized"  = force_norm_gt1 || force_norm_su1, # normalizations? #### force_norm_usr || 
     "transformed" = force_tran || state_tran,                           # transformation?
     "base"        = as.integer(base),                                   # index of the base category
     "class"       = "DirichletRegData"                                  # class definition
@@ -124,9 +130,9 @@ DR_data <- function(
   
   
   # Issue warnings
-  if((force_norm_usr || force_norm_gt1 || force_norm_su1) && (force_tran || state_tran)){
+  if((force_norm_gt1 || force_norm_su1) && (force_tran || state_tran)){ ### force_norm_usr || 
     warning("not all rows sum up to 1 => normalization forced\n  some entries are 0 or 1 => transformation forced")
-  } else if(force_norm_usr || force_norm_gt1 || force_norm_su1){
+  } else if(force_norm_gt1 || force_norm_su1){ ### force_norm_usr || 
     warning("not all rows sum up to 1 => normalization forced")
   } else if(force_tran || state_tran){
     warning("some entries are 0 or 1 => transformation forced")

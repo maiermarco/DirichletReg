@@ -14,8 +14,8 @@ These data are taken from Aitchison (2003) and contain information on the relati
     \item{\code{depth}}{water depth in meters}%
   }%
 }%
-\source{
-Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.
+\source{%
+  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.
 }
 \examples{
 head(ArcticLake)

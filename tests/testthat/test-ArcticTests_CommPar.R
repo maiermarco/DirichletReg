@@ -15,7 +15,7 @@ AL <- ArcticLake[, 4L, drop = FALSE]
 test_that("Arctic Lake - Data Transformation", {
   expect_identical(dim(AL), c(39L, 1L))
   expect_s3_class(AL, "data.frame", exact = TRUE)
-  expect_warning(AL$Y <<- DR_data(ArcticLake[, 1:3]), regexp = "normalization\\ forced$")
+  expect_warning(AL$Y <<- DR_data(ArcticLake[, 1:3]), regexp = "normalization forced", fixed = TRUE) # nolint
   expect_equal(unname(rowSums(AL$Y)), rep(1.0, 39L))
 })
 

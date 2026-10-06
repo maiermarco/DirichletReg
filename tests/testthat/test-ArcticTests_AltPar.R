@@ -16,7 +16,7 @@ AL <- ArcticLake["depth"]
 test_that("Arctic Lake - Data Transformation", {
   expect_identical(dim(AL), c(39L, 1L))
   expect_s3_class(AL, "data.frame", exact = TRUE)
-  expect_warning(AL$Y <<- DR_data(ArcticLake[, 1L:3L]), regexp = "normalization\\ forced$")
+  expect_warning(AL$Y <<- DR_data(ArcticLake[, 1L:3L]), regexp = "normalization forced", fixed = TRUE) # nolint
   expect_equal(unname(rowSums(AL$Y)), rep(1.0, 39L))
 })
 
@@ -29,7 +29,7 @@ test_that("Arctic Lake - Data Transformation", {
 #                                                                              #
 
 test_that("Text-to-formula conversion", {
-  expect_no_error(resA1_1 <<- DirichReg(as.formula("Y ~ 1"), data = AL, model = "alternative", base = 1L))
+  expect_no_error(resA1_1 <<- DirichReg(as.formula("Y ~ 1"), data = AL, model = "alternative", base = 1L)) # nolint
 })
 
 load(file.path("testdata", "resA1_1.RData"))
@@ -76,7 +76,7 @@ test_that("Methods", {
 #                                                                          #####
 
 test_that("Text-to-formula conversion", {
-  expect_no_error(resA2_1 <<- DirichReg(as.formula("Y ~ depth | 1"), data = AL, model = "alternative", base = 1L))
+  expect_no_error(resA2_1 <<- DirichReg(as.formula("Y ~ depth | 1"), data = AL, model = "alternative", base = 1L)) # nolint
 })
 
 load(file.path("testdata", "resA2_1.RData"))
@@ -123,10 +123,10 @@ test_that("Methods", {
 #                                                                          ####
 
 test_that("Text-to-formula conversion", {
-  expect_no_error(resA3_2 <<- DirichReg(as.formula(sprintf("Y ~ 1 | `%s`", "depth")), data = AL, model = "alternative", base = 2L))
+  expect_no_error(resA3_2 <<- DirichReg(as.formula(sprintf("Y ~ 1 | `%s`", "depth")), data = AL, model = "alternative", base = 2L)) # nolint
 })
 
-resA3_2_mathematica <- list(
+resA3_2_mathematica <- list( # nolint start
   MLE     =  51.71895090427818151113,
   DEV     = -103.4379018085563630223,
   COEFS   = c(-1.92806496209330522141400, -0.13956410084104567041840, -0.07823484089230527185368, 0.04951503424822068330203),
@@ -146,7 +146,7 @@ resA3_2_mathematica <- list(
 #    PHI   = 4.638246013539815237261,
 #    MU    = c(0.2201694800127515751630,0.4998398613709953725498,0.2799906586162530522872)
 #  )
-)
+) # nolint end
 
 test_that("Model Estimation", {
   expect_equal(resA3_2_mathematica$MLE    , resA3_2$logLik)

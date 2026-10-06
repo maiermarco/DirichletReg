@@ -19,8 +19,7 @@ Data from Aitchison (2003)
     \item{\code{Pcount}}{a numeric vector}
   }
 }
-\source{
-  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.}
-  The Blackburn Press, Caldwell, NJ.
+\source{%
+  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.
 }
 \keyword{datasets}
