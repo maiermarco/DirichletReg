@@ -12,50 +12,54 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-    collapse   = TRUE
-  , comment    = "##"
-  , tidy       = TRUE
-  , fig.width  = 7L
-  , fig.height = 7L
+  knitr::opts_chunk$set(
+      collapse   = TRUE
+    , comment    = "##"
+    , tidy       = TRUE
+    , fig.width  = 7L
+    , fig.height = 7L
+    , tidy.opts  = list(blank = TRUE, width.cutoff = 75L, indent = 4L)
 )
 ```
 
 Full R-Code for:
 
-Maier, M. J. (2014). DirichletReg: Dirichlet Regression for Compositional Data in R. Research Report Series/Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. [https://doi.org/10.57938/ad3142d3-2fcd-4c37-aec6-8e0bd7d077e1](https://doi.org/10.57938/ad3142d3-2fcd-4c37-aec6-8e0bd7d077e1)
+Maier, M. J. (2014). _DirichletReg: Dirichlet Regression for Compositional Data in R._
+Research Report Series/Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna.
+[doi.org/10.57938/ad3142d3-2fcd-4c37-aec6-8e0bd7d077e1](https://doi.org/10.57938/ad3142d3-2fcd-4c37-aec6-8e0bd7d077e1)
 
 ## 4. Application examples
 
 ### 4.1. The Arctic lake (common parametrization)
 
 ```{r, message = FALSE}
-library("DirichletReg")
+library(DirichletReg)
 head(ArcticLake)
 
-AL <- DR_data(ArcticLake[,1:3])
+AL <- DR_data(ArcticLake[, 1:3])
 
-AL[1:6,]
+AL[1:6, ]
 ```
 
 Code for Fig. 4 (left):
 ```{r, fig.cap = "Figure 4: Arctic lake: Ternary plot (left) and a scatter plot of depth vs. composition (right)."}
-plot(AL, cex=.5, a2d=list(colored=FALSE, c.grid=FALSE))
+plot(AL, cex = 0.5, a2d = list(colored = FALSE, c.grid = FALSE))
 ```
 
 Code for Fig. 4 (right):
 ```{r, fig.cap = "Figure 4: Arctic lake: Ternary plot (left) and a scatter plot of depth vs. composition (right)."}
-plot(rep(ArcticLake$depth,3),as.numeric(AL), pch=21, bg=rep(c("#E495A5", "#86B875", "#7DB0DD"),each=39), xlab="Depth (m)", ylab="Proportion", ylim=0:1)
+plot(rep(ArcticLake$depth, 3L), as.numeric(AL), pch = 21L, bg = rep(c("#E495A5", "#86B875", "#7DB0DD"), each = 39L),
+  xlab = "Depth (m)", ylab = "Proportion", ylim = c(0.0, 1.0))
 ```
 
 ```{r}
-lake1 <- DirichReg(AL~depth, ArcticLake)
+lake1 <- DirichReg(AL ~ depth, ArcticLake)
 lake1
 
 coef(lake1)
 
-lake2 <- update(lake1, .~.+I(depth^2)|.+I(depth^2)|.+I(depth^2))
-anova(lake1,lake2)
+lake2 <- update(lake1, . ~ . + I(depth^2) | . + I(depth^2) | . + I(depth^2))
+anova(lake1, lake2)
 
 summary(lake2)
 ```
@@ -65,58 +69,60 @@ summary(lake2)
 
 Code for Fig. 5:
 ```{r, fig.show='hold', fig.cap = "Figure 5: Arctic lake: Fitted values of the quadratic model."}
-par(mar=c(4, 4, 4, 4)+0.1)
-plot(rep(ArcticLake$depth,3),as.numeric(AL),
-     pch=21, bg=rep(c("#E495A5", "#86B875", "#7DB0DD"),each=39),
-     xlab="Depth (m)", ylab="Proportion", ylim=0:1, main="Sediment Composition in an Arctic Lake")
+par(mar = c(4.0, 4.0, 4.0, 4.0) + 0.1)
+plot(rep(ArcticLake$depth, 3L), as.numeric(AL), pch = 21L, bg = rep(c("#E495A5", "#86B875", "#7DB0DD"), each = 39L),
+  xlab = "Depth (m)", ylab = "Proportion", ylim = c(0.0, 1.0), main = "Sediment Composition in an Arctic Lake")
 
-Xnew <- data.frame(depth=seq(min(ArcticLake$depth), max(ArcticLake$depth), length.out=100))
-for(i in 1:3)lines(cbind(Xnew, predict(lake2, Xnew)[,i]),col=c("#E495A5", "#86B875", "#7DB0DD")[i],lwd=2)   
-legend("topleft", legend=c("Sand","Silt","Clay"), lwd=2, col=c("#E495A5", "#86B875", "#7DB0DD"), pt.bg=c("#E495A5", "#86B875", "#7DB0DD"), pch=21,bty="n")
+Xnew <- data.frame(depth = seq(min(ArcticLake$depth), max(ArcticLake$depth), length.out = 100L))
+for(i in seq_len(3L)) lines(cbind(Xnew, predict(lake2, Xnew)[, i]), col = c("#E495A5", "#86B875", "#7DB0DD")[i], lwd = 2.0)   
+legend("topleft", legend = c("Sand", "Silt", "Clay"), lwd = 2.0, col = c("#E495A5", "#86B875", "#7DB0DD"),
+  pt.bg = c("#E495A5", "#86B875", "#7DB0DD"), pch = 21L, bty = "n")
 
-par(new=TRUE)
-plot(cbind(Xnew, predict(lake2, Xnew, F,F,T)), lty="24", type="l",ylim=c(0,max(predict(lake2, Xnew, F,F,T))),axes=F,ann=F,lwd=2)
-axis(4)
-mtext(expression(paste("Precision (",phi,")",sep="")), 4, line=3)
-legend("top",legend=c(expression(hat(mu)[c]==hat(alpha)[c]/hat(alpha)[0]),expression(hat(phi)==hat(alpha)[0])),lty=c(1,2),lwd=c(3,2),bty="n")
+par(new = TRUE)
+plot(cbind(Xnew, predict(lake2, Xnew, FALSE, FALSE, TRUE)), lty = "24", type = "l",
+  ylim = c(0.0, max(predict(lake2, Xnew, FALSE, FALSE, TRUE))), axes = FALSE, ann = FALSE, lwd = 2.0)
+axis(4L)
+mtext(expression(paste("Precision (", phi, ")")), 4L, line = 3L)
+legend("top", legend = c(expression(hat(mu)[c] == hat(alpha)[c] / hat(alpha)[0]), expression(hat(phi) == hat(alpha)[0])),
+  lty = c(1L, 2L), lwd = c(3.0, 2.0), bty = "n")
 ```
 
 ```{r}
 AL <- ArcticLake
-AL$AL <- DR_data(ArcticLake[,1:3])
+AL$AL <- DR_data(ArcticLake[, 1:3])
 
 dd <- range(ArcticLake$depth)
-X <- data.frame(depth=seq(dd[1], dd[2], length.out=200))
+X <- data.frame(depth = seq(dd[1L], dd[2L], length.out = 200L))
 
-pp <- predict(DirichReg(AL~depth+I(depth^2),AL), X)
+pp <- predict(DirichReg(AL ~ depth + I(depth^2), AL), X)
 ```
 
 
 Code for Fig. 6:
 ```{r, fig.cap = "Figure 6: Arctic lake: OLS (dashed) vs. Dirichlet regression (solid) predictions."}
-plot(AL$AL, cex=.1, reset_par=FALSE)
-points(toSimplex(AL$AL), pch=16, cex=.5, col=gray(.5))
+plot(AL$AL, cex = 0.1, reset_par = FALSE)
+points(toSimplex(AL$AL), pch = 16L, cex = 0.5, col = gray(0.5))
 
-lines(toSimplex(pp), lwd=3, col=c("#6E1D34", "#004E42")[2])
+lines(toSimplex(pp), lwd = 3.0, col = c("#6E1D34", "#004E42")[2L])
 
-Dols <- log(cbind(ArcticLake[,2]/ArcticLake[,1],
-                  ArcticLake[,3]/ArcticLake[,1]))
+Dols <- log(cbind(ArcticLake[, 2L] / ArcticLake[, 1L],
+                  ArcticLake[, 3L] / ArcticLake[, 1L]))
 
-ols <- lm(Dols~depth+I(depth^2), ArcticLake)
+ols <- lm(Dols ~ depth + I(depth^2), ArcticLake)
 p2 <- predict(ols, X)
-p2m <- exp(cbind(0,p2[,1],p2[,2]))/rowSums(exp(cbind(0,p2[,1],p2[,2])))
+p2m <- exp(cbind(0.0, p2[, 1L], p2[, 2L])) / rowSums(exp(cbind(0.0, p2[, 1L], p2[, 2L])))
 
-lines(toSimplex(p2m), lwd=3, col=c("#6E1D34", "#004E42")[1], lty="21")
+lines(toSimplex(p2m), lwd = 3.0, col = c("#6E1D34", "#004E42")[1L], lty = "21")
 ```
 
 ### 4.2. Blood samples (alternative parametrization)
 
 ```{r}
 Bld <- BloodSamples
-Bld$Smp <- DR_data(Bld[,1:4])
+Bld$Smp <- DR_data(Bld[, 1:4])
 
-blood1 <- DirichReg(Smp~Disease|1, Bld, model="alternative", base=3)
-blood2 <- DirichReg(Smp~Disease|Disease, Bld, model="alternative", base=3)
+blood1 <- DirichReg(Smp ~ Disease | 1, Bld, model = "alternative", base = 3L)
+blood2 <- DirichReg(Smp ~ Disease | Disease, Bld, model = "alternative", base = 3L)
 anova(blood1, blood2)
 
 summary(blood1)
@@ -124,43 +130,44 @@ summary(blood1)
 
 Code for Fig. 7:
 ```{r, fig.cap="Figure 7: Blood samples: Box plots and fitted values (dashed lines indicate the fitted values for each group)."}
-par(mfrow=c(1,4), mar=c(4,4,4,2)+.25)
+par(mfrow = c(1L, 4L), mar = c(4.0, 4.0, 4.0, 2.0) + 0.25)
 for(i in 1:4){
-  boxplot(Bld$Smp[,i]~Bld$Disease, ylim=range(Bld$Smp[,1:4]), main=paste(names(Bld)[i]), xlab="Disease Type", ylab="Proportion")
-  segments(c(-5,1.5),unique(fitted(blood2)[,i]),
-           c(1.5,5),unique(fitted(blood2)[,i]),lwd=2,lty=2)
+  boxplot(Bld$Smp[, i] ~ Bld$Disease, ylim = range(Bld$Smp[, 1:4]), main = paste(names(Bld)[i]),
+    xlab = "Disease Type", ylab = "Proportion")
+  segments(c(-5.0, 1.5), unique(fitted(blood2)[, i]),
+           c( 1.5, 5.0), unique(fitted(blood2)[, i]), lwd = 2.0, lty = 2L)
 }
-
 ```
 
 ```{r}
-alpha <- predict(blood2, data.frame(Disease=factor(c("A","B"))), F, T, F)
-L <- sapply(1:2, function(i) ddirichlet(DR_data(Bld[31:36,1:4]), unlist(alpha[i,])))
+alpha <- predict(blood2, data.frame(Disease = factor(c("A", "B"))), FALSE, TRUE, FALSE)
+L <- sapply(1:2, function(i) ddirichlet(DR_data(Bld[31:36, 1:4]), unlist(alpha[i, ])))
 LP <- L / rowSums(L)
-dimnames(LP) <- list(paste("C",1:6), c("A", "B"))
-print(data.frame(round(LP * 100, 1),"pred."=as.factor(ifelse(LP[,1]>LP[,2], "==> A", "==> B"))),print.gap=2)
+dimnames(LP) <- list(paste("C", 1:6), c("A", "B"))
+print(data.frame(round(LP * 100, 1), "pred." = as.factor(ifelse(LP[, 1L] > LP[, 2L], "==> A", "==> B"))), print.gap = 2L)
 ```
 
 Code for Fig. 8:
 ```{r, fig.cap = "Figure 8: Blood samples: Observed values and predictions."}
-B2 <- DR_data(BloodSamples[,c(1,2,4)])
-plot(B2, cex=.001, reset_par=FALSE)
+B2 <- DR_data(BloodSamples[, c(1L, 2L, 4L)])
+plot(B2, cex = 0.001, reset_par = FALSE)
 
-div.col <- colorRampPalette(c("#023FA5", "#c0c0c0", "#8E063B"))(100)
+div.col <- colorRampPalette(c("#023FA5", "#c0c0c0", "#8E063B"))(100L)
 
 # expected values
-temp <- (alpha/rowSums(alpha))[,c(1,2,4)]
-points(toSimplex(temp/rowSums(temp)), pch=22, bg=div.col[c(1,100)], cex=2, lwd=.25)
+temp <- (alpha / rowSums(alpha))[, c(1L, 2L, 4L)]
+points(toSimplex(temp / rowSums(temp)), pch = 22L, bg = div.col[c(1L, 100L)], cex = 2.0, lwd = 0.25)
 
 # known values   
-temp <- B2[1:30,]
-points(toSimplex(temp/rowSums(temp)), pch=21, bg=(div.col[c(1,100)])[BloodSamples$Disease[1:30]], cex=.5, lwd=.25)
+temp <- B2[1:30, ]
+points(toSimplex(temp / rowSums(temp)), pch = 21L, bg = (div.col[c(1L, 100L)])[BloodSamples$Disease[1:30]], cex = 0.5, lwd = 0.25)
 
 # unclassified  
-temp <- B2[31:36,]
-points(toSimplex(temp/rowSums(temp)), pch=21, bg=div.col[round(100*LP[,2],0)], cex=1, lwd=.5)
+temp <- B2[31:36, ]
+points(toSimplex(temp / rowSums(temp)), pch = 21L, bg = div.col[round(100 * LP[, 2L], 0L)], cex = 1.0, lwd = 0.5)
 
-legend("topright", bty="n", legend=c("Disease A","Disease B",NA,"Expected Values"), pch=c(21,21,NA,22), pt.bg=c(div.col[c(1,100)],NA,"white"))
+legend("topright", bty = "n", legend = c("Disease A", "Disease B", NA, "Expected Values"), pch = c(21L, 21L, NA, 22L),
+  pt.bg = c(div.col[c(1L, 100L)], NA, "white"))
 ```
 
 ### 4.3. Reading skills data (alternative parametrization)
@@ -170,81 +177,89 @@ RS <- ReadingSkills
 RS$acc <- DR_data(RS$accuracy)
 
 RS$dyslexia <- C(RS$dyslexia, treatment)
-rs1 <- DirichReg(acc ~ dyslexia*iq | dyslexia*iq, RS, model="alternative")
-rs2 <- DirichReg(acc ~ dyslexia*iq | dyslexia+iq, RS, model="alternative")
-anova(rs1,rs2)
+rs1 <- DirichReg(acc ~ dyslexia * iq | dyslexia * iq, RS, model = "alternative")
+rs2 <- DirichReg(acc ~ dyslexia * iq | dyslexia + iq, RS, model = "alternative")
+anova(rs1, rs2)
 ```
 
 Code for Fig. 9:
 ```{r, fig.cap="Figure 9: Reading skills: Predicted values of Dirichlet regression and OLS regression."}
 g.ind <- as.numeric(RS$dyslexia)
-g1 <- g.ind == 1   # normal
-g2 <- g.ind != 1   # dyslexia
-par(mar=c(4,4,4,4)+0.25)
-plot(accuracy~iq, RS, pch=21, bg=c("#E495A5", "#39BEB1")[3-g.ind],
-cex=1.5, main="Dyslexic (Red) vs. Control (Green) Group",
-xlab="IQ Score",ylab="Reading Accuracy", xlim=range(ReadingSkills$iq))
+g1 <- g.ind == 1L   # normal
+g2 <- g.ind != 1L   # dyslexia
+par(mar = c(4.0, 4.0, 4.0, 4.0) + 0.25)
+plot(accuracy ~ iq, RS, pch = 21L, bg = c("#E495A5", "#39BEB1")[3L - g.ind],
+cex = 1.5, main = "Dyslexic (Red) vs. Control (Green) Group",
+xlab = "IQ Score", ylab = "Reading Accuracy", xlim = range(ReadingSkills$iq))
 
-x1 <- seq(min(RS$iq[g1]), max(RS$iq[g1]), length.out=200)
-x2 <- seq(min(RS$iq[g2]), max(RS$iq[g2]), length.out=200)
+x1 <- seq(min(RS$iq[g1]), max(RS$iq[g1]), length.out = 200L)
+x2 <- seq(min(RS$iq[g2]), max(RS$iq[g2]), length.out = 200L)
 n <- length(x1)
-X <- data.frame(dyslexia=factor(rep(0:1, each=n), levels=0:1, labels=c("no", "yes")),iq=c(x1,x2))
+X <- data.frame(dyslexia = factor(rep(0:1, each = n), levels = 0:1, labels = c("no", "yes")), iq = c(x1, x2))
 pv <- predict(rs2, X, TRUE, TRUE, TRUE)
 
-lines(x1, pv$mu[1:n,2], col=c("#E495A5", "#39BEB1")[2],lwd=3)
-lines(x2, pv$mu[(n+1):(2*n),2], col=c("#E495A5", "#39BEB1")[1],lwd=3)
+lines(x1, pv$mu[1:n, 2L], col = c("#E495A5", "#39BEB1")[2L], lwd = 3.0)
+lines(x2, pv$mu[(n + 1L):(2L * n), 2L], col = c("#E495A5", "#39BEB1")[1L], lwd = 3.0)
 
 a <- RS$accuracy
-logRa_a <- log(a/(1-a))
-rlr <- lm(logRa_a~dyslexia*iq, RS)
-ols <- 1/(1+exp(-predict(rlr, X)))
-lines(x1, ols[1:n], col=c("#AD6071", "#00897D")[2],lwd=3,lty=2)
-lines(x2, ols[(n+1):(2*n)], col=c("#AD6071", "#00897D")[1],lwd=3,lty=2)
+logRa_a <- log(a / (1.0 - a))
+rlr <- lm(logRa_a ~ dyslexia * iq, RS)
+ols <- 1 / (1 + exp(-predict(rlr, X)))
+lines(x1, ols[1:n], col = c("#AD6071", "#00897D")[2L], lwd = 3.0, lty = 2L)
+lines(x2, ols[(n + 1L):(2L * n)], col = c("#AD6071", "#00897D")[1L], lwd = 3.0, lty = 2L)
 
 ### precision plot
-par(new=TRUE)
-plot(x1, pv$phi[1:n], col=c("#6E1D34", "#004E42")[2], lty="11", type="l",ylim=c(0,max(pv$phi)),axes=F,ann=F,lwd=2, xlim=range(RS$iq))
-lines(x2, pv$phi[(n+1):(2*n)], col=c("#6E1D34", "#004E42")[1], lty="11", type="l",lwd=2)
-axis(4)
-mtext(expression(paste("Precision (",phi,")",sep="")), 4, line=3)
-legend("topleft",legend=c(expression(hat(mu)),expression(hat(phi)),"OLS"),lty=c(1,3,2),lwd=c(3,2,3),bty="n")
+par(new = TRUE)
+plot(x1, pv$phi[1:n], col = c("#6E1D34", "#004E42")[2L], lty = "11", type = "l", ylim = c(0.0, max(pv$phi)), axes = FALSE,
+  ann = FALSE, lwd = 2.0, xlim = range(RS$iq))
+lines(x2, pv$phi[(n + 1L):(2L * n)], col = c("#6E1D34", "#004E42")[1L], lty = "11", type = "l", lwd = 2.0)
+axis(4L)
+mtext(expression(paste("Precision (", phi, ")")), 4L, line = 3)
+legend("topleft", legend = c(expression(hat(mu)), expression(hat(phi)), "OLS"), lty = c(1L, 3L, 2L), lwd = c(3.0, 2.0, 3.0),
+  bty = "n")
 ```
 
 ```{r}
 a <- RS$accuracy
-logRa_a <- log(a/(1-a))
-rlr <- lm(logRa_a~dyslexia*iq, RS)
+logRa_a <- log(a / (1 - a))
+rlr <- lm(logRa_a ~ dyslexia * iq, RS)
 summary(rlr)
 
 summary(rs2)
 
 confint(rs2)
 
-confint(rs2, exp=TRUE)
+confint(rs2, exp = TRUE)
 ```
 
 Code for 10:
 ```{r, fig.height=7/2*3, fig.cap="Figure 10: Reading skills: Various residual plots of OLS and Dirichlet regression models. The left columns shows OLS, the right column Dirichlet models. In the first row, QQ-plots show deviation from a normal distribution of residuals. The second row plots residuals against the covariate IQ. The third row plots residuals against fitted values."}
-gcol <- c("#E495A5", "#39BEB1")[3-as.numeric(RS$dyslexia)]
-tmt <- c(-3,3)
+gcol <- c("#E495A5", "#39BEB1")[3L - as.numeric(RS$dyslexia)]
+tmt <- c(-3.0, 3.0)
 
-par(mfrow=c(3,2), cex=.8)
+par(mfrow = c(3L, 2L), cex = 0.8)
 
-qqnorm(residuals(rlr,"pearson"), ylim=tmt, xlim=tmt, pch=21, bg=gcol, main="Normal Q-Q-Plot: OLS Residuals",cex=.75,lwd=.5)
-abline(0,1, lwd=2)
-qqline(residuals(rlr,"pearson"), lty=2)
+qqnorm(residuals(rlr, "pearson"), ylim = tmt, xlim = tmt, pch = 21L, bg = gcol,
+  main = "Normal Q-Q-Plot: OLS Residuals", cex = 0.75, lwd = 0.5)
+abline(0.0, 1.0, lwd = 2L)
+qqline(residuals(rlr, "pearson"), lty = 2L)
 
-qqnorm(residuals(rs2,"standardized")[,2], ylim=tmt, xlim=tmt, pch=21, bg=gcol, main="Normal Q-Q-Plot: DirichReg Residuals",cex=.75,lwd=.5)
-abline(0,1, lwd=2)
-qqline(residuals(rs2,"standardized")[,2], lty=2)
+qqnorm(residuals(rs2, "standardized")[, 2L], ylim = tmt, xlim = tmt, pch = 21L, bg = gcol,
+  main = "Normal Q-Q-Plot: DirichReg Residuals", cex = 0.75, lwd = 0.5)
+abline(0.0, 1.0, lwd = 2L)
+qqline(residuals(rs2, "standardized")[, 2L], lty = 2L)
 
-plot(ReadingSkills$iq, residuals(rlr,"pearson"), pch=21, bg=gcol, ylim=c(-3,3),main="OLS Residuals",xlab="IQ",ylab="Pearson Residuals",cex=.75,lwd=.5)
-abline(h=0,lty=2)
-plot(ReadingSkills$iq, residuals(rs2,"standardized")[,2], pch=21, bg=gcol ,ylim=c(-3,3),main="DirichReg Residuals",xlab="IQ",ylab="Standardized Residuals",cex=.75,lwd=.5)
-abline(h=0,lty=2)
+plot(ReadingSkills$iq, residuals(rlr, "pearson"), pch = 21L, bg = gcol, ylim = tmt,
+  main = "OLS Residuals", xlab = "IQ", ylab = "Pearson Residuals", cex = 0.75, lwd = 0.5)
+abline(h = 0.0, lty = 2L)
+plot(ReadingSkills$iq, residuals(rs2, "standardized")[, 2L], pch = 21L, bg = gcol, ylim = tmt,
+  main = "DirichReg Residuals", xlab = "IQ", ylab = "Standardized Residuals", cex = 0.75, lwd = 0.5)
+abline(h = 0.0, lty = 2L)
 
-plot(fitted(rlr), residuals(rlr,"pearson"), pch=21, bg=gcol ,ylim=c(-3,3),main="OLS Residuals",xlab="Fitted",ylab="Pearson Residuals",cex=.75,lwd=.5)
-abline(h=0,lty=2)
-plot(fitted(rs2)[,2], residuals(rs2,"standardized")[,2], pch=21, bg=gcol ,ylim=c(-3,3),main="DirichReg Residuals",xlab="Fitted",ylab="Standardized Residuals",cex=.75,lwd=.5)
-abline(h=0,lty=2)
+plot(fitted(rlr), residuals(rlr, "pearson"), pch = 21L, bg = gcol, ylim = tmt,
+  main = "OLS Residuals", xlab = "Fitted", ylab = "Pearson Residuals", cex = 0.75, lwd = 0.5)
+abline(h = 0.0, lty = 2L)
+plot(fitted(rs2)[, 2L], residuals(rs2, "standardized")[, 2L], pch = 21L, bg = gcol, ylim = tmt,
+  main = "DirichReg Residuals", xlab = "Fitted", ylab = "Standardized Residuals", cex = 0.75, lwd = 0.5)
+abline(h = 0.0, lty = 2L)
 ```

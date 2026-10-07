@@ -13,7 +13,7 @@ This function allows for pairwise tests of Dirichlet regression models using a l
 \item{\dots}{models to be tested against the one specified as \code{object}}
 \item{sorted}{should the models be sorted according to their number of parameters?}
 }
-\details{
+\details{%
 The test statistic is computed \eqn{LR=-2\left[\log(L_a)-\log(L_b)\right]}{LR = -2 * [log(L_a) - log(L_b)]} where \eqn{L_i}{L_i} is the likelihood of model \eqn{i}{i} with \eqn{df}{df} equal to the difference of the number of parameters in the models.
 }
 \value{%

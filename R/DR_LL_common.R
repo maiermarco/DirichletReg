@@ -42,10 +42,10 @@ DReg <- function(x, logY, X, ncolX, n, d, k, w, npar, seq_along_d, bx, NR, h_dim
           derv <- derv[1L]
 
           hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
-          sum(w*(
-            X[[derv]][,vars[1L]] * X[[derv]][,vars[2L]] * A[,derv] * (
-            logY[,derv] + digamma_Aplus - digamma_A[,derv] + A[,derv] * (
-              trigamma_Aplus - trigamma_A[,derv]
+          sum(w * (
+            X[[derv]][, vars[1L]] * X[[derv]][, vars[2L]] * A[, derv] * (
+            logY[, derv] + digamma_Aplus - digamma_A[, derv] + A[, derv] * (
+              trigamma_Aplus - trigamma_A[, derv]
               )
             )
           ))
@@ -53,8 +53,8 @@ DReg <- function(x, logY, X, ncolX, n, d, k, w, npar, seq_along_d, bx, NR, h_dim
         ################################################ DIFFERENT RESPONSES ###
         } else {
           hessian[hess.i, hess.j] <- hessian[hess.j, hess.i] <-
-          sum(w*(
-            X[[derv[1L]]][,vars[1L]]*X[[derv[2L]]][,vars[2L]]*A[,derv[1L]]*A[,derv[2L]]*trigamma_Aplus
+          sum(w * (
+            X[[derv[1L]]][, vars[1L]] * X[[derv[2L]]][, vars[2L]] * A[, derv[1L]] * A[, derv[2L]] * trigamma_Aplus
           ))
         }
       }

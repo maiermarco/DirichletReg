@@ -44,7 +44,7 @@ na.delete <- function(x){
   if(is.null(dim(x))){
     return( x[!is.na(x)] )
   } else {
-    return( x[rowSums(is.na(x)) == 0L,] )
+    return( x[rowSums(is.na(x)) == 0L, ] )
   }
 }
 

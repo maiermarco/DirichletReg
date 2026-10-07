@@ -32,7 +32,7 @@
 
 \method{residuals}{DirichletRegModel}(object, type = c("standardized", "composite", "raw"), \dots)
 
-\method{confint}{DirichletRegModel}(object, parm, level, \dots, type=c("all", "beta", "gamma"), exp = FALSE)
+\method{confint}{DirichletRegModel}(object, parm, level = 0.95, \dots, type = c("all", "beta", "gamma"), exp = FALSE)
 
 \method{print}{DirichletRegConfint}(x, digits = 3, \dots)
 
@@ -89,7 +89,7 @@
 ALake <- ArcticLake
 ALake$AL <- DR_data(ArcticLake[, 1:3])
 
-mod1 <- DirichReg(AL ~ depth + I(depth^2) | depth, data = ALake, model="alternative")
+mod1 <- DirichReg(AL ~ depth + I(depth^2) | depth, data = ALake, model = "alternative")
 
 update(mod1, . ~ . | . + I(depth^2), evaluate = FALSE)
 mod1

@@ -40,7 +40,7 @@ test_that("Model Estimation", {
   expect_equal(resA1_1_mathematica$COEFS  , unname(resA1_1$coefficients))
   expect_equal(resA1_1_mathematica$SE     , unname(resA1_1$se))
   expect_equal(resA1_1_mathematica$Z      , unname(resA1_1$coefficients / resA1_1$se))
-  expect_equal(resA1_1_mathematica$P      , 2*pnorm(-abs(unname(resA1_1$coefficients / resA1_1$se))))
+  expect_equal(resA1_1_mathematica$P      , 2.0 * pnorm(-abs(unname(resA1_1$coefficients / resA1_1$se))))
   expect_equal(resA1_1_mathematica$HESSIAN, unname(resA1_1$hessian))
   expect_equal(resA1_1_mathematica$VCOV   , unname(resA1_1$vcov))
 })
@@ -54,15 +54,15 @@ test_that("Methods", {
   expect_equal(resA1_1_mathematica$COEFS, unname(unlist(coef(resA1_1))))
   expect_equal(resA1_1_mathematica$VCOV , unname(vcov(resA1_1)))
   
-  expect_equal(resA1_1_mathematica$PREDICT$ALPHA, unname(fitted(resA1_1, alpha=TRUE , phi=FALSE, mu=FALSE)[1L,]))
-  expect_equal(resA1_1_mathematica$PREDICT$PHI,   unname(fitted(resA1_1, alpha=FALSE, phi=TRUE , mu=FALSE)[1L] ))
-  expect_equal(resA1_1_mathematica$PREDICT$MU,    unname(fitted(resA1_1, alpha=FALSE, phi=FALSE, mu=TRUE )[1L,]))
+  expect_equal(resA1_1_mathematica$PREDICT$ALPHA, unname(fitted(resA1_1, alpha = TRUE , phi = FALSE, mu = FALSE)[1L,]))
+  expect_equal(resA1_1_mathematica$PREDICT$PHI,   unname(fitted(resA1_1, alpha = FALSE, phi = TRUE , mu = FALSE)[1L] ))
+  expect_equal(resA1_1_mathematica$PREDICT$MU,    unname(fitted(resA1_1, alpha = FALSE, phi = FALSE, mu = TRUE )[1L,]))
   
-  expect_equal(resA1_1_mathematica$PREDICT$ALPHA, unname(predict(resA1_1, data.frame("depth" = 0), alpha=TRUE , phi=FALSE, mu=FALSE)[1L,]))
-  expect_equal(resA1_1_mathematica$PREDICT$PHI,   unname(predict(resA1_1, data.frame("depth" = 0), alpha=FALSE, phi=TRUE , mu=FALSE)[1L,]))
-  expect_equal(resA1_1_mathematica$PREDICT$MU,    unname(predict(resA1_1, data.frame("depth" = 0), alpha=FALSE, phi=FALSE, mu=TRUE )[1L,]))
+  expect_equal(resA1_1_mathematica$PREDICT$ALPHA, unname(predict(resA1_1, data.frame("depth" = 0), alpha = TRUE , phi = FALSE, mu = FALSE)[1L,]))
+  expect_equal(resA1_1_mathematica$PREDICT$PHI,   unname(predict(resA1_1, data.frame("depth" = 0), alpha = FALSE, phi = TRUE , mu = FALSE)[1L,]))
+  expect_equal(resA1_1_mathematica$PREDICT$MU,    unname(predict(resA1_1, data.frame("depth" = 0), alpha = FALSE, phi = FALSE, mu = TRUE )[1L,]))
   
-  conf_ints <- confint(resA1_1, level = c(.99, .95))
+  conf_ints <- confint(resA1_1, level = c(0.99, 0.95))
   conf_ints$coefficients[[1L]][4L] <- conf_ints$coefficients[[2L]]
   conf_ints <- lapply(c(2L, 3L, 4L), function(listelement){ sort(unlist(lapply(c(conf_ints$coefficients[1L], conf_ints$ci), `[[`, listelement))) })
   conf_ints <- unname(t(matrix(unlist(conf_ints), 5L)))
@@ -83,11 +83,11 @@ load(file.path("testdata", "resA2_1.RData"))
 
 test_that("Model Estimation", {
   expect_equal(resA2_1_mathematica$MLE    , resA2_1$logLik)
-  expect_equal(resA2_1_mathematica$DEV    , -2.0*resA2_1$logLik)
+  expect_equal(resA2_1_mathematica$DEV    , -2.0 * resA2_1$logLik)
   expect_equal(resA2_1_mathematica$COEFS  , unname(resA2_1$coefficients))
   expect_equal(resA2_1_mathematica$SE     , unname(resA2_1$se))
   expect_equal(resA2_1_mathematica$Z      , unname(resA2_1$coefficients / resA2_1$se))
-  expect_equal(resA2_1_mathematica$P      , 2*pnorm(-abs(unname(resA2_1$coefficients / resA2_1$se))))
+  expect_equal(resA2_1_mathematica$P      , 2.0 * pnorm(-abs(unname(resA2_1$coefficients / resA2_1$se))))
   expect_equal(resA2_1_mathematica$HESSIAN, unname(resA2_1$hessian))
   expect_equal(resA2_1_mathematica$VCOV   , unname(resA2_1$vcov))
 })
@@ -101,15 +101,15 @@ test_that("Methods", {
   expect_equal(resA2_1_mathematica$COEFS, unname(unlist(coef(resA2_1))))
   expect_equal(resA2_1_mathematica$VCOV , unname(vcov(resA2_1)))
   
- #expect_equal(resA2_1_mathematica$PREDICT$ALPHA, unname(fitted(resA2_1, alpha=T, phi=F, mu=F))[1,], ignore_attr = TRUE)
- #expect_equal(resA2_1_mathematica$PREDICT$PHI,   unname(fitted(resA2_1, alpha=F, phi=T, mu=F))[1], ignore_attr = TRUE)
- #expect_equal(resA2_1_mathematica$PREDICT$MU,    unname(fitted(resA2_1, alpha=F, phi=F, mu=T))[1,], ignore_attr = TRUE)
+ #expect_equal(resA2_1_mathematica$PREDICT$ALPHA, unname(fitted(resA2_1, alpha = TRUE , phi = FALSE, mu = FALSE))[1L,], ignore_attr = TRUE)
+ #expect_equal(resA2_1_mathematica$PREDICT$PHI,   unname(fitted(resA2_1, alpha = FALSE, phi = TRUE , mu = FALSE))[1L] , ignore_attr = TRUE)
+ #expect_equal(resA2_1_mathematica$PREDICT$MU,    unname(fitted(resA2_1, alpha = FALSE, phi = FALSE, mu = TRUE ))[1L,], ignore_attr = TRUE)
   
-  expect_equal(resA2_1_mathematica$PREDICT$ALPHA, unname(predict(resA2_1, data.frame("depth" = 0:150), alpha=TRUE , phi=FALSE, mu=FALSE)))
-  expect_equal(resA2_1_mathematica$PREDICT$PHI  , unname(predict(resA2_1, data.frame("depth" = 0:150), alpha=FALSE, phi=TRUE , mu=FALSE)[,1L]))
-  expect_equal(resA2_1_mathematica$PREDICT$MU   , unname(predict(resA2_1, data.frame("depth" = 0:150), alpha=FALSE, phi=FALSE, mu=TRUE )))
+  expect_equal(resA2_1_mathematica$PREDICT$ALPHA, unname(predict(resA2_1, data.frame("depth" = 0:150), alpha = TRUE , phi = FALSE, mu = FALSE)))
+  expect_equal(resA2_1_mathematica$PREDICT$PHI  , unname(predict(resA2_1, data.frame("depth" = 0:150), alpha = FALSE, phi = TRUE , mu = FALSE)[,1L]))
+  expect_equal(resA2_1_mathematica$PREDICT$MU   , unname(predict(resA2_1, data.frame("depth" = 0:150), alpha = FALSE, phi = FALSE, mu = TRUE )))
   
-  conf_ints <- confint(resA2_1, level = c(.99, .95))
+  conf_ints <- confint(resA2_1, level = c(0.99, 0.95))
   conf_ints$coefficients[[1L]][4L] <- conf_ints$coefficients[[2L]]
   conf_ints <- lapply(c(2L, 3L, 4L), function(listelement){ sort(unlist(lapply(c(conf_ints$coefficients[1L], conf_ints$ci), `[[`, listelement))) })
   conf_ints <- unname(t(matrix(unlist(conf_ints), 5L)))
@@ -150,11 +150,11 @@ resA3_2_mathematica <- list( # nolint start
 
 test_that("Model Estimation", {
   expect_equal(resA3_2_mathematica$MLE    , resA3_2$logLik)
-  expect_equal(resA3_2_mathematica$DEV    , -2.0*resA3_2$logLik)
+  expect_equal(resA3_2_mathematica$DEV    , -2.0 * resA3_2$logLik)
   expect_equal(resA3_2_mathematica$COEFS  , unname(resA3_2$coefficients))
   expect_equal(resA3_2_mathematica$SE     , unname(resA3_2$se))
   expect_equal(resA3_2_mathematica$Z      , unname(resA3_2$coefficients / resA3_2$se))
-  expect_equal(resA3_2_mathematica$P      , 2*pnorm(-abs(unname(resA3_2$coefficients / resA3_2$se))))
+  expect_equal(resA3_2_mathematica$P      , 2.0 * pnorm(-abs(unname(resA3_2$coefficients / resA3_2$se))))
   expect_equal(resA3_2_mathematica$HESSIAN, unname(resA3_2$hessian))
   expect_equal(resA3_2_mathematica$VCOV   , unname(resA3_2$vcov))
 })
@@ -168,15 +168,15 @@ test_that("Methods", {
   expect_equal(resA3_2_mathematica$COEFS, unname(unlist(coef(resA3_2))))
   expect_equal(resA3_2_mathematica$VCOV , unname(vcov(resA3_2)))
   
- #expect_equal(resA3_2_mathematica$PREDICT$ALPHA, unname(fitted(resA3_2, alpha=T, phi=F, mu=F))[1,], ignore_attr = TRUE)
- #expect_equal(resA3_2_mathematica$PREDICT$PHI,   unname(fitted(resA3_2, alpha=F, phi=T, mu=F))[1], ignore_attr = TRUE)
- #expect_equal(resA3_2_mathematica$PREDICT$MU,    unname(fitted(resA3_2, alpha=F, phi=F, mu=T))[1,], ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$ALPHA, unname(fitted(resA3_2, alpha = TRUE , phi = FALSE, mu = FALSE))[1L,], ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$PHI,   unname(fitted(resA3_2, alpha = FALSE, phi = TRUE , mu = FALSE))[1L] , ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$MU,    unname(fitted(resA3_2, alpha = FALSE, phi = FALSE, mu = TRUE ))[1L,], ignore_attr = TRUE)
  #
- #expect_equal(resA3_2_mathematica$PREDICT$ALPHA, unname(predict(resA3_2, data.frame("depth"=0), alpha=T, phi=F, mu=F))[1,], ignore_attr = TRUE)
- #expect_equal(resA3_2_mathematica$PREDICT$PHI,   unname(predict(resA3_2, data.frame("depth"=0), alpha=F, phi=T, mu=F))[1,], ignore_attr = TRUE)
- #expect_equal(resA3_2_mathematica$PREDICT$MU,    unname(predict(resA3_2, data.frame("depth"=0), alpha=F, phi=F, mu=T))[1,], ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$ALPHA, unname(predict(resA3_2, data.frame("depth" = 0), alpha = TRUE , phi = FALSE, mu = FALSE))[1L,], ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$PHI,   unname(predict(resA3_2, data.frame("depth" = 0), alpha = FALSE, phi = TRUE , mu = FALSE))[1L,], ignore_attr = TRUE)
+ #expect_equal(resA3_2_mathematica$PREDICT$MU,    unname(predict(resA3_2, data.frame("depth" = 0), alpha = FALSE, phi = FALSE, mu = TRUE ))[1L,], ignore_attr = TRUE)
   
-  conf_ints <- confint(resA3_2, level = c(.99, .95))
+  conf_ints <- confint(resA3_2, level = c(0.99, 0.95))
   conf_ints <- unname(rbind(
     sort(c(conf_ints$coefficients$beta[[1L]], unlist(lapply(conf_ints$ci, `[`, 1L)))),
     sort(c(conf_ints$coefficients$beta[[3L]], unlist(lapply(conf_ints$ci, `[`, 3L)))),

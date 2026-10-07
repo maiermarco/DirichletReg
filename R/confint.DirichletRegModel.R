@@ -1,7 +1,7 @@
 confint.DirichletRegModel <- function(
   object
 , parm
-, level = .95
+, level = 0.95
 , ...
 , type  = c("all", "beta", "gamma")
 , exp   = FALSE
@@ -30,8 +30,8 @@ confint.DirichletRegModel <- function(
     )
 
   rci <- lapply(level, function(L){
-    cbind(qnorm(    (1.0 - L)/2.0, co, se),
-          qnorm(L + (1.0 - L)/2.0, co, se))
+    cbind(qnorm(    (1.0 - L) / 2.0, co, se),
+          qnorm(L + (1.0 - L) / 2.0, co, se))
   })
 
   res$ci <- lapply(seq_along(rci), function(i) list())
@@ -47,7 +47,7 @@ confint.DirichletRegModel <- function(
           list(NULL)
         } else {
           inti <- inti + 1L
-          list(rci[[ll]][Xc[inti]:(Xc[inti+1L]-1L), , drop = FALSE])
+          list(rci[[ll]][Xc[inti]:(Xc[inti + 1L] - 1L), , drop = FALSE])
         }
       }
       res$ci[[ll]][[length(res$ci[[ll]]) + 1L]] <- rci[[ll]][Zc[1L]:Zc[2L] , , drop = FALSE]
@@ -59,7 +59,7 @@ confint.DirichletRegModel <- function(
       inti <- 0L
       for(i in 1L:object$dims){
         inti <- inti + 1L
-        res$ci[[ll]][[i]] <- rci[[ll]][Xc[inti]:(Xc[inti+1L]-1L) , , drop = FALSE]
+        res$ci[[ll]][[i]] <- rci[[ll]][Xc[inti]:(Xc[inti + 1L] - 1L) , , drop = FALSE]
       }
     }
   }

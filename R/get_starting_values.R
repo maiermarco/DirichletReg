@@ -3,7 +3,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
   ops <- options("warn" = -1L) # ignores all warnings and stores the original settings in ops # nolint
   on.exit(options(ops))        # on exiting the function, all original options are restored   # nolint
 
-  if(!repar){###################################################### COMMON MODEL
+  if(!repar){###################################################### COMMON MODEL # nolint
 
     ### collinearity check begin
     exclude_par <- lapply(X.mats, function(list_el){
@@ -22,25 +22,25 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
     beta.LL <- function(x, y, X, w){
       b <- matrix(x, ncol = 2L)
       if(ncol(X) > 1L){
-        LL <- w * dbeta(y, exp(X%*%b[,1]), exp(X%*%b[,2]), log=TRUE)
+        LL <- w * dbeta(y, exp(X %*% b[, 1L]), exp(X %*% b[, 2L]), log = TRUE)
       } else {
-        LL <- w * dbeta(y, unlist(exp(X*x[1])), unlist(exp(X*x[2])), log=TRUE)
+        LL <- w * dbeta(y, unlist(exp(X * x[1L])), unlist(exp(X * x[2L])), log = TRUE)
       }
       return(LL)
     }
 
     beta.LL.deriv <- function(x, y, X, w){
-      b <- matrix(x, ncol=2L)
-      grad <- matrix(0.0, nrow=nrow(X), ncol=prod(dim(b)))
+      b <- matrix(x, ncol = 2L)
+      grad <- matrix(0.0, nrow = nrow(X), ncol = prod(dim(b)))
       element <- 1L
       if(ncol(X) > 1L){
         for(cc in seq_len(ncol(b)))for(rr in seq_len(nrow(b))){
-          grad[,element] <- w * X[,rr]*(psigamma(exp(X%*%b[,1L]+X%*%b[,2L]))-psigamma(exp(X%*%b[,cc]))+log(y))
+          grad[, element] <- w * X[, rr] * (psigamma(exp(X %*% b[, 1L] + X %*% b[, 2L])) - psigamma(exp(X %*% b[, cc])) + log(y))
           element <- element + 1L
         }
       } else {
         for(cc in seq_len(ncol(b))){
-          grad[,element] <- w * X*(psigamma(exp(X%*%x[1L]+X%*%x[2L]))-psigamma(exp(X%*%x[cc]))+log(y))
+          grad[, element] <- w * X * (psigamma(exp(X %*% x[1L] + X %*% x[2L])) - psigamma(exp(X %*% x[cc])) + log(y))
           element <- element + 1L
         }
       }
@@ -55,11 +55,11 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
       }
       #suppressWarnings(
         maxBFGS(beta.LL, beta.LL.deriv,
-          start        = rep(0, 2*ncol(correctX)),
+          start        = rep(0.0, 2L * ncol(correctX)),
           tol          = 1e-05,
           finalHessian = FALSE,
           X            = correctX,
-          y            = Y[,i],
+          y            = Y[, i],
           w            = weights)$estimate[seq_len(ncol(correctX))]
       #)
     })
@@ -76,7 +76,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
 
   } else {#################################################### ALTERNATIVE MODEL
 
-    Y_logr <- log(Y[,-base,drop=FALSE]/(Y[,base,drop=TRUE]))
+    Y_logr <- log(Y[, -base, drop = FALSE] / (Y[, base, drop = TRUE]))
     unidim_fit <- as.numeric(lm(Y_logr ~ X.mats[[1L]] - 1, weights = weights)[["coefficients"]])
 
     epsilon <- matrix(1.0, nrow = nrow(Y), ncol = ncol(Y))
@@ -95,7 +95,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
 
     MU <- epsilon / rowSums(epsilon)
 
-    log_phi <- optimize(function(x){ sum(weights*ddirichlet(Y, MU * exp(x), log = TRUE)) }, c(-20, 20), maximum = TRUE)[["maximum"]]
+    log_phi <- optimize(function(x){ sum(weights * ddirichlet(Y, MU * exp(x), log = TRUE)) }, c(-20.0, 20.0), maximum = TRUE)[["maximum"]]
     gammas <- as.numeric(lm(I(rep(log_phi, nrow(Y))) ~ Z.mat - 1, weights = weights)[["coefficients"]])
 
     unidim_fit <- c(unidim_fit, gammas)

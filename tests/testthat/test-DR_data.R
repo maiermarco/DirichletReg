@@ -242,7 +242,7 @@ test_that("Test Various Scenarios with the Arctic Lake Dataset", {
   expect_no_error(summary(DR_AL))
   
   expect_warning(DR_AL_withNA <- DR_data(AL_withNA), regexp = "normalization forced", fixed = TRUE) # nolint
-  expect_equal(DR_AL_withNA[,], DR_AL_withNA_check[,])
+  expect_equal(DR_AL_withNA[, ], DR_AL_withNA_check[, ])
   expect_s3_class(DR_AL_withNA, "DirichletRegData")
   expect_no_error(print(DR_AL_withNA))
   expect_no_error(summary(DR_AL_withNA))

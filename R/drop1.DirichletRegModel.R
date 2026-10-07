@@ -9,9 +9,9 @@ safe_pchisq <- function(q, df, ...){
 
 extractAIC.DirichletRegModel <- function(fit, scale = 0, k = 2, ...){
   .Deprecated()
-  n <- nobs(fit)
+  n    <- nobs(fit)
   npar <- fit$npar
-  dev <- -2*fit$logLik
+  dev  <- -2.0 * fit$logLik
   c(npar, dev + k * npar)
 }
 
@@ -30,14 +30,14 @@ drop1.DirichletRegModel <- function(
   if(!exists("._DirichletReg_drop1_warning", where = ".GlobalEnv")){
     .GlobalEnv$._DirichletReg_drop1_warning <- TRUE
 
-    if(interactive()) writeLines(paste(rep("-", getOption("width")), collapse = ""))
+    if(interactive()) writeLines(strrep("-", getOption("width")))
 
     writeLines(strwrap(paste(
       "CAVEAT: drop1() is still an experimental feature.",
       "If you plan to use this function, please double-check results, e.g., by comparing two models using anova()."
     , collapse = ""), width = getOption("width"), exdent = 8L))
 
-    if(interactive()) writeLines(paste(rep("-", getOption("width")), collapse = ""))
+    if(interactive()) writeLines(strrep("-", getOption("width")))
   }
 ###
 
@@ -97,7 +97,7 @@ stop("not implemented yet!") # nolint start
 ###
 
   ns <- lapply(scope, length)
-  chisq <- -2*object$logLik
+  chisq <- -2.0 * object$logLik
   dfs <- lapply(ns, numeric)
   dev <- lapply(ns, numeric)
 
@@ -109,10 +109,10 @@ stop("not implemented yet!") # nolint start
     for(subterm in seq_len(ns[[comp]])){
 #cat("\ntrying ...", comp, (tl[[comp]])[(ndrop[[comp]][subterm])]); flush.console()
       z <- update(object,
-        as.formula(paste0(".~", paste(rep(".|", comp - 1L), collapse=""), ".-", (tl[[comp]])[(ndrop[[comp]][subterm])]))
+        as.formula(paste0(".~", paste(rep(".|", comp - 1L), collapse = ""), ".-", (tl[[comp]])[(ndrop[[comp]][subterm])]))
       )
       dfs[[comp]][subterm] <- z$npar
-      dev[[comp]][subterm] <- -2*z$logLik
+      dev[[comp]][subterm] <- -2.0 * z$logLik
 #cat(" - DONE!\n")
     }
   }

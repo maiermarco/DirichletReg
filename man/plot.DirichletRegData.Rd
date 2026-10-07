@@ -41,7 +41,7 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
 %}
 \examples{
 # plot of "Sand" in the Arctic Lake data set
-plot(DR_data(ReadingSkills[, 1]), main="Reading Accuracy")
+plot(DR_data(ReadingSkills[, 1L]), main = "Reading Accuracy")
 
 # ternary plot of Arctic Lake data
 plot(DR_data(ArcticLake[, 1:3]), a2d = list(colored = FALSE))

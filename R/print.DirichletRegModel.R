@@ -5,17 +5,17 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
   names(x$coefficients) <- x$coefnames
 
          if(x$optimization$convergence %in% c(1L, 2L, 8L)){ # normal convergence
-  } else if(x$optimization$convergence ==   3L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Try changing \"steptol\"!",.wd),"\n",sep="")
-  } else if(x$optimization$convergence ==   4L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Iteration limit exceeded!",.wd),"\n",sep="")
-  } else if(x$optimization$convergence ==   5L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Infinite log-likelihood value!",.wd),"\n",sep="")
-  } else if(x$optimization$convergence ==   6L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Infinite gradient!",.wd),"\n",sep="")
-  } else if(x$optimization$convergence ==   7L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Infinite Hessian!",.wd),"\n",sep="")
-  } else if(x$optimization$convergence ==   9L){ cat("\n",strwrap("CAUTION! Possible convergence problems: BFGS-Hessian approx. could not be improved!",.wd),"\n",sep="")
-  } else if(x$optimization$convergence == 100L){ cat("\n",strwrap("CAUTION! Possible convergence problems: Initial value out of range!",.wd),"\n",sep="")
-  } else { cat("\n",strwrap("CAUTION! Possible UNKNOWN convergence problems: Please report this.",.wd),"\n",sep="") }
+  } else if(x$optimization$convergence ==   3L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Try changing \"steptol\"!", .wd), "\n", sep = "")
+  } else if(x$optimization$convergence ==   4L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Iteration limit exceeded!", .wd), "\n", sep = "")
+  } else if(x$optimization$convergence ==   5L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Infinite log-likelihood value!", .wd), "\n", sep = "")
+  } else if(x$optimization$convergence ==   6L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Infinite gradient!", .wd), "\n", sep = "")
+  } else if(x$optimization$convergence ==   7L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Infinite Hessian!", .wd), "\n", sep = "")
+  } else if(x$optimization$convergence ==   9L){ cat("\n", strwrap("CAUTION! Possible convergence problems: BFGS-Hessian approx. could not be improved!", .wd), "\n", sep = "")
+  } else if(x$optimization$convergence == 100L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Initial value out of range!", .wd), "\n", sep = "")
+  } else { cat("\n", strwrap("CAUTION! Possible UNKNOWN convergence problems: Please report this.", .wd), "\n", sep = "") }
 
   if(!(x$optimization$convergence %in% c(1L, 2L, 8L))){ # will become (... %notin% ...) in future releases
-    warning(paste(strwrap(paste("\nOptimization did (most likely) not converge in",x$optimization$bfgs.it,"+",x$optimization$iterations,"iterations and exited with code",x$optimization$convergence),.wd),sep="\n",collapse="\n"))
+    warning(paste(strwrap(paste("\nOptimization did (most likely) not converge in", x$optimization$bfgs.it, "+", x$optimization$iterations, "iterations and exited with code", x$optimization$convergence), .wd), sep = "\n", collapse = "\n"))
   }
 
   if(interactive()) writeLines("")
@@ -26,7 +26,7 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
 
   writeLines("")
 
-  writeLines(paste0("Log-likelihood: ",format(x$logLik,digits=digits)," on ",x$npar," df (", x$optimization$bfgs.it," BFGS + ",x$optimization$iterations," NR Iterations)"))
+  writeLines(paste0("Log-likelihood: ", format(x$logLik, digits = digits), " on ", x$npar, " df (", x$optimization$bfgs.it, " BFGS + ", x$optimization$iterations, " NR Iterations)"))
 
   writeLines("")
 
@@ -35,42 +35,42 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
   if(x$parametrization == "common"){
 
     for(i in seq_along(x$varnames)){
-      writeLines(paste0(rep("-", min(41L, .wd)),collapse=""))
-      writeLines(paste0("Coefficients for variable no. ",i,": ",x$varnames[i]))
-      print.default(format(x$coefficients[ifelse(i==1,1,coef.ind[i-1]+1):coef.ind[i]], digits = digits), print.gap = 2L, quote = FALSE)
+      writeLines(strrep("-", min(41L, .wd)))
+      writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
+      print.default(format(x$coefficients[ifelse(i == 1L, 1L, coef.ind[i - 1L] + 1L):coef.ind[i]], digits = digits), print.gap = 2L, quote = FALSE)
     }
-    writeLines(paste0(rep("-", min(41L, .wd)), collapse=""))
+    writeLines(strrep("-", min(41L, .wd)))
 
   } else {
 
     printed.var <- 1
-    set.size    <- ncol(x$X[[1]])
+    set.size    <- ncol(x$X[[1L]])
 
     writeLines("MEAN MODELS:")
 
     for(i in seq_along(x$varnames)){
       if(i == x$base){
-        writeLines(paste0(rep("-", min(41L, .wd)),collapse=""))
-        writeLines(paste0("Coefficients for variable no. ",i , ": ", x$varnames[i]))
+        writeLines(strrep("-", min(41L, .wd)))
+        writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
         writeLines("- variable omitted (reference category) -")
       } else {
-        writeLines(paste0(rep("-", min(41L, .wd)),collapse=""))
-        writeLines(paste0("Coefficients for variable no. ",i , ": ", x$varnames[i]))
-        print.default(format(x$coefficients[printed.var:(printed.var+set.size-1)], digits=digits), print.gap=2, quote=FALSE)
+        writeLines(strrep("-", min(41L, .wd)))
+        writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
+        print.default(format(x$coefficients[printed.var:(printed.var + set.size - 1L)], digits = digits), print.gap = 2, quote = FALSE)
 
         printed.var <- printed.var + set.size
       }
     }
 
-    writeLines(paste0(rep("-", min(41L, .wd)), collapse=""))
+    writeLines(strrep("-", min(41L, .wd)))
 
     writeLines("")
 
     writeLines("PRECISION MODEL:")
 
-    writeLines(paste0(rep("-", min(41L, .wd)), collapse=""))
-    print.default(format(x$coefficients[printed.var:length(x$coefficients)], digits=digits), print.gap=2, quote=FALSE)
-    writeLines(paste0(rep("-", min(41L, .wd)), collapse=""))
+    writeLines(strrep("-", min(41L, .wd)))
+    print.default(format(x$coefficients[printed.var:length(x$coefficients)], digits = digits), print.gap = 2L, quote = FALSE)
+    writeLines(strrep("-", min(41L, .wd)))
   }
 
   if(interactive()) writeLines("")

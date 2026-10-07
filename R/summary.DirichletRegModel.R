@@ -1,26 +1,29 @@
 summary.DirichletRegModel <- function(object, ...) {
 
-  if(object$optimization$convergence > 2L) stop("\n", paste(strwrap(paste("\nOptimization did not converge in",object$optimization$bfgs.it,"+",object$optimization$iterations,"iterations and exited with code",object$optimization$convergence), getOption("width")),sep="\n",collapse="\n"))
+  if(object$optimization$convergence > 2L) stop("\n", paste(strwrap(paste("\nOptimization did not converge in", object$optimization$bfgs.it, "+", object$optimization$iterations, "iterations and exited with code", object$optimization$convergence), getOption("width")), sep = "\n", collapse = "\n"))
 
-  res <- structure(list(
-    call = object[["call"]],
-    terms = terms(object$formula),
-    logLik = object$logLik,
-    df = object$npar,
-    deviance = -2.0 * object$logLik,
-    aic = AIC(object),
-    bic = BIC(object),
-    residuals = residuals(object, type="standardized"),
-    coefficients = object$coefficients,
-    varnames = object$varnames,
-    base = object$base,
-    n.vars = object$n.vars,
-    npar = object$npar,
-    coef.ind = cumsum(object$n.vars),
-    nobs = nobs(object),
-    parametrization = object$parametrization,
-    optimization = object$optimization
-  ), class = "summary_DirichletRegModel")
+  res <- structure(
+    .Data = list(
+      call            = object[["call"]],
+      terms           = terms(object$formula),
+      logLik          = object$logLik,
+      df              = object$npar,
+      deviance        = -2.0 * object$logLik,
+      aic             = AIC(object),
+      bic             = BIC(object),
+      residuals       = residuals(object, type = "standardized"),
+      coefficients    = object$coefficients,
+      varnames        = object$varnames,
+      base            = object$base,
+      n.vars          = object$n.vars,
+      npar            = object$npar,
+      coef.ind        = cumsum(object$n.vars),
+      nobs            = nobs(object),
+      parametrization = object$parametrization,
+      optimization    = object$optimization
+    ),
+    class = "summary_DirichletRegModel"
+  )
 
   names(object$coefficients) <- object$coefnames
 
@@ -53,10 +56,10 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   if(interactive()) writeLines("")
 
   writeLines("Call:")
-  writeLines(paste(strwrap(deparse_nocutoff(x$call), .wd), sep="\n", collapse="\n"))
+  writeLines(paste(strwrap(deparse_nocutoff(x$call), .wd), sep = "\n", collapse = "\n"))
 
   cat("\nStandardized Residuals:\n")
-  print(x$resid.mat, print.gap=2)
+  print(x$resid.mat, print.gap = 2L)
   cat("\n")
 
 ################################################################################
@@ -65,15 +68,15 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   if(x$parametrization == "common"){
 
     for(i in seq_along(x$varnames)){
-      writeLines(paste0(rep("-", min(66L, .wd)), collapse=""))
+      writeLines(strrep("-", min(66L, .wd)))
       writeLines(paste0("Beta-Coefficients for variable no. ", i, ": ", x$varnames[i]))
 
-      printCoefmat(x$coef.mat[ ifelse(i==1L, 1L, x$coef.ind[i-1L]+1L):x$coef.ind[i] , , drop = FALSE],
-                   digits = digits, cs.ind=1:2, tst.ind=3, P.values = TRUE, signif.legend = FALSE)
+      printCoefmat(x$coef.mat[ifelse(i == 1L, 1L, x$coef.ind[i - 1L] + 1L):x$coef.ind[i], , drop = FALSE],
+                   digits = digits, cs.ind = 1:2, tst.ind = 3, P.values = TRUE, signif.legend = FALSE)
 
 
     }
-    writeLines(paste0(rep("-", min(66L, .wd)), collapse=""))
+    writeLines(strrep("-", min(66L, .wd)))
     writeLines(signif_codes)
 
   } else {
@@ -82,33 +85,33 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
     printed.var <- 1L
     set.size    <- x$n.vars[1L]
 
-    cat("MEAN MODELS:\n",sep="",collapse="")
+    cat("MEAN MODELS:\n", sep = "", collapse = "")
 
     for(i in seq_along(x$varnames)){
       if(i == x$base){
-        writeLines(paste0(rep("-", min(66L, .wd)), collapse=""))
-        writeLines(paste0("Coefficients for variable no. ",i,": ",x$varnames[i]))
+        writeLines(strrep("-", min(66L, .wd)))
+        writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
         writeLines("- variable omitted (reference category) -")
       } else {
-        writeLines(paste0(rep("-", min(66L, .wd)), collapse=""))
-        writeLines(paste0("Coefficients for variable no. ",i,": ",x$varnames[i]))
+        writeLines(strrep("-", min(66L, .wd)))
+        writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
 
-        printCoefmat(x$coef.mat[printed.var:(printed.var+set.size-1),,drop=FALSE],
-                     digits = digits, cs.ind=1:2, tst.ind=3, P.values = TRUE, signif.legend = FALSE)
+        printCoefmat(x$coef.mat[printed.var:(printed.var + set.size - 1L), , drop = FALSE],
+                     digits = digits, cs.ind = 1:2, tst.ind = 3, P.values = TRUE, signif.legend = FALSE)
 
         printed.var <- printed.var + set.size
       }
     }
 
-    writeLines(paste0(rep("-", min(66L, .wd)), collapse=""))
+    writeLines(strrep("-", min(66L, .wd)))
 
     writeLines("")
 
     writeLines("PRECISION MODEL:")
-    writeLines(paste0(rep("-", min(66L, .wd)), collapse=""))
+    writeLines(strrep("-", min(66L, .wd)))
     printCoefmat(x$coef.mat[printed.var:length(x$coefficients), , drop = FALSE],
-                 digits = digits, cs.ind=1:2, tst.ind=3, P.values = TRUE, signif.legend = FALSE)
-    writeLines(paste0(rep("-", min(66L, .wd)), collapse=""))
+                 digits = digits, cs.ind = 1:2, tst.ind = 3, P.values = TRUE, signif.legend = FALSE)
+    writeLines(strrep("-", min(66L, .wd)))
     writeLines(signif_codes)
 
   }
@@ -117,9 +120,9 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
 ############################################################################ FIN
 
   writeLines("")
-  writeLines(paste0("Log-likelihood: ",format(x$logLik,digits=digits)," on ",x$npar," df (", x$optimization$bfgs.it," BFGS + ",x$optimization$iterations," NR Iterations)"))
-  writeLines(paste0("AIC: ", format(x$aic, digits=digits),", BIC: ", format(x$bic, digits=digits)))
-  writeLines(paste0("Number of Observations: ",x$nobs))
+  writeLines(paste0("Log-likelihood: ", format(x$logLik, digits = digits), " on ", x$npar, " df (", x$optimization$bfgs.it, " BFGS + ", x$optimization$iterations, " NR Iterations)"))
+  writeLines(paste0("AIC: ", format(x$aic, digits = digits), ", BIC: ", format(x$bic, digits = digits)))
+  writeLines(paste0("Number of Observations: ", x$nobs))
   if(x$parametrization == "common"){
     writeLines(paste0("Link: Log\nParametrization: ", x$parametrization))
   } else {

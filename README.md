@@ -1,4 +1,3 @@
-
 # DirichletReg
 
 [![CRAN
@@ -9,3 +8,5 @@ month](https://cranlogs.r-pkg.org/badges/DirichletReg)](https://cran.r-project.o
 grand-total](https://cranlogs.r-pkg.org/badges/grand-total/DirichletReg)](https://cran.r-project.org/package=DirichletReg)
 [![Code
 coverage](https://codecov.io/gh/maiermarco/DirichletReg/branch/master/graph/badge.svg)](https://codecov.io/gh/maiermarco/DirichletReg)
+[![GitHub Actions Check and Code
+Coverage](https://github.com/maiermarco/DirichletReg/actions/workflows/R-CMD-check+covr.yml/badge.svg)](https://github.com/maiermarco/DirichletReg/actions/workflows/R-CMD-check+covr.yml)

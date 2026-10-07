@@ -29,19 +29,17 @@ if(verbosity > 0L){
   # checks and preliminary work
   if(missing(data)) data <- environment(formula)
 
-  if(missing(formula)){
-    stop("specification of \"formula\" is necessary.")
-  } else {
-    oformula <- formula
-  }
+  if(missing(formula)) stop("specification of \"formula\" is necessary.")
+  oformula <- formula
+  
   model <- match.arg(arg = model, choices = c("common", "alternative"))
   if(missing(control)){
-    control <- list(sv = NULL, iterlim = 10000L, tol1 = .Machine$double.eps^(1/2), tol2 = .Machine$double.eps^(3/4))
+    control <- list(sv = NULL, iterlim = 10000L, tol1 = .Machine$double.eps^(1.0 / 2.0), tol2 = .Machine$double.eps^(3.0 / 4.0))
   } else {
     if(is.null(control$sv))      control$sv       <-   NULL
     if(is.null(control$iterlim)) control$iterlim  <- 10000L
-    if(is.null(control$tol1))    control$tol1     <- .Machine$double.eps^(1/2)
-    if(is.null(control$tol2))    control$tol2     <- .Machine$double.eps^(3/4)
+    if(is.null(control$tol1))    control$tol1     <- .Machine$double.eps^(1.0 / 2.0)
+    if(is.null(control$tol2))    control$tol2     <- .Machine$double.eps^(3.0 / 4.0)
   }
 
 #>>> get Y #####################################################################
@@ -173,7 +171,7 @@ if(verbosity > 0L){
   if(is.null(control$sv)){
     starting.vals <- get_starting_values(Y = Y_fit, X.mats = X_fit,
                        Z.mat = if(repar) as.matrix(Z.mat) else Z.mat,
-                       repar = repar, base = base, weights = weights) * if(repar){ 1 } else { 1/n.dim }
+                       repar = repar, base = base, weights = weights) * if(repar){ 1.0 } else { 1.0 / n.dim }
   } else {
     if(length(control$sv) != sum(n.vars)) stop("wrong number of starting values supplied.")
     starting.vals <- control$sv
@@ -205,7 +203,7 @@ if(verbosity > 0){
   coefs <- fit.res$estimate
 
   if(repar){
-    names(coefs) <- unlist(as.vector(c(rep(colnames(X.mats[[1]]), n.dim-1), colnames(Z.mat))))
+    names(coefs) <- unlist(as.vector(c(rep(colnames(X.mats[[1L]]), n.dim - 1L), colnames(Z.mat))))
   } else {
     names(coefs) <- unlist(lapply(X.mats, colnames))
   }
@@ -215,12 +213,12 @@ if(verbosity > 0){
   if(repar){
 
     B <- matrix(0.0, nrow = n.vars[1L], ncol = n.dim)
-    B[cbind(rep(seq_len(n.vars[1L]), (n.dim-1L)), rep(seq_len(n.dim)[-base], each = n.vars[1]))] <- coefs[1:((n.dim-1)*n.vars[1])]
+    B[cbind(rep(seq_len(n.vars[1L]), (n.dim - 1L)), rep(seq_len(n.dim)[-base], each = n.vars[1]))] <- coefs[1L:((n.dim - 1L) * n.vars[1L])]
 
-    g <- matrix(coefs[((n.dim-1)*n.vars[1]+1):length(coefs)], ncol = 1)
+    g <- matrix(coefs[((n.dim - 1L) * n.vars[1L] + 1L):length(coefs)], ncol = 1L)
 
     XB <- exp(apply(B, 2L, function(b){ as.matrix(X.mats[[1L]]) %*% b }))
-    MU <- apply(XB, 2L, function(x){ x /rowSums(XB) })
+    MU <- apply(XB, 2L, function(x){ x / rowSums(XB) })
 
     PHI <- exp(as.matrix(Z.mat) %*% g)
 
@@ -228,7 +226,7 @@ if(verbosity > 0){
 
   } else {
 
-    B <- sapply(seq_len(n.dim), function(i){ coefs[(cumsum(c(0L, n.vars))[i]+1L) : cumsum(n.vars)[i]] }, simplify = FALSE)
+    B <- sapply(seq_len(n.dim), function(i){ coefs[(cumsum(c(0L, n.vars))[i] + 1L) : cumsum(n.vars)[i]] }, simplify = FALSE)
 
     ALPHA <- sapply(seq_len(n.dim), function(i){ exp(as.matrix(X.mats[[i]]) %*% matrix(B[[i]], ncol = 1L)) })
 
@@ -257,7 +255,7 @@ if(verbosity > 0){
   shortnames        <- names(coefs)
   names(coefs)      <- coefnames
 
-  se <- if(!anyNA(vcov)) sqrt(diag(vcov)) else rep(NA_real_, length(coefs))
+  se <- if(anyNA(vcov)) rep(NA_real_, length(coefs)) else sqrt(diag(vcov))
 
   res <- structure(list(
     call            = this.call,

@@ -67,7 +67,7 @@ ddirichlet_R <- function(x, alpha, log = FALSE, sum.up = FALSE){
     if(sum.up) return(NaN) else return(rep(NaN, nrow(x)))
   }
 
-  res <- lgamma(rowSums(alpha)) - rowSums(lgamma(alpha)) + rowSums((alpha-1.0)*log(x))
+  res <- lgamma(rowSums(alpha)) - rowSums(lgamma(alpha)) + rowSums((alpha - 1.0) * log(x))
 
   if(sum.up){
     if(log) return(sum(res)) else return(exp(sum(res)))
