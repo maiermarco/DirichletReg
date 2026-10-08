@@ -58,3 +58,18 @@ make.symmetric <- function(x){
   x[cell.ind] <- x[cell.ind[, 2:1]] # nolint
   return(x)
 }
+
+
+
+pretty_list <- function(x, quotes = FALSE, oxford = TRUE, ampersand = FALSE, remove_empty_NA = TRUE){
+  et <- sprintf(" %s ", if(ampersand) "&" else gettext("and")) # supports translations!
+  
+  if(remove_empty_NA) x <- x[!is.na(x) & nzchar(x)]
+  if(quotes) x <- dQuote(x) # automatically inserts regular or fancy quotation marks according to getOption("useFancyQuotes")
+  
+  if(length(x) < 2L) return(x) else
+  if(length(x) == 2L) return(paste(x, collapse = et)) else {
+    if(oxford) et <- sprintf(",%s", et)
+    return(paste(paste(head(x, -2L), collapse = ", "), paste(tail(x, 2L), collapse = et), sep = ", "))
+  }
+}

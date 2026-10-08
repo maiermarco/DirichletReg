@@ -8,7 +8,7 @@
 %
 \title{Prepare Compositional Data}
 %
-\description{This function prepares a matrix with compositional variables for further processing in the \pkg{DirichletReg} package.}
+\description{This function prepares a matrix-like object with compositional variables for further processing in the \pkg{DirichletReg} package.}
 %
 %
 %
@@ -84,8 +84,8 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
   }
 }
 \value{The function returns a \code{matrix} object of class \code{DirichletRegData} with the following attributes:
-  \item{attr(*, "dimnames")}{a list with two entries, row names (by default \code{NULL}) and column names.}
-  \item{attr(*, "Y.original")}{the original data}
+  \item{attr(*, "dimnames")}{a list with two entries, row names (by default \code{NULL}) and column names}
+  \item{attr(*, "Y.original")}{the original data (since version 0.8-0, this is always a matrix; single-column or vector data have been matched as described above)}
   \item{attr(*, "dims")}{number of dimensions of \code{Y} (i.e., number of columns)}
   \item{attr(*, "dim.names")}{the number of components in \code{Y}}
   \item{attr(*, "obs")}{number of observations of \code{Y} (i.e., number of rows)}
@@ -114,6 +114,7 @@ summary(AL)
 head(AL)
 
 # you can also supply a vector in [0, 1]
+set.seed(1)
 rand_data <- DR_data(runif(10))
 
 # since no names were supplied, DR_data guessed the names

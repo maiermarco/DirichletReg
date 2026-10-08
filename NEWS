@@ -12,13 +12,20 @@ Changes in Version 0.8-0:
     Instead of stopping with an error, a warning is now issued with
     more detailed diagnostic information.
 
+  • ‘DirichReg()’ was completely rewritten and now handles formula
+    input much more robustly and predictably.  Aside from some
+    hopefully helpful new messages, there should not be any
+    user-visible changes.
+
   • ‘DR_data()’ was rewritten to address some issues in the original
     implementation.  ‘trafo’ and ‘norm_tol’ must now be in (0, .1].
-    ‘norm_tol’ must be numeric and ‘trafo’ can also be ‘TRUE’ (not
-    ‘FALSE’ because this would lead to errors when estimating the
-    models).  If the data are supplied as a single column or vector,
-    the function tries to fix the new column names if ‘fix_names =
-    TRUE’.
+    ‘norm_tol’ must be numeric but ‘trafo’ can also be ‘TRUE’ to force
+    transformation even if it is not necessary (not ‘FALSE’ because
+    this would lead to errors when estimating the models).  If the data
+    are supplied as a single column or vector, the function tries to
+    guess and fix the new column names if ‘fix_names = TRUE’.  NB: The
+    attribute ‘attr(*, "Y.original")’ now stores the original data
+    ‘as.matrix’-transformed.
 
   • ‘DirichReg()’ now evaluates the ‘formula’ object in the parent
     frame to ensure that character-to-formula and similar applications
