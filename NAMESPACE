@@ -18,6 +18,8 @@ export("toTernary")    ; export("toTernaryVectors")
 export("toSimplex")
 
 export("DR_data")
+                                      S3method("[", "DirichletRegData")
+                                      S3method("str", "DirichletRegData")
 export("print.DirichletRegData")    ; S3method("print", "DirichletRegData")
 export("summary.DirichletRegData")  ; S3method("summary", "DirichletRegData")
 export("plot.DirichletRegData")     ; S3method("plot", "DirichletRegData")

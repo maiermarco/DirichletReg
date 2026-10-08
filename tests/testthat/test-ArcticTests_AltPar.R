@@ -106,7 +106,7 @@ test_that("Methods", {
  #expect_equal(resA2_1_mathematica$PREDICT$MU,    unname(fitted(resA2_1, alpha = FALSE, phi = FALSE, mu = TRUE ))[1L,], ignore_attr = TRUE)
   
   expect_equal(resA2_1_mathematica$PREDICT$ALPHA, unname(predict(resA2_1, data.frame("depth" = 0:150), alpha = TRUE , phi = FALSE, mu = FALSE)))
-  expect_equal(resA2_1_mathematica$PREDICT$PHI  , unname(predict(resA2_1, data.frame("depth" = 0:150), alpha = FALSE, phi = TRUE , mu = FALSE)[,1L]))
+  expect_equal(resA2_1_mathematica$PREDICT$PHI  , unname(predict(resA2_1, data.frame("depth" = 0:150), alpha = FALSE, phi = TRUE , mu = FALSE)[, 1L]))
   expect_equal(resA2_1_mathematica$PREDICT$MU   , unname(predict(resA2_1, data.frame("depth" = 0:150), alpha = FALSE, phi = FALSE, mu = TRUE )))
   
   conf_ints <- confint(resA2_1, level = c(0.99, 0.95))

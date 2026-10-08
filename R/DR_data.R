@@ -19,10 +19,7 @@ DR_data <- function(
   if((length(norm_tol) != 1L) || is.na(norm_tol) || (norm_tol <= 0) || (norm_tol > 0.01) || is.logical(norm_tol)){
     stop("\"norm_tol\" must be a small number > 0. See ?DR_data") # error if norm_tol is not specified correctly
   }
-  
-  
-  # save the original data for reference
-  Y.original <- Y
+
   
   
   # set up beta-distributed matrix if a variables with values in [0, 1] is supplied
@@ -65,6 +62,11 @@ DR_data <- function(
     # print a message how the vector was processed
     message("only one variable in [0, 1] supplied - beta-distribution assumed.\ncheck this assumption.")
   }
+  
+  
+  
+  # save the original data for reference
+  Y.original <- Y
   
   # set all rows containing NAs to NA
   if(anyNA(Y)){ Y[which(rowSums(is.na(Y)) > 0L), ] <- NA }
@@ -115,16 +117,16 @@ DR_data <- function(
   
   # Object definition
   res <- structure(
-    ".Data"       = as.matrix(Y),                                       # the final, possible normalized/transformed data
-    "Y.original"  = as.data.frame(Y.original),                          # the original data
-    "dims"        = ncol(Y),                                            # the number of dimensions/components
-    "dim.names"   = colnames(Y),                                        # names of dimensions/components
-    "obs"         = nrow(Y),                                            # number of observations (including NAs)
-    "valid_obs"   = length(na.delete(row_sums)),                        # number of valid observations
-    "normalized"  = force_norm_gt1 || force_norm_su1, # normalizations? #### force_norm_usr || 
-    "transformed" = force_tran || state_tran,                           # transformation?
-    "base"        = as.integer(base),                                   # index of the base category
-    "class"       = "DirichletRegData"                                  # class definition
+    .Data       = as.matrix(Y),                                       # the final, possible normalized/transformed data
+    Y.original  = as.matrix(Y.original),                              # the original data --> now as a matrix (changed in 0.8-0)
+    dims        = ncol(Y),                                            # the number of dimensions/components
+    dim.names   = colnames(Y),                                        # names of dimensions/components
+    obs         = nrow(Y),                                            # number of observations (including NAs)
+    valid_obs   = length(na.delete(row_sums)),                        # number of valid observations
+    normalized  = force_norm_gt1 || force_norm_su1, # normalizations? #### force_norm_usr || 
+    transformed = force_tran || state_tran,                           # transformation?
+    base        = as.integer(base),                                   # index of the base category
+    class       = "DirichletRegData"                                  # class definition
   )
   
   
