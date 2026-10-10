@@ -1,7 +1,7 @@
 \encoding{UTF-8}
 \name{anova.DirichletRegModel}
 \alias{anova.DirichletRegModel}
-\title{Compare Dirichlet Regression Models using an LRT}
+\title{Compare Dirichlet Regression Models using an \acronym{LRT}}
 \description{
 This function allows for pairwise tests of Dirichlet regression models using a likelihood ratio test (\acronym{LRT}).
 }

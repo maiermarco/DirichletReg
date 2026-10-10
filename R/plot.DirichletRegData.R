@@ -108,7 +108,7 @@ plot.DirichletRegData <- function(
     plot_DRdata_2d(y = x$Y[, 2L], rug = rug, main = .main, ylim = .ylim, colr = .col, lwd = .lwd, lty = .lty)
 
   } else if(x$dims == 3L) {
-    if(!all(is.null(c(.xlim, .ylim)))) warning("xlim and ylim not useable in a ternary plot. arguments ignored.")
+    if(!all(is.null(c(.xlim, .ylim)))) warning("xlim and ylim not usable in a ternary plot. arguments ignored.")
     if(is.null(.main)) .main <- "Ternary Plot"
 
     if(reset_par){ # reset the current pars after plotting

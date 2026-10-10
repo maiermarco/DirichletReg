@@ -1,7 +1,8 @@
 # some checks require DirichletReg >= 0.8-0
 ._DR_ver_0_8 <- as.numeric_version(packageDescription("DirichletReg")[["Version"]]) >= as.numeric_version("0.8-0")
 
-
+x <- function(ooo) writeClipboard(paste(collapse = "", deparse(ooo, width.cutoff = 500L, control = "exact"))) # TODO
+#x(bd1) # TODO
 
 ################################################################################
 ### Basic Checks ###############################################################
@@ -9,14 +10,14 @@
 
 compodat <- seq(0.1, 0.9, 0.1)
 
-test_that("Checks that should result in errors", {
-  if(._DR_ver_0_8) expect_error(DR_data(compodat, trafo = FALSE), regexp = "\"trafo\" must be a small number > 0 or TRUE.", fixed = TRUE)
-  if(._DR_ver_0_8) expect_error(DR_data(compodat, trafo =   0.2), regexp = "\"trafo\" must be a small number > 0 or TRUE.", fixed = TRUE)
-  if(._DR_ver_0_8) expect_error(DR_data(compodat, trafo =  -1.0), regexp = "\"trafo\" must be a small number > 0 or TRUE.", fixed = TRUE)
+if(._DR_ver_0_8) test_that("Checks that should result in errors", {
+  expect_error(DR_data(compodat, trafo = FALSE), regexp = "\"trafo\" must be a small number > 0 or TRUE.", fixed = TRUE)
+  expect_error(DR_data(compodat, trafo =   0.2), regexp = "\"trafo\" must be a small number > 0 or TRUE.", fixed = TRUE)
+  expect_error(DR_data(compodat, trafo =  -1.0), regexp = "\"trafo\" must be a small number > 0 or TRUE.", fixed = TRUE)
   
-  if(._DR_ver_0_8) expect_error(DR_data(compodat, norm_tol = TRUE), regexp = "\"norm_tol\" must be a small number > 0.", fixed = TRUE)
-  if(._DR_ver_0_8) expect_error(DR_data(compodat, norm_tol =  0.2), regexp = "\"norm_tol\" must be a small number > 0.", fixed = TRUE)
-  if(._DR_ver_0_8) expect_error(DR_data(compodat, norm_tol = -1.0), regexp = "\"norm_tol\" must be a small number > 0.", fixed = TRUE)
+  expect_error(DR_data(compodat, norm_tol = TRUE), regexp = "\"norm_tol\" must be a small number > 0.", fixed = TRUE)
+  expect_error(DR_data(compodat, norm_tol =  0.2), regexp = "\"norm_tol\" must be a small number > 0.", fixed = TRUE)
+  expect_error(DR_data(compodat, norm_tol = -1.0), regexp = "\"norm_tol\" must be a small number > 0.", fixed = TRUE)
 })
 
 
@@ -32,43 +33,43 @@ beta_data_1   <- c(1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
 beta_data_m1  <- c(-1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
 beta_data_p2  <- c(+2, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
 
-bd1_check <- structure(c(0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data", "beta_data")), Y.original = structure(list(Y.original = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)), row.names = c(NA, -9L), class = "data.frame"), dims = 2L, dim.names = c("1 - beta_data", "beta_data"), obs = 9L, valid_obs = 9L, normalized = FALSE, transformed = FALSE, base = 1, class = "DirichletRegData") # nolint
-bd2_check <- structure(c(NA, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, NA, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data_1NA", "beta_data_1NA")), Y.original = structure(list(Y.original = c(NA, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)), row.names = c(NA, -9L), class = "data.frame"), dims = 2L, dim.names = c("1 - beta_data_1NA", "beta_data_1NA"), obs = 9L, valid_obs = 8L, normalized = FALSE, transformed = FALSE, base = 1L, class = "DirichletRegData") # nolint
-bd3_check <- structure(c(0.944444444444444, 0.766666666666667, 0.677777777777778, 0.588888888888889, 0.5, 0.411111111111111, 0.322222222222222, 0.233333333333333, 0.144444444444444, 0.0555555555555556, 0.233333333333333, 0.322222222222222, 0.411111111111111, 0.5, 0.588888888888889, 0.677777777777778, 0.766666666666667, 0.855555555555556), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data_0", "beta_data_0")), Y.original = structure(list(Y.original = c(0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)), row.names = c(NA, -9L), class = "data.frame"), dims = 2L, dim.names = c("1 - beta_data_0", "beta_data_0"), obs = 9L, valid_obs = 9L, normalized = FALSE, transformed = TRUE, base = 1, class = "DirichletRegData") # nolint
-bd4_check <- structure(c(0.0555555555555556, 0.766666666666667, 0.677777777777778, 0.588888888888889, 0.5, 0.411111111111111, 0.322222222222222, 0.233333333333333, 0.144444444444444, 0.944444444444444, 0.233333333333333, 0.322222222222222, 0.411111111111111, 0.5, 0.588888888888889, 0.677777777777778, 0.766666666666667, 0.855555555555556), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data_1", "beta_data_1")), Y.original = structure(list(Y.original = c(1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)), row.names = c(NA, -9L), class = "data.frame"), dims = 2L, dim.names = c("1 - beta_data_1", "beta_data_1"), obs = 9L, valid_obs = 9L, normalized = FALSE, transformed = TRUE, base = 1, class = "DirichletRegData") # nolint
+bd1_check <- structure(c(0x1.ccccccccccccdp-1, 0x1.999999999999ap-1, 0x1.6666666666666p-1, 0x1.3333333333333p-1, 0x1p-1, 0x1.999999999999ap-2, 0x1.3333333333334p-2, 0x1.9999999999998p-3, 0x1.9999999999998p-4, 0x1.999999999999ap-4, 0x1.999999999999ap-3, 0x1.3333333333333p-2, 0x1.999999999999ap-2, 0x1p-1, 0x1.3333333333333p-1, 0x1.6666666666666p-1, 0x1.999999999999ap-1, 0x1.ccccccccccccdp-1), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data", "beta_data")), Y.original = if(._DR_ver_0_8) structure(c(0x1.ccccccccccccdp-1, 0x1.999999999999ap-1, 0x1.6666666666666p-1, 0x1.3333333333333p-1, 0x1p-1, 0x1.999999999999ap-2, 0x1.3333333333334p-2, 0x1.9999999999998p-3, 0x1.9999999999998p-4, 0x1.999999999999ap-4, 0x1.999999999999ap-3, 0x1.3333333333333p-2, 0x1.999999999999ap-2, 0x1p-1, 0x1.3333333333333p-1, 0x1.6666666666666p-1, 0x1.999999999999ap-1, 0x1.ccccccccccccdp-1), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data", "beta_data"))) else structure(list(Y.original = c(0x1.999999999999ap-4, 0x1.999999999999ap-3, 0x1.3333333333333p-2, 0x1.999999999999ap-2, 0x1p-1, 0x1.3333333333333p-1, 0x1.6666666666666p-1, 0x1.999999999999ap-1, 0x1.ccccccccccccdp-1)), row.names = c(NA, -9L), class = "data.frame"), dims = 2L, dim.names = c("1 - beta_data", "beta_data"), obs = 9L, valid_obs = 9L, normalized = FALSE, transformed = FALSE, base = if(._DR_ver_0_8) 1L else 0x1p+0, class = "DirichletRegData") # nolint
+bd2_check <- structure(c(NA, 0x1.999999999999ap-1, 0x1.6666666666666p-1, 0x1.3333333333333p-1, 0x1p-1, 0x1.999999999999ap-2, 0x1.3333333333334p-2, 0x1.9999999999998p-3, 0x1.9999999999998p-4, NA, 0x1.999999999999ap-3, 0x1.3333333333333p-2, 0x1.999999999999ap-2, 0x1p-1, 0x1.3333333333333p-1, 0x1.6666666666666p-1, 0x1.999999999999ap-1, 0x1.ccccccccccccdp-1), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data_1NA", "beta_data_1NA")), Y.original = structure(c(NA, 0x1.999999999999ap-1, 0x1.6666666666666p-1, 0x1.3333333333333p-1, 0x1p-1, 0x1.999999999999ap-2, 0x1.3333333333334p-2, 0x1.9999999999998p-3, 0x1.9999999999998p-4, NA, 0x1.999999999999ap-3, 0x1.3333333333333p-2, 0x1.999999999999ap-2, 0x1p-1, 0x1.3333333333333p-1, 0x1.6666666666666p-1, 0x1.999999999999ap-1, 0x1.ccccccccccccdp-1), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data_1NA", "beta_data_1NA"))), dims = 2L, dim.names = c("1 - beta_data_1NA", "beta_data_1NA"), obs = 9L, valid_obs = 8L, normalized = FALSE, transformed = FALSE, base = 1L, class = "DirichletRegData") # nolint
+bd3_check <- structure(c(0x1.e38e38e38e38ep-1, 0x1.8888888888889p-1, 0x1.5b05b05b05b05p-1, 0x1.2d82d82d82d83p-1, 0x1p-1, 0x1.a4fa4fa4fa4fbp-2, 0x1.49f49f49f49f5p-2, 0x1.ddddddddddddcp-3, 0x1.27d27d27d27d2p-3, 0x1.c71c71c71c71cp-5, 0x1.ddddddddddddep-3, 0x1.49f49f49f49f4p-2, 0x1.a4fa4fa4fa4fbp-2, 0x1p-1, 0x1.2d82d82d82d83p-1, 0x1.5b05b05b05b05p-1, 0x1.8888888888889p-1, 0x1.b60b60b60b60cp-1), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data_0", "beta_data_0")), Y.original = if(._DR_ver_0_8) structure(c(0x1p+0, 0x1.999999999999ap-1, 0x1.6666666666666p-1, 0x1.3333333333333p-1, 0x1p-1, 0x1.999999999999ap-2, 0x1.3333333333334p-2, 0x1.9999999999998p-3, 0x1.9999999999998p-4, 0x0p+0, 0x1.999999999999ap-3, 0x1.3333333333333p-2, 0x1.999999999999ap-2, 0x1p-1, 0x1.3333333333333p-1, 0x1.6666666666666p-1, 0x1.999999999999ap-1, 0x1.ccccccccccccdp-1), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data_0", "beta_data_0"))) else structure(list(Y.original = c(0x0p+0, 0x1.999999999999ap-3, 0x1.3333333333333p-2, 0x1.999999999999ap-2, 0x1p-1, 0x1.3333333333333p-1, 0x1.6666666666666p-1, 0x1.999999999999ap-1, 0x1.ccccccccccccdp-1)), row.names = c(NA, -9L), class = "data.frame"), dims = 2L, dim.names = c("1 - beta_data_0", "beta_data_0"), obs = 9L, valid_obs = 9L, normalized = FALSE, transformed = TRUE, base = if(._DR_ver_0_8) 1L else 0x1p+0, class = "DirichletRegData") # nolint
+bd4_check <- structure(c(0x1.c71c71c71c71cp-5, 0x1.8888888888889p-1, 0x1.5b05b05b05b05p-1, 0x1.2d82d82d82d83p-1, 0x1p-1, 0x1.a4fa4fa4fa4fbp-2, 0x1.49f49f49f49f5p-2, 0x1.ddddddddddddcp-3, 0x1.27d27d27d27d2p-3, 0x1.e38e38e38e38ep-1, 0x1.ddddddddddddep-3, 0x1.49f49f49f49f4p-2, 0x1.a4fa4fa4fa4fbp-2, 0x1p-1, 0x1.2d82d82d82d83p-1, 0x1.5b05b05b05b05p-1, 0x1.8888888888889p-1, 0x1.b60b60b60b60cp-1), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data_1", "beta_data_1")), Y.original = if(._DR_ver_0_8) structure(c(0x0p+0, 0x1.999999999999ap-1, 0x1.6666666666666p-1, 0x1.3333333333333p-1, 0x1p-1, 0x1.999999999999ap-2, 0x1.3333333333334p-2, 0x1.9999999999998p-3, 0x1.9999999999998p-4, 0x1p+0, 0x1.999999999999ap-3, 0x1.3333333333333p-2, 0x1.999999999999ap-2, 0x1p-1, 0x1.3333333333333p-1, 0x1.6666666666666p-1, 0x1.999999999999ap-1, 0x1.ccccccccccccdp-1), dim = c(9L, 2L), dimnames = list(NULL, c("1 - beta_data_1", "beta_data_1"))) else structure(list(Y.original = c(0x1p+0, 0x1.999999999999ap-3, 0x1.3333333333333p-2, 0x1.999999999999ap-2, 0x1p-1, 0x1.3333333333333p-1, 0x1.6666666666666p-1, 0x1.999999999999ap-1, 0x1.ccccccccccccdp-1)), row.names = c(NA, -9L), class = "data.frame"), dims = 2L, dim.names = c("1 - beta_data_1", "beta_data_1"), obs = 9L, valid_obs = 9L, normalized = FALSE, transformed = TRUE, base = if(._DR_ver_0_8) 1L else 0x1p+0, class = "DirichletRegData") # nolint
 
 test_that("Testing Well-Behaved Beta-Distributed Data", {
   expect_message(bd1 <- DR_data(beta_data), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
-  expect_equal(bd1, bd1_check)
+  expect_identical(bd1, bd1_check)
   expect_s3_class(bd1, "DirichletRegData")
-  expect_no_error(print(bd1))
-  expect_no_error(summary(bd1))
+  expect_no_error(print(bd1)) |> capture.output() # capture.output is used, so print methods do not clutter the output
+  expect_no_error(print(summary(bd1))) |> capture.output()
 })
 
 if(._DR_ver_0_8){ # versions before 0.8-0 could not handle this scenario
   test_that("Testing a Beta-Distributed Data with Missings", {
     expect_message(bd2 <- DR_data(beta_data_1NA), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
-    expect_equal(bd2, bd2_check)
+    expect_identical(bd2, bd2_check)
     expect_s3_class(bd2, "DirichletRegData")
-    expect_no_error(print(bd2))
-    expect_no_error(summary(bd2))
+    expect_no_error(print(bd2)) |> capture.output()
+    expect_no_error(summary(bd2)) |> capture.output()
   })
 }
 
 test_that("Testing a Beta-Distributed Data with a Zero", {
   expect_warning(bd3 <- DR_data(beta_data_0), regexp = "transformation forced", fixed = TRUE) # nolint
-  expect_equal(bd3, bd3_check)
+  expect_identical(bd3, bd3_check)
   expect_s3_class(bd3, "DirichletRegData")
-  expect_no_error(print(bd3))
-  expect_no_error(summary(bd3))
+  expect_no_error(print(bd3)) |> capture.output()
+  expect_no_error(summary(bd3)) |> capture.output()
 })
 
 test_that("Testing a Beta-Distributed Data with a One", {
   expect_warning(bd4 <- DR_data(beta_data_1), regexp = "transformation forced", fixed = TRUE) # nolint
-  expect_equal(bd4, bd4_check)
+  expect_identical(bd4, bd4_check)
   expect_s3_class(bd4, "DirichletRegData")
-  expect_no_error(print(bd4))
-  expect_no_error(summary(bd4))
+  expect_no_error(print(bd4)) |> capture.output()
+  expect_no_error(summary(bd4)) |> capture.output()
 })
 
 test_that("Testing a Beta-Distributed Data LESS THAN ZERO or GREATER THAN ONE", {
@@ -101,8 +102,8 @@ test_that("Testing Well-Behaved Beta-Distributed Data (as a Matrix)", {
   expect_message(mbd1 <- DR_data(beta_matrix), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
   expect_equal(mbd1, mbd1_check)
   expect_s3_class(mbd1, "DirichletRegData")
-  expect_no_error(print(mbd1))
-  expect_no_error(summary(mbd1))
+  expect_no_error(print(mbd1)) |> capture.output()
+  expect_no_error(summary(mbd1)) |> capture.output()
 })
 
 # works for versions before 0.8-0 too
@@ -110,24 +111,24 @@ test_that("Testing a Beta-Distributed Data with Missings (as a Matrix)", {
   expect_message(mbd2 <- DR_data(beta_matrix_1NA), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
   expect_equal(mbd2, mbd2_check)
   expect_s3_class(mbd2, "DirichletRegData")
-  expect_no_error(print(mbd2))
-  expect_no_error(summary(mbd2))
+  expect_no_error(print(mbd2)) |> capture.output()
+  expect_no_error(summary(mbd2)) |> capture.output()
 })
 
 test_that("Testing a Beta-Distributed Data with a Zero (as a Matrix)", {
   expect_warning(mbd3 <- DR_data(beta_matrix_0), regexp = "transformation forced", fixed = TRUE) # nolint
   expect_equal(mbd3, mbd3_check)
   expect_s3_class(mbd3, "DirichletRegData")
-  expect_no_error(print(mbd3))
-  expect_no_error(summary(mbd3))
+  expect_no_error(print(mbd3)) |> capture.output()
+  expect_no_error(summary(mbd3)) |> capture.output()
 })
 
 test_that("Testing a Beta-Distributed Data with a One (as a Matrix)", {
   expect_warning(mbd4 <- DR_data(beta_matrix_1), regexp = "transformation forced", fixed = TRUE) # nolint
   expect_equal(mbd4, mbd4_check)
   expect_s3_class(mbd4, "DirichletRegData")
-  expect_no_error(print(mbd4))
-  expect_no_error(summary(mbd4))
+  expect_no_error(print(mbd4)) |> capture.output()
+  expect_no_error(summary(mbd4)) |> capture.output()
 })
 
 test_that("Testing a Beta-Distributed Data LESS THAN ZERO or GREATER THAN ONE (as a Matrix)", {
@@ -161,8 +162,8 @@ test_that("Testing Well-Behaved Beta-Distributed Data (as a Data Frame)", {
   expect_message(dbd1 <- DR_data(beta_df), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
   expect_equal(dbd1, dbd1_check)
   expect_s3_class(dbd1, "DirichletRegData")
-  expect_no_error(print(dbd1))
-  expect_no_error(summary(dbd1))
+  expect_no_error(print(dbd1)) |> capture.output()
+  expect_no_error(summary(dbd1)) |> capture.output()
 })
 
 # works for versions before 0.8-0 too
@@ -170,24 +171,24 @@ test_that("Testing a Beta-Distributed Data with Missings (as a Data Frame)", {
   expect_message(dbd2 <- DR_data(beta_df_1NA), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
   expect_equal(dbd2, dbd2_check)
   expect_s3_class(dbd2, "DirichletRegData")
-  expect_no_error(print(dbd2))
-  expect_no_error(summary(dbd2))
+  expect_no_error(print(dbd2)) |> capture.output()
+  expect_no_error(summary(dbd2)) |> capture.output()
 })
 
 test_that("Testing a Beta-Distributed Data with a Zero (as a Data Frame)", {
   expect_warning(dbd3 <- DR_data(beta_df_0), regexp = "transformation forced", fixed = TRUE) # nolint
   expect_equal(dbd3, dbd3_check)
   expect_s3_class(dbd3, "DirichletRegData")
-  expect_no_error(print(dbd3))
-  expect_no_error(summary(dbd3))
+  expect_no_error(print(dbd3)) |> capture.output()
+  expect_no_error(summary(dbd3)) |> capture.output()
 })
 
 test_that("Testing a Beta-Distributed Data with a One (as a Data Frame)", {
   expect_warning(dbd4 <- DR_data(beta_df_1), regexp = "transformation forced", fixed = TRUE) # nolint
   expect_equal(dbd4, dbd4_check)
   expect_s3_class(dbd4, "DirichletRegData")
-  expect_no_error(print(dbd4))
-  expect_no_error(summary(dbd4))
+  expect_no_error(print(dbd4)) |> capture.output()
+  expect_no_error(summary(dbd4)) |> capture.output()
 })
 
 test_that("Testing a Beta-Distributed Data LESS THAN ZERO or GREATER THAN ONE (as a Data Frame)", {
@@ -238,14 +239,14 @@ test_that("Test Various Scenarios with the Arctic Lake Dataset", {
   expect_equal(DR_AL, DR_AL_check)
   expect_equivalent(DR_AL, suppressWarnings(DR_data(mat_AL)))
   expect_s3_class(DR_AL, "DirichletRegData")
-  expect_no_error(print(DR_AL))
-  expect_no_error(summary(DR_AL))
+  expect_no_error(print(DR_AL)) |> capture.output()
+  expect_no_error(summary(DR_AL)) |> capture.output()
   
   expect_warning(DR_AL_withNA <- DR_data(AL_withNA), regexp = "normalization forced", fixed = TRUE) # nolint
   expect_equal(DR_AL_withNA[, ], DR_AL_withNA_check[, ])
   expect_s3_class(DR_AL_withNA, "DirichletRegData")
-  expect_no_error(print(DR_AL_withNA))
-  expect_no_error(summary(DR_AL_withNA))
+  expect_no_error(print(DR_AL_withNA)) |> capture.output()
+  expect_no_error(summary(DR_AL_withNA)) |> capture.output()
   
   expect_warning(DR_AL_withNA_base3 <- DR_data(AL_withNA, base = 3), regexp = "normalization forced", fixed = TRUE) # nolint
   expect_equal(attr(DR_AL_withNA_base3, "base"), 3L)

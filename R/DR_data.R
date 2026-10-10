@@ -36,7 +36,7 @@ DR_data <- function(
     Y <- cbind(1.0 - Y, Y) # create a two-column matrix
     
     # get the deparsed name from the call unless Y was a single column matrix with a column name
-    if(!exists(".name")) .name <- deparse_nocutoff(match.call()$Y)
+    if(!exists(".name")) .name <- deparse_nocutoff(match.call()$Y) # TODO remove deparse_nocutoff
     
     if(fix_names){ # if fix_names is TRUE, try to guess the name if it resulted from being indexed from a data.frame or matrix
       # loop to debug regex

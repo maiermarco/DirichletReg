@@ -1,9 +1,9 @@
 print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
-
+  
   .wd <- getOption("width")
-
+  
   names(x$coefficients) <- x$coefnames
-
+  
          if(x$optimization$convergence %in% c(1L, 2L, 8L)){ # normal convergence
   } else if(x$optimization$convergence ==   3L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Try changing \"steptol\"!", .wd), "\n", sep = "")
   } else if(x$optimization$convergence ==   4L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Iteration limit exceeded!", .wd), "\n", sep = "")
@@ -11,6 +11,7 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
   } else if(x$optimization$convergence ==   6L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Infinite gradient!", .wd), "\n", sep = "")
   } else if(x$optimization$convergence ==   7L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Infinite Hessian!", .wd), "\n", sep = "")
   } else if(x$optimization$convergence ==   9L){ cat("\n", strwrap("CAUTION! Possible convergence problems: BFGS-Hessian approx. could not be improved!", .wd), "\n", sep = "")
+  } else if(x$optimization$convergence ==  10L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Optimizer hit an inferior value too many times!", .wd), "\n", sep = "")
   } else if(x$optimization$convergence == 100L){ cat("\n", strwrap("CAUTION! Possible convergence problems: Initial value out of range!", .wd), "\n", sep = "")
   } else { cat("\n", strwrap("CAUTION! Possible UNKNOWN convergence problems: Please report this.", .wd), "\n", sep = "") }
 

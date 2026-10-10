@@ -1,5 +1,5 @@
 .onUnload <- function(libpath){
-  library.dynam.unload("DirichletReg", libpath) # unload the package's DLL
+  library.dynam.unload(chname = "DirichletReg", libpath = libpath) # unload DirichletReg's DLL
 }
 
 

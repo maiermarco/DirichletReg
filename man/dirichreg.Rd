@@ -37,7 +37,7 @@ DirichReg(formula, data, model = c("common", "alternative"),
     \subsection{Formulae for the \dQuote{Common} Model}{
       The simplest possible model here is to include only an intercept for all components.
       If \code{DV} is the \emph{\sQuote{dependent variable}} (i.e., compositional data) with three components, we can request this null-model by \code{DV ~ 1}.
-      We always have at least two dependent variables, so simple formulae as the one given above will be expanded to \code{DV ~ 1 | 1 | 1}, because \code{DV} hast three components.
+      We always have at least two dependent variables, so simple formulae as the one given above will be expanded to \code{DV ~ 1 | 1 | 1}, because \code{DV} has three components.
       Likewise, it is possible to specify a common set of predictors for all components, as in \code{DV ~ p1 * p2}, where \code{p1} and \code{p2} are predictors.
       
       If the covariates of the components shall differ, one has to set up a complete formula for each subcomposition, using \code{|} as separators between the components, for example, \code{DV ~ p1 | p1 + p2 | p1 * p2} will lead to a model where the first response in \code{DV} will be modeled using \code{p1}, the second will be predicted by \code{p1 + p2} and the third by \code{p1 * p2}.
@@ -71,7 +71,7 @@ DirichReg(formula, data, model = c("common", "alternative"),
     This argument takes a named list.
     To supply user-defined starting values, use \code{control = list(sv = c(...))} and supply a vector containing starting values for all parameters.
     An example of how to extract and use starting values in provided below.
-    Optimizer-specific options include the number of iterations (\code{iterlim = 1000}) and convergence criteria for the BFGS- and NR-optimization (\code{tol1 = 1e-5} and \code{tol2 = 1e-10}).
+    Optimizer-specific options include the number of iterations (\code{iterlim = 1000}) and convergence criteria for the \acronym{BFGS}- and \acronym{NR}-optimization (\code{tol1 = 1e-5} and \code{tol2 = 1e-10}).
     
     Verbosity takes integer values from \code{0} to \code{4}.
     If the argument is not specified, it defaults to the \code{"verbose"} option setting and is either off (\code{FALSE}) or at level \code{1} (\code{TRUE}).

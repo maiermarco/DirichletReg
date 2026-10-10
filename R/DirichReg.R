@@ -6,7 +6,7 @@ DirichReg <- function(
   sub.comp,                           # subcompositions
   base,
   weights,
-  control,
+  control,                            # TODO add steptol
   verbosity = getOption("verbose")
 ){
   
@@ -52,7 +52,7 @@ DirichReg <- function(
   
   
   call_model_frame <- match.call(expand.dots = FALSE)
-  call_model_frame <- call_model_frame[c(1L, which(names(call_model_frame) %in% c("formula", "data", "subset", "weights")))] # maybe add "na.action" and "offset"?
+  call_model_frame <- call_model_frame[c(1L, which(names(call_model_frame) %in% c("formula", "data", "subset", "weights")))] # TODO maybe add "na.action" and "offset"?
   call_model_frame[[1L]] <- as.name("model.frame") # .default
   call_model_frame[["formula"]] <- formula
   call_model_frame[["drop.unused.levels"]] <- TRUE
@@ -66,10 +66,10 @@ DirichReg <- function(
   Y_full <- model.response(model_frame, type = "numeric")
   if(!inherits(Y_full, "DirichletRegData")) stop("the response must be prepared by DR_data")
   n_obs <- nrow(Y_full)
-  if(is.null(dim(Y_full))) stop('\"Y_full\" must be matrix-like.')
+  if(is.null(dim(Y_full))) stop("\"Y_full\" must be matrix-like.")
   if(n_obs < 1L) stop("empty model") # TODO better description!
   if(ncol(Y_full) < 2L) stop("\"Y_full\" has less than 2 components.")
-  if(anyNA(Y_full)) stop("\"Y_full\" must noch contain missing values.")
+  if(anyNA(Y_full)) stop("\"Y_full\" must not contain missing values.")
   
   
   
@@ -122,7 +122,7 @@ DirichReg <- function(
   # expand "shorthands"
   if(len_def_frm[2L] == 1L){                # if there is only one RHS part in def_formula
     frml_parts <- as.character(def_formula) # split def_formula into c("~", <LHS>, <RHS>)
-    if(length(frml_parts) != 3L) stop("unexpected error (more than 3 formlua parts as character).") # should not happen
+    if(length(frml_parts) != 3L) stop("unexpected error (more than 3 formula parts as character).") # should not happen
     if(repar){                              # if an alternative model only has predictors in the mean model, add an intercept for the precision model
       message("Only mean model specified, assuming precision model to be ~ 1.")
       def_formula <- sprintf("%s ~ %s | 1", frml_parts[2L], frml_parts[3L])
@@ -231,7 +231,7 @@ DirichReg <- function(
   }
   
   # fit and store the results
-  fit.res <- DirichReg_fit(Y     = Y_fit,
+  fit_res <- DirichReg_fit(Y     = Y_fit,
                            X     = X_fit,
                            Z     = as.matrix(Z.mat),
                            sv    = starting.vals,
@@ -246,7 +246,7 @@ DirichReg <- function(
   
   varnames <- colnames(Y)
   
-  coefs <- fit.res$estimate
+  coefs <- fit_res$estimate
   
   if(repar){
     names(coefs) <- unlist(as.vector(c(rep(colnames(X.mats[[1L]]), n.dim - 1L), colnames(Z.mat))))
@@ -284,16 +284,19 @@ DirichReg <- function(
   colnames(ALPHA) <- varnames
   colnames(MU) <- varnames
   
-  hessian <- fit.res$hessian
+  hessian <- fit_res$hessian
   
-  vcov <- tryCatch(solve(-fit.res$hessian),
-                   error = function(x){ return(matrix(NA_real_, nrow = nrow(hessian), ncol = ncol(hessian))) },
-                   silent = TRUE)
+  vcov <- try(solve(-fit_res$hessian), silent = TRUE)
+  if(inherits(vcov, "try-error")){
+    vcov <- matrix(NA_real_, nrow = nrow(hessian), ncol = ncol(hessian))
+    warning("Hessian matrix is singular.") # TODO
+  }
   
-  if(!repar){   ## COMMON                              #nolint
-    coefnames <- apply(cbind(rep(varnames, n.vars), unlist(lapply(X.mats, colnames))), 1L, paste, collapse = ":")
-  } else {   ## ALTERNATIVE
+  
+  if(repar){   ## ALTERNATIVE
     coefnames <- apply(cbind(rep(c(varnames[-base], "(phi)"), n.vars), c(unlist(lapply(X.mats, colnames)[-base]), colnames(Z.mat))), 1L, paste, collapse = ":")
+  } else {     ## COMMON
+    coefnames <- apply(cbind(rep(varnames, n.vars), unlist(lapply(X.mats, colnames))), 1L, paste, collapse = ":")
   }
   
   dimnames(hessian) <- list(coefnames, coefnames)
@@ -324,15 +327,15 @@ DirichReg <- function(
       coefficients    = coefs,
       coefnames       = shortnames,
       fitted.values   = list(mu = MU, phi = PHI, alpha = ALPHA),
-      logLik          = fit.res$maximum,
+      logLik          = fit_res$maximum,
       vcov            = vcov,
       hessian         = hessian,
       se              = se,
       optimization    = list(
-                          convergence = fit.res$code,
-                          iterations  = fit.res$iterations,
-                          bfgs.it     = fit.res$bfgs.it,
-                          message     = fit.res$message
+                          convergence = fit_res$code,
+                          iterations  = fit_res$iterations,
+                          bfgs.it     = fit_res$bfgs.it,
+                          message     = fit_res$message
                         ),
       # new components
       terms           = list(X = model_terms_X, Z = model_terms_Z, full = model_terms),
@@ -383,11 +386,11 @@ DirichReg <- function(
   ix <- match(ovar, nvar)
   
   ## subset predvars
-  if(!is.null(attr(rval, "predvars"))) warning("terms already had 'predvars' attribute, now replaced")
+  if(!is.null(attr(rval, "predvars"))) warning("terms already had \"predvars\" attribute, now replaced")
   attr(rval, "predvars") <- attr(nval, "predvars")[1L + c(0L, ix)]
   
   ## subset dataClasses
-  if(!is.null(attr(rval, "dataClasses"))) warning("terms already had 'dataClasses' attribute, now replaced")
+  if(!is.null(attr(rval, "dataClasses"))) warning("terms already had \"dataClasses\" attribute, now replaced")
   attr(rval, "dataClasses") <- attr(nval, "dataClasses")[ix]
   
   rval

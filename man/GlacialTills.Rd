@@ -20,6 +20,6 @@ Data from Aitchison (2003)
   }
 }
 \source{%
-  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.
+  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, \acronym{NJ}.
 }
 \keyword{datasets}

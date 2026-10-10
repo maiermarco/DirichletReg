@@ -7,12 +7,9 @@ safe_pchisq <- function(q, df, ...){
 
 
 
-extractAIC.DirichletRegModel <- function(fit, scale = 0, k = 2, ...){
-  .Deprecated()
-  n    <- nobs(fit)
+extractAIC.DirichletRegModel <- function(fit, scale, k = 2, ...){
   npar <- fit$npar
-  dev  <- -2.0 * fit$logLik
-  c(npar, dev + k * npar)
+  c(npar, AIC(fit) + (k - 2.0) * npar)
 }
 
 

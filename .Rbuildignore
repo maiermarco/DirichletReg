@@ -5,7 +5,7 @@
 ^README\.R?md$
 ^.*\.Rproj(\.user)?$
 ^revdep$
-^inst\/(NEWSRd2txt\.R|WORDLIST)$
+^inst\/(NEWSRd2txt\.R|WORDLIST.+)$
 ^src\/.+\.(R|o|dll)$
 
 .*\.pot$

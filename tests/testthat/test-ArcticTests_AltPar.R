@@ -32,7 +32,7 @@ test_that("Text-to-formula conversion", {
   expect_no_error(resA1_1 <<- DirichReg(as.formula("Y ~ 1"), data = AL, model = "alternative", base = 1L)) # nolint
 })
 
-load(file.path("testdata", "resA1_1.RData"))
+load(normalizePath(file.path("testdata", "resA1_1.RData")))
 
 test_that("Model Estimation", {
   expect_equal(resA1_1_mathematica$MLE    , resA1_1$logLik)
@@ -79,7 +79,7 @@ test_that("Text-to-formula conversion", {
   expect_no_error(resA2_1 <<- DirichReg(as.formula("Y ~ depth | 1"), data = AL, model = "alternative", base = 1L)) # nolint
 })
 
-load(file.path("testdata", "resA2_1.RData"))
+load(normalizePath(file.path("testdata", "resA2_1.RData")))
 
 test_that("Model Estimation", {
   expect_equal(resA2_1_mathematica$MLE    , resA2_1$logLik)

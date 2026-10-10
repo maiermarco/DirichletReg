@@ -63,8 +63,8 @@ DReg.repar <- function(x, logY, X, ncolX, Z, ncolZ, n, d, k, w, base, npar, bi, 
               )
               -
               A[, derv] * (
-                (1.0 - mu[, derv])^2 * trigamma_A[, derv]
-              + rowSums(mu[, -derv, drop = FALSE]^2 * trigamma_A[, -derv, drop = FALSE])
+                (1.0 - mu[, derv])^2.0 * trigamma_A[, derv]
+              + rowSums(mu[, -derv, drop = FALSE]^2.0 * trigamma_A[, -derv, drop = FALSE])
               )
             )
           ))

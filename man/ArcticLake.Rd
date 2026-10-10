@@ -15,7 +15,7 @@ These data are taken from Aitchison (2003) and contain information on the relati
   }%
 }%
 \source{%
-  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, NJ.
+  Aitchison, J. (2003). \emph{The Statistical Analysis of Compositional Data.} The Blackburn Press, Caldwell, \acronym{NJ}.
 }
 \examples{
 head(ArcticLake)
