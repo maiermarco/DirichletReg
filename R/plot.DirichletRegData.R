@@ -77,9 +77,9 @@ plot.DirichletRegData <- function(
 
   if(is.null(dims)){
     if(x$dims > 4L){
-      x$Y         <- x$Y[, seq_len(4)]
+      x$Y         <- x$Y[, seq_len(4L)]
       x$dims      <- 4L
-      x$dim.names <- x$dim.names[seq_len(4)]
+      x$dim.names <- x$dim.names[seq_len(4L)]
       warning("data contains > 4 variables. the first four are being used. to change this, set the 'dims' argument appropriately.")
       .marginal <- TRUE
     } else {

@@ -1,7 +1,7 @@
 DR_data <- function(
   Y,                                       # response (compositional variable)
   trafo       = sqrt(.Machine$double.eps), # transform (compress) the data?
-  base        = 1,                         # base variable for the reparametrized (alternative) model
+  base        = 1L,                        # base variable for the reparametrized (alternative) model
   norm_tol    = sqrt(.Machine$double.eps), # tolerance for normalization [0, ?]
   fix_names   = TRUE                       # tries to "guess" and fix names when Y is a vector
 ){
@@ -16,7 +16,7 @@ DR_data <- function(
   if((length(trafo) != 1L) || is.na(trafo) || isFALSE(trafo) || (is.numeric(trafo) && ((trafo <= 0.0) || (trafo > 0.01)))){
     stop("\"trafo\" must be a small number > 0 or TRUE. See ?DR_data") # error if trafo is not specified correctly
   }
-  if((length(norm_tol) != 1L) || is.na(norm_tol) || (norm_tol <= 0) || (norm_tol > 0.01) || is.logical(norm_tol)){
+  if((length(norm_tol) != 1L) || is.na(norm_tol) || (norm_tol <= 0.0) || (norm_tol > 0.01) || is.logical(norm_tol)){
     stop("\"norm_tol\" must be a small number > 0. See ?DR_data") # error if norm_tol is not specified correctly
   }
 
@@ -29,7 +29,7 @@ DR_data <- function(
       Y <- Y[, 1L, drop = TRUE] # store the column in a vector format
     }
     
-    if((length(na.delete(Y)) < 1L) || any((na.delete(Y) < 0) | (na.delete(Y) > 1))){ # error if no non-missing or just values outside [0, 1] supplied
+    if((length(na.delete(Y)) < 1L) || any((na.delete(Y) < 0.0) | (na.delete(Y) > 1.0))){ # error if no non-missing or just values outside [0, 1] supplied
       stop("only one variable with values outside [0, 1] supplied.\nbeta distribution cannot safely be assumed.\ncheck and prepare your data first.")
     }
     

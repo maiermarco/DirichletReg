@@ -35,7 +35,7 @@ DirichReg <- function(
   if(missing(control)){
     control <- list(sv = NULL, iterlim = 10000L, tol1 = .Machine$double.eps^(1.0 / 2.0), tol2 = .Machine$double.eps^(3.0 / 4.0))
   } else {
-    if(!all(names(control) %in% c("sv", "iterlim", "tol1", "tol2")) || any(duplicated(names(control)))) stop("duplicated or inadmissible elements in \"control\".")
+    if(!all(names(control) %in% c("sv", "iterlim", "tol1", "tol2")) || (anyDuplicated(names(control)) > 0L)) stop("duplicated or inadmissible elements in \"control\".")
     if(is.null(control$sv))      control$sv       <-   NULL
     if(is.null(control$iterlim)) control$iterlim  <- 10000L
     if(is.null(control$tol1))    control$tol1     <- .Machine$double.eps^(1.0 / 2.0)
@@ -225,7 +225,7 @@ DirichReg <- function(
   
   
   
-  if(verbosity > 0){
+  if(verbosity > 0L){
     cat("- ESTIMATING PARAMETERS\n")
     if(interactive()) flush.console()
   }
@@ -259,7 +259,7 @@ DirichReg <- function(
   if(repar){
     
     B <- matrix(0.0, nrow = n.vars[1L], ncol = n.dim)
-    B[cbind(rep(seq_len(n.vars[1L]), (n.dim - 1L)), rep(seq_len(n.dim)[-base], each = n.vars[1]))] <- coefs[1L:((n.dim - 1L) * n.vars[1L])]
+    B[cbind(rep(seq_len(n.vars[1L]), (n.dim - 1L)), rep(seq_len(n.dim)[-base], each = n.vars[1L]))] <- coefs[1L:((n.dim - 1L) * n.vars[1L])]
     
     g <- matrix(coefs[((n.dim - 1L) * n.vars[1L] + 1L):length(coefs)], ncol = 1L)
     

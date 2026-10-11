@@ -3,6 +3,6 @@ library(DirichletReg) # nolint
 
 old_options <- options("warn" = 1L) # nolint
 
-test_check("DirichletReg") # , reporter = default_reporter()
+test_check("DirichletReg")
 
 options(old_options) # nolint

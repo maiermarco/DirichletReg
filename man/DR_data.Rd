@@ -13,7 +13,7 @@
 %
 %
 \usage{
-DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
+DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1L,
     norm_tol = sqrt(.Machine$double.eps), fix_names = TRUE)
 
 \method{print}{DirichletRegData}(x, type = c("processed", "original"), \dots)
@@ -36,7 +36,7 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1,
     If \code{trafo} is numeric it is used as a \dQuote{threshold}, so transformation will be applied if values in \code{Y} are \eqn{y < \mathtt{trafo}}{y < trafo} or \eqn{y > \left(1-\mathtt{trafo}\right)}{y > (1 - trafo)}.
   }%
   \item{base}{%
-    The \dQuote{base} component to use in the reparametrized model
+    The \dQuote{base} component to use in the reparametrized model (default: \code{1}).
   }%
   \item{norm_tol}{%
     Due to numerical precision, row sums of \eqn{\mathbf{Y}} may not be \emph{exactly} equal to 1.

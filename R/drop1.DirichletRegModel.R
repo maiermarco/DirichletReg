@@ -1,7 +1,7 @@
 ### from stats for drop1
 safe_pchisq <- function(q, df, ...){
   .Deprecated("pchisq(q, ifelse(df <= 0.0, NA_real_, df), ...)")
-  df[df <= 0] <- NA
+  df[df <= 0.0] <- NA
   pchisq(q = q, df = df, ...)
 }
 
@@ -73,8 +73,8 @@ drop1.DirichletRegModel <- function(
       drop.scope(formula(Formula, rhs = f_index))
     })
   } else {
-stop("not implemented yet!") # nolint start
-    if(!is.character(scope)){
+stop("not implemented yet!") # TODO implement
+    if(!is.character(scope)){ # nolint start
       scope <- attr(terms(update.formula(object, scope)),  "term.labels")
     }
     if(!all(match(scope, tl, 0L) > 0L)){
@@ -134,10 +134,10 @@ stop("not implemented yet!") # nolint start
   aic <- aic + (AIC(object, k = k) - aic[1L])
 
   aod <- data.frame(Df = dfs, Deviance = dev, AIC = aic, row.names = scope, check.names = FALSE)
-  if(all(is.na(aic))) aod <- aod[, -3]
+  if(all(is.na(aic))) aod <- aod[, -3L]
 
   if(test == "LRT"){
-      dev <- pmax(0, dev - dev[1L])
+      dev <- pmax(0.0, dev - dev[1L])
       dev[1L] <- NA
       nas <- !is.na(dev)
       LRT <- "LRT"

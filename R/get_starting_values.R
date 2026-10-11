@@ -96,7 +96,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
     MU <- epsilon / rowSums(epsilon)
 
     log_phi <- optimize(function(x){ sum(weights * ddirichlet(Y, MU * exp(x), log = TRUE)) }, c(-20.0, 20.0), maximum = TRUE)[["maximum"]]
-    gammas <- as.numeric(lm(I(rep(log_phi, nrow(Y))) ~ Z.mat - 1, weights = weights)[["coefficients"]])
+    gammas  <- as.numeric(lm(I(rep(log_phi, nrow(Y))) ~ Z.mat - 1, weights = weights)[["coefficients"]])
 
     unidim_fit <- c(unidim_fit, gammas)
 
