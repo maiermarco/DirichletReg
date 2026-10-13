@@ -112,8 +112,8 @@ plot.DirichletRegData <- function(
     if(is.null(.main)) .main <- "Ternary Plot"
 
     if(reset_par){ # reset the current pars after plotting
-      old.par <- par(no.readonly = TRUE)
-      on.exit(par(old.par))
+      old_par <- par(no.readonly = TRUE) # nolint
+      on.exit(par(old_par))              # nolint
     }
 
     plot_DRdata_3d(x = x, entropy.contours = entropy.contours, colored = colored, c.grid = c.grid, ticks = ticks, dim.labels = dim.labels, col.scheme = col.scheme,

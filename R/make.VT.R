@@ -32,25 +32,25 @@ make.VT <- function(
 
 
   TT <- diag(4L)   # scale extents to [-1, 1]
-  TT[cbind(1:3, 1:3)] <- c(1.0 / xs, 1.0 / ys, expand / zs)
+  TT[cbind(1L:3L, 1L:3L)] <- c(1.0 / xs, 1.0 / ys, expand / zs)
   VT <- VT %*% TT
 
 
   TT <- diag(4L)   # rotate x-y plane to horizontal
-  TT[cbind(c(2, 3, 3, 2), c(2, 2, 3, 3))] <- c(cos(D2R(-90.0)), -sin(D2R(-90.0)),
-                                               cos(D2R(-90.0)),  sin(D2R(-90.0)))
+  TT[cbind(c(2L, 3L, 3L, 2L), c(2L, 2L, 3L, 3L))] <- c(cos(D2R(-90.0)), -sin(D2R(-90.0)),
+                                                       cos(D2R(-90.0)),  sin(D2R(-90.0)))
   VT <- VT %*% TT
 
 
   TT <- diag(4L)   # azimuthal rotation (theta)
-  TT[cbind(c(1, 3, 3, 1), c(1, 1, 3, 3))] <- c(cos(D2R(-theta)),  sin(D2R(-theta)),
-                                               cos(D2R(-theta)), -sin(D2R(-theta)))
+  TT[cbind(c(1L, 3L, 3L, 1L), c(1L, 1L, 3L, 3L))] <- c(cos(D2R(-theta)),  sin(D2R(-theta)),
+                                                       cos(D2R(-theta)), -sin(D2R(-theta)))
   VT <- VT %*% TT
 
 
   TT <- diag(4L)   # elevation rotation (phi)
-  TT[cbind(c(2, 3, 3, 2), c(2, 2, 3, 3))] <- c(cos(D2R(phi)), -sin(D2R(phi)),
-                                               cos(D2R(phi)),  sin(D2R(phi)))
+  TT[cbind(c(2L, 3L, 3L, 2L), c(2L, 2L, 3L, 3L))] <- c(cos(D2R(phi)), -sin(D2R(phi)),
+                                                       cos(D2R(phi)),  sin(D2R(phi)))
   VT <- VT %*% TT
 
 

@@ -19,15 +19,15 @@ plot_DRdata_4d <- function(
   xyz <- toQuaternary(x$Y)
 
   corners <- toQuaternary(diag(4L))
-  corner.connect <- structure(c(1, 1, 1, 2, 2, 3, 2, 3, 4, 3, 4, 4), dim = c(6L, 2L))
+  corner.connect <- structure(c(1L, 1L, 1L, 2L, 2L, 3L, 2L, 3L, 4L, 3L, 4L, 4L), dim = c(6L, 2L))
 
-  coo.lab <- 2 * corners - toQuaternary(diag(4) * (0.9 - 0.1 / 3.0) + 0.1 / 3.0)
+  coo.lab <- 2.0 * corners - toQuaternary(diag(4L) * (0.9 - 0.1 / 3.0) + 0.1 / 3.0)
   lab.col <- cmyk2rgb(diag(4L) + cbind(0.0, 0.0, 0.0, c(0.2, 0.2, 0.2, 0.0)))
 
   # reference - axes
-  ref_axes                  <- matrix(1.0 / 3.0, ncol = 4L, nrow = 4L)
-  ref_axes[cbind(1:4, 1:4)] <- 0
-  ref_axes_xyz              <- toQuaternary(ref_axes)
+  ref_axes                      <- matrix(1.0 / 3.0, ncol = 4L, nrow = 4L)
+  ref_axes[cbind(1L:4L, 1L:4L)] <- 0.0
+  ref_axes_xyz                  <- toQuaternary(ref_axes)
 
 
 # reference points orthogonal to the planes
@@ -36,19 +36,19 @@ plot_DRdata_4d <- function(
     .ref_pts[[1L]] <- xyz + toQuaternary(cbind(1.0 - x$Y[, 1L],
                                                      x$Y[, 1L] / 3.0,
                                                      x$Y[, 1L] / 3.0,
-                                                     x$Y[, 1L] / 3.0)) - toQuaternary(matrix(rep(c(1, 0, 0, 0), nrow(x$Y)), ncol = 4L, byrow = TRUE))
+                                                     x$Y[, 1L] / 3.0)) - toQuaternary(matrix(rep(c(1.0, 0.0, 0.0, 0.0), nrow(x$Y)), ncol = 4L, byrow = TRUE))
     .ref_pts[[2L]] <- xyz + toQuaternary(cbind(      x$Y[, 2L] / 3.0,
                                                1.0 - x$Y[, 2L],
                                                      x$Y[, 2L] / 3.0,
-                                                     x$Y[, 2L] / 3.0)) - toQuaternary(matrix(rep(c(0, 1, 0, 0), nrow(x$Y)), ncol = 4L, byrow = TRUE))
+                                                     x$Y[, 2L] / 3.0)) - toQuaternary(matrix(rep(c(0.0, 1.0, 0.0, 0.0), nrow(x$Y)), ncol = 4L, byrow = TRUE))
     .ref_pts[[3L]] <- xyz + toQuaternary(cbind(      x$Y[, 3L] / 3.0,
                                                      x$Y[, 3L] / 3.0,
                                                1.0 - x$Y[, 3L],
-                                                     x$Y[, 3L] / 3.0)) - toQuaternary(matrix(rep(c(0, 0, 1, 0), nrow(x$Y)), ncol = 4L, byrow = TRUE))
+                                                     x$Y[, 3L] / 3.0)) - toQuaternary(matrix(rep(c(0.0, 0.0, 1.0, 0.0), nrow(x$Y)), ncol = 4L, byrow = TRUE))
     .ref_pts[[4L]] <- xyz + toQuaternary(cbind(      x$Y[, 4L] / 3.0,
                                                      x$Y[, 4L] / 3.0,
                                                      x$Y[, 4L] / 3.0,
-                                               1.0 - x$Y[, 4L]      )) - toQuaternary(matrix(rep(c(0, 0, 0, 1), nrow(x$Y)), ncol = 4L, byrow = TRUE))
+                                               1.0 - x$Y[, 4L]      )) - toQuaternary(matrix(rep(c(0.0, 0.0, 0.0, 1.0), nrow(x$Y)), ncol = 4L, byrow = TRUE))
 
 
   if(rgl){
@@ -83,7 +83,7 @@ plot_DRdata_4d <- function(
 
     rgl::points3d(xyz, cex = cex, col = cmyk2rgb(x$Y), point_antialias = TRUE)
 
-    rgl::text3d(x = coo.lab[, 1L], y = coo.lab[, 2L], z = coo.lab[, 3L], texts = dim.labels, font = 2, col = lab.col, line_antialias = TRUE)
+    rgl::text3d(x = coo.lab[, 1L], y = coo.lab[, 2L], z = coo.lab[, 3L], texts = dim.labels, font = 2L, col = lab.col, line_antialias = TRUE)
 
   } else {
 
@@ -92,16 +92,16 @@ plot_DRdata_4d <- function(
     xy.corners <- as.data.frame(t3d(corners, VTrans))
     xy.coo.lab <- t3d(coo.lab, VTrans)
 
-    par(mai = rep(0, 4L))
+    par(mai = rep(0.0, 4L))
     plot(NULL, xlim = range(xy.coo.lab$x), ylim = range(xy.coo.lab$y), asp = 1.0, axes = FALSE, xlab = "", ylab = "")
 
     segments(xy.corners[corner.connect[, 1L], 1L], xy.corners[corner.connect[, 1L], 2L],
              xy.corners[corner.connect[, 2L], 1L], xy.corners[corner.connect[, 2L], 2L])
 
-    text(xy.coo.lab, labels = dim.labels, font = 2, col = lab.col)
+    text(xy.coo.lab, labels = dim.labels, font = 2L, col = lab.col)
 
     ref_axes_xy <- t3d(ref_axes_xyz, VTrans)
-    for(i in 1:4) segments(ref_axes_xy$x[i], ref_axes_xy$y[i], xy.corners$x[i], xy.corners$y[i], lwd = 1.0, lty = 2L, col = lab.col[i])
+    for(i in 1L:4L) segments(ref_axes_xy$x[i], ref_axes_xy$y[i], xy.corners$x[i], xy.corners$y[i], lwd = 1.0, lty = 2L, col = lab.col[i])
 
     if(!is.null(ref.lines)){
       for(i in ref.lines){

@@ -36,9 +36,9 @@ Research Report Series/Department of Statistics and Mathematics, 125. WU Vienna 
 library(DirichletReg)
 head(ArcticLake)
 
-AL <- DR_data(ArcticLake[, 1:3])
+AL <- DR_data(ArcticLake[, 1L:3L])
 
-AL[1:6, ]
+AL[1L:6L, ]
 ```
 
 Code for Fig. 4 (left):
@@ -89,7 +89,7 @@ legend("top", legend = c(expression(hat(mu)[c] == hat(alpha)[c] / hat(alpha)[0])
 
 ```{r}
 AL <- ArcticLake
-AL$AL <- DR_data(ArcticLake[, 1:3])
+AL$AL <- DR_data(ArcticLake[, 1L:3L])
 
 dd <- range(ArcticLake$depth)
 X <- data.frame(depth = seq(dd[1L], dd[2L], length.out = 200L))
@@ -119,7 +119,7 @@ lines(toSimplex(p2m), lwd = 3.0, col = c("#6E1D34", "#004E42")[1L], lty = "21")
 
 ```{r}
 Bld <- BloodSamples
-Bld$Smp <- DR_data(Bld[, 1:4])
+Bld$Smp <- DR_data(Bld[, 1L:4L])
 
 blood1 <- DirichReg(Smp ~ Disease | 1, Bld, model = "alternative", base = 3L)
 blood2 <- DirichReg(Smp ~ Disease | Disease, Bld, model = "alternative", base = 3L)
@@ -131,8 +131,8 @@ summary(blood1)
 Code for Fig. 7:
 ```{r, fig.cap="Figure 7: Blood samples: Box plots and fitted values (dashed lines indicate the fitted values for each group)."}
 par(mfrow = c(1L, 4L), mar = c(4.0, 4.0, 4.0, 2.0) + 0.25)
-for(i in 1:4){
-  boxplot(Bld$Smp[, i] ~ Bld$Disease, ylim = range(Bld$Smp[, 1:4]), main = paste(names(Bld)[i]),
+for(i in 1L:4L){
+  boxplot(Bld$Smp[, i] ~ Bld$Disease, ylim = range(Bld$Smp[, 1L:4L]), main = paste(names(Bld)[i]),
     xlab = "Disease Type", ylab = "Proportion")
   segments(c(-5.0, 1.5), unique(fitted(blood2)[, i]),
            c( 1.5, 5.0), unique(fitted(blood2)[, i]), lwd = 2.0, lty = 2L)
@@ -141,7 +141,7 @@ for(i in 1:4){
 
 ```{r}
 alpha <- predict(blood2, data.frame(Disease = factor(c("A", "B"))), FALSE, TRUE, FALSE)
-L <- sapply(1:2, function(i) ddirichlet(DR_data(Bld[31:36, 1:4]), unlist(alpha[i, ])))
+L <- sapply(1L:2L, function(i) ddirichlet(DR_data(Bld[31L:36L, 1L:4L]), unlist(alpha[i, ])))
 LP <- L / rowSums(L)
 dimnames(LP) <- list(paste("C", 1:6), c("A", "B"))
 print(data.frame(round(LP * 100, 1), "pred." = as.factor(ifelse(LP[, 1L] > LP[, 2L], "==> A", "==> B"))), print.gap = 2L)
@@ -159,12 +159,12 @@ temp <- (alpha / rowSums(alpha))[, c(1L, 2L, 4L)]
 points(toSimplex(temp / rowSums(temp)), pch = 22L, bg = div.col[c(1L, 100L)], cex = 2.0, lwd = 0.25)
 
 # known values   
-temp <- B2[1:30, ]
-points(toSimplex(temp / rowSums(temp)), pch = 21L, bg = (div.col[c(1L, 100L)])[BloodSamples$Disease[1:30]], cex = 0.5, lwd = 0.25)
+temp <- B2[1L:30L, ]
+points(toSimplex(temp / rowSums(temp)), pch = 21L, bg = (div.col[c(1L, 100L)])[BloodSamples$Disease[1L:30L]], cex = 0.5, lwd = 0.25)
 
 # unclassified  
-temp <- B2[31:36, ]
-points(toSimplex(temp / rowSums(temp)), pch = 21L, bg = div.col[round(100 * LP[, 2L], 0L)], cex = 1.0, lwd = 0.5)
+temp <- B2[31L:36L, ]
+points(toSimplex(temp / rowSums(temp)), pch = 21L, bg = div.col[round(100.0 * LP[, 2L], 0L)], cex = 1.0, lwd = 0.5)
 
 legend("topright", bty = "n", legend = c("Disease A", "Disease B", NA, "Expected Values"), pch = c(21L, 21L, NA, 22L),
   pt.bg = c(div.col[c(1L, 100L)], NA, "white"))
@@ -195,22 +195,22 @@ xlab = "IQ Score", ylab = "Reading Accuracy", xlim = range(ReadingSkills$iq))
 x1 <- seq(min(RS$iq[g1]), max(RS$iq[g1]), length.out = 200L)
 x2 <- seq(min(RS$iq[g2]), max(RS$iq[g2]), length.out = 200L)
 n <- length(x1)
-X <- data.frame(dyslexia = factor(rep(0:1, each = n), levels = 0:1, labels = c("no", "yes")), iq = c(x1, x2))
+X <- data.frame(dyslexia = factor(rep(0L:1L, each = n), levels = 0L:1L, labels = c("no", "yes")), iq = c(x1, x2))
 pv <- predict(rs2, X, TRUE, TRUE, TRUE)
 
-lines(x1, pv$mu[1:n, 2L], col = c("#E495A5", "#39BEB1")[2L], lwd = 3.0)
+lines(x1, pv$mu[1L:n, 2L], col = c("#E495A5", "#39BEB1")[2L], lwd = 3.0)
 lines(x2, pv$mu[(n + 1L):(2L * n), 2L], col = c("#E495A5", "#39BEB1")[1L], lwd = 3.0)
 
 a <- RS$accuracy
 logRa_a <- log(a / (1.0 - a))
 rlr <- lm(logRa_a ~ dyslexia * iq, RS)
-ols <- 1 / (1 + exp(-predict(rlr, X)))
-lines(x1, ols[1:n], col = c("#AD6071", "#00897D")[2L], lwd = 3.0, lty = 2L)
+ols <- 1.0 / (1.0 + exp(-predict(rlr, X)))
+lines(x1, ols[1L:n], col = c("#AD6071", "#00897D")[2L], lwd = 3.0, lty = 2L)
 lines(x2, ols[(n + 1L):(2L * n)], col = c("#AD6071", "#00897D")[1L], lwd = 3.0, lty = 2L)
 
 ### precision plot
 par(new = TRUE)
-plot(x1, pv$phi[1:n], col = c("#6E1D34", "#004E42")[2L], lty = "11", type = "l", ylim = c(0.0, max(pv$phi)), axes = FALSE,
+plot(x1, pv$phi[1L:n], col = c("#6E1D34", "#004E42")[2L], lty = "11", type = "l", ylim = c(0.0, max(pv$phi)), axes = FALSE,
   ann = FALSE, lwd = 2.0, xlim = range(RS$iq))
 lines(x2, pv$phi[(n + 1L):(2L * n)], col = c("#6E1D34", "#004E42")[1L], lty = "11", type = "l", lwd = 2.0)
 axis(4L)
@@ -221,7 +221,7 @@ legend("topleft", legend = c(expression(hat(mu)), expression(hat(phi)), "OLS"), 
 
 ```{r}
 a <- RS$accuracy
-logRa_a <- log(a / (1 - a))
+logRa_a <- log(a / (1.0 - a))
 rlr <- lm(logRa_a ~ dyslexia * iq, RS)
 summary(rlr)
 
@@ -233,7 +233,7 @@ confint(rs2, exp = TRUE)
 ```
 
 Code for 10:
-```{r, fig.height=7/2*3, fig.cap="Figure 10: Reading skills: Various residual plots of OLS and Dirichlet regression models. The left columns shows OLS, the right column Dirichlet models. In the first row, QQ-plots show deviation from a normal distribution of residuals. The second row plots residuals against the covariate IQ. The third row plots residuals against fitted values."}
+```{r, fig.height=7.0/2.0*3.0, fig.cap="Figure 10: Reading skills: Various residual plots of OLS and Dirichlet regression models. The left columns shows OLS, the right column Dirichlet models. In the first row, QQ-plots show deviation from a normal distribution of residuals. The second row plots residuals against the covariate IQ. The third row plots residuals against fitted values."}
 gcol <- c("#E495A5", "#39BEB1")[3L - as.numeric(RS$dyslexia)]
 tmt <- c(-3.0, 3.0)
 

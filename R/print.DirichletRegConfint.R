@@ -2,7 +2,7 @@ print.DirichletRegConfint <- function(x, digits = 3L, ...){
 
   e <- x$e
   repar <- x$repar
-  cat("\n", paste(100 * x$level, collapse = "%, ", sep = ""), "% Confidence Intervals ", sep = "")
+  cat("\n", paste(100.0 * x$level, collapse = "%, ", sep = ""), "% Confidence Intervals ", sep = "")
   if(e) cat("(exponentiated)\n\n") else cat("(original form)\n\n")
 
   ctab <- x$coefficients
@@ -15,28 +15,28 @@ print.DirichletRegConfint <- function(x, digits = 3L, ...){
       }
     }
 
-    iter <- 1
-    for(cc in rev(seq_along(x$ci[[1]]))[-1]){
-        iter <- iter + 1
+    iter <- 1L
+    for(cc in rev(seq_along(x$ci[[1L]]))[-1L]){
+        iter <- iter + 1L
       for(ll in seq_along(x$ci)){
-        if(is.null(x$ci[[1]][[cc]])) next
-        ctab[[1]][[cc]] <- cbind(ctab[[1]][[cc]], x$ci[[ll]][[cc]])
+        if(is.null(x$ci[[1L]][[cc]])) next
+        ctab[[1L]][[cc]] <- cbind(ctab[[1L]][[cc]], x$ci[[ll]][[cc]])
       }
     }
     for(ll in seq_along(x$ci)){
-      ctab[[2]][[1]] <- cbind(ctab[[2]][[1]], x$ci[[ll]][[iter]])
+      ctab[[2L]][[1L]] <- cbind(ctab[[2L]][[1L]], x$ci[[ll]][[iter]])
     }
 
-    for(cc in seq_along(ctab[[1]])){
-      if(is.null(ctab[[1]][[cc]])) next
-      ll <- ncol(ctab[[1]][[cc]])
-      ind <- c(rev(seq(2, ll, by = 2)), seq(1, ll, by = 2))
+    for(cc in seq_along(ctab[[1L]])){
+      if(is.null(ctab[[1L]][[cc]])) next
+      ll <- ncol(ctab[[1L]][[cc]])
+      ind <- c(rev(seq(2L, ll, by = 2L)), seq(1L, ll, by = 2L))
 
-      ctab[[1]][[cc]] <- ctab[[1]][[cc]][, ind, drop = FALSE]
+      ctab[[1L]][[cc]] <- ctab[[1L]][[cc]][, ind, drop = FALSE]
     }
-    ll <- ncol(ctab[[2]][[1]])
-    ind <- c(rev(seq(2, ll, by = 2)), seq(1, ll, by = 2))
-    ctab[[2]][[1]] <- ctab[[2]][[1]][, ind, drop = FALSE]
+    ll <- ncol(ctab[[2L]][[1L]])
+    ind <- c(rev(seq(2L, ll, by = 2L)), seq(1L, ll, by = 2L))
+    ctab[[2L]][[1L]] <- ctab[[2L]][[1L]][, ind, drop = FALSE]
 
   } else {
 
@@ -44,14 +44,14 @@ print.DirichletRegConfint <- function(x, digits = 3L, ...){
     ctab <- lapply(ctab, exp)
   }
 
-    for(cc in rev(seq_along(x$ci[[1]]))){
+    for(cc in rev(seq_along(x$ci[[1L]]))){
       for(ll in seq_along(x$ci)){
         ctab[[cc]] <- cbind(ctab[[cc]], x$ci[[ll]][[cc]])
       }
     }
-    for(cc in seq_along(x$ci[[1]])){
+    for(cc in seq_along(x$ci[[1L]])){
       ll <- ncol(ctab[[cc]])
-      ind <- c(rev(seq(2, ll, by = 2)), seq(1, ll, by = 2))
+      ind <- c(rev(seq(2L, ll, by = 2L)), seq(1L, ll, by = 2L))
 
       ctab[[cc]] <- ctab[[cc]][, ind, drop = FALSE]
     }
@@ -63,7 +63,7 @@ print.DirichletRegConfint <- function(x, digits = 3L, ...){
   hi_lab <- paste(format(100.0 * (x$level + (1.0 - x$level) / 2.0), format = "f"), "%", sep = "")
 
   if(repar){
-    for(tt in 1:2){
+    for(tt in 1L:2L){
     cat("- ", ifelse(tt == 1L, "Beta-Parameters:\n", "Gamma-Parameters\n"), sep = "")
       for(i in seq_along(ctab[[tt]])){
         if(tt == 1L) cat("Variable: ", names(ctab[[1L]])[i], "\n", sep = "")

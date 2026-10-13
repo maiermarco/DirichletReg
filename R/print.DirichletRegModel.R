@@ -44,7 +44,7 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
 
   } else {
 
-    printed.var <- 1
+    printed.var <- 1L
     set.size    <- ncol(x$X[[1L]])
 
     writeLines("MEAN MODELS:")
@@ -57,7 +57,7 @@ print.DirichletRegModel <- function(x, digits = max(3L, getOption("digits") - 3L
       } else {
         writeLines(strrep("-", min(41L, .wd)))
         writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
-        print.default(format(x$coefficients[printed.var:(printed.var + set.size - 1L)], digits = digits), print.gap = 2, quote = FALSE)
+        print.default(format(x$coefficients[printed.var:(printed.var + set.size - 1L)], digits = digits), print.gap = 2L, quote = FALSE)
 
         printed.var <- printed.var + set.size
       }

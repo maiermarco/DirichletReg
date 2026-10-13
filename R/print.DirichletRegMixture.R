@@ -4,7 +4,7 @@ print.DirichletRegMixture <- function(x, ...){
 
   sp.tab <- as.table(rbind(format(round(x$groups, 0L)),
                            format(round(x$groups / sum(x$groups), 3L))))
-  dimnames(sp.tab) <- list(c("Size", "Probability"), paste("Class", 1:x$classes))
+  dimnames(sp.tab) <- list(c("Size", "Probability"), paste("Class", 1L:x$classes))
   print(sp.tab, print.gap = 2L, justify = "right")
 
   cat("\n\nLog-Likelihood:", round(x$logLik, 3L), "with", x$npar, "Parameters")

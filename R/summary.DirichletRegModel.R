@@ -27,13 +27,13 @@ summary.DirichletRegModel <- function(object, ...) {
   
   names(object$coefficients) <- object$coefnames
   
-  resid.mat <- round(t(apply(residuals(object, type = "standardized"), 2, quantile)), 4)
+  resid.mat <- round(t(apply(residuals(object, type = "standardized"), 2L, quantile)), 4L)
   colnames(resid.mat) <- c("Min", "1Q", "Median", "3Q", "Max")
   
   res$resid.mat <- resid.mat
   
   z.values <- object$coefficients / object$se
-  p.values <- 2 * pnorm(-abs(z.values))
+  p.values <- 2.0 * pnorm(-abs(z.values))
   coef.mat <- cbind(object$coefficients, object$se, z.values, p.values)
   colnames(coef.mat) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
   
@@ -48,9 +48,10 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   
   .wd <- getOption("width")
   
-  signif_codes <- paste0("Significance codes: ", attr(symnum(0, corr = FALSE, na = FALSE,
-    cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
+  signif_codes <- paste0("Significance codes: ", attr(symnum(0.0, corr = FALSE, na = FALSE,
+    cutpoints = c(0.0, 0.001, 0.01, 0.05, 0.1, 1.0),
     symbols = c("***", "**", "*", ".", " ")), "legend"))
+  sig_code_len <- nchar(signif_codes)
   
   if(interactive()) writeLines("")
   
@@ -67,15 +68,15 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   if(x$parametrization == "common"){
     
     for(i in seq_along(x$varnames)){
-      writeLines(strrep("-", min(66L, .wd)))
+      writeLines(strrep("-", min(sig_code_len, .wd)))
       writeLines(paste0("Beta-Coefficients for variable no. ", i, ": ", x$varnames[i]))
       
       printCoefmat(x$coef.mat[ifelse(i == 1L, 1L, x$coef.ind[i - 1L] + 1L):x$coef.ind[i], , drop = FALSE],
-                   digits = digits, cs.ind = 1:2, tst.ind = 3, P.values = TRUE, signif.legend = FALSE)
+                   digits = digits, cs.ind = 1L:2L, tst.ind = 3L, P.values = TRUE, signif.legend = FALSE)
       
       
     }
-    writeLines(strrep("-", min(66L, .wd)))
+    writeLines(strrep("-", min(sig_code_len, .wd)))
     writeLines(signif_codes)
     
   } else {
@@ -88,29 +89,29 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
     
     for(i in seq_along(x$varnames)){
       if(i == x$base){
-        writeLines(strrep("-", min(66L, .wd)))
+        writeLines(strrep("-", min(sig_code_len, .wd)))
         writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
         writeLines("- variable omitted (reference category) -")
       } else {
-        writeLines(strrep("-", min(66L, .wd)))
+        writeLines(strrep("-", min(sig_code_len, .wd)))
         writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
         
         printCoefmat(x$coef.mat[printed.var:(printed.var + set.size - 1L), , drop = FALSE],
-                     digits = digits, cs.ind = 1:2, tst.ind = 3, P.values = TRUE, signif.legend = FALSE)
+                     digits = digits, cs.ind = 1L:2L, tst.ind = 3L, P.values = TRUE, signif.legend = FALSE)
         
         printed.var <- printed.var + set.size
       }
     }
     
-    writeLines(strrep("-", min(66L, .wd)))
+    writeLines(strrep("-", min(sig_code_len, .wd)))
     
     writeLines("")
     
     writeLines("PRECISION MODEL:")
-    writeLines(strrep("-", min(66L, .wd)))
+    writeLines(strrep("-", min(sig_code_len, .wd)))
     printCoefmat(x$coef.mat[printed.var:length(x$coefficients), , drop = FALSE],
-                 digits = digits, cs.ind = 1:2, tst.ind = 3, P.values = TRUE, signif.legend = FALSE)
-    writeLines(strrep("-", min(66L, .wd)))
+                 digits = digits, cs.ind = 1L:2L, tst.ind = 3L, P.values = TRUE, signif.legend = FALSE)
+    writeLines(strrep("-", min(sig_code_len, .wd)))
     writeLines(signif_codes)
     
   }

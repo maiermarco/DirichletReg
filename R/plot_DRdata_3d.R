@@ -17,7 +17,7 @@ plot_DRdata_3d <- function(
   xy <- toTernary(x$Y)
   
   par(mai = rep(0.0, 4L))
-  plot(NULL, axes = FALSE, ann = FALSE, xlim = c(-.0866025, 2.0 / sqrt(3.0) + .0866025), ylim = c(0.0 - 0.05, 1.0 + 0.1), asp = 1.0)
+  plot(NULL, axes = FALSE, ann = FALSE, xlim = c(-0.0866025, 2.0 / sqrt(3.0) + 0.0866025), ylim = c(0.0 - 0.05, 1.0 + 0.1), asp = 1.0)
 ###
 ###
 ###
@@ -26,9 +26,9 @@ plot_DRdata_3d <- function(
   if(entropy.contours){
     if(entropy.colors){
       heatcols <- c("#D9545F", "#E06951", "#E47C42", "#E88F33", "#EAA428", "#E9B62D", "#E8C842", "#E5D961", "#E2E6BD")   # colorspace : heat_hcl(100)[round(seq(0, 100, length.out = 10), 0L)]
-      for(i in 9:1) polygon(.entropy.coordinates[[i]][, 1L], .entropy.coordinates[[i]][, 2L], col = heatcols[i], border = NA)
+      for(i in 9L:1L) polygon(.entropy.coordinates[[i]][, 1L], .entropy.coordinates[[i]][, 2L], col = heatcols[i], border = NA)
     } else {
-      for(i in 9:1) lines(.entropy.coordinates[[i]], lwd = 0.25)
+      for(i in 9L:1L) lines(.entropy.coordinates[[i]], lwd = 0.25)
     }
   }
 
@@ -40,12 +40,12 @@ plot_DRdata_3d <- function(
   }
 
   if(c.grid || ticks){
-    g.main <- (1:9) / 10
+    g.main <- (1L:9L) / 10.0
     g.aux1 <- 1.0 - g.main
 
-    c1.grid <- cbind(toTernaryVectors(g.main, g.aux1, 0), toTernaryVectors(g.main, 0, g.aux1))
-    c2.grid <- cbind(toTernaryVectors(0, g.main, g.aux1), toTernaryVectors(g.aux1, g.main, 0))
-    c3.grid <- cbind(toTernaryVectors(0, g.aux1, g.main), toTernaryVectors(g.aux1, 0, g.main))
+    c1.grid <- cbind(toTernaryVectors(g.main, g.aux1, 0.0), toTernaryVectors(g.main, 0.0, g.aux1))
+    c2.grid <- cbind(toTernaryVectors(0.0, g.main, g.aux1), toTernaryVectors(g.aux1, g.main, 0.0))
+    c3.grid <- cbind(toTernaryVectors(0.0, g.aux1, g.main), toTernaryVectors(g.aux1, 0.0, g.main))
 
 #DEBUG for(a in 0:10) abline(v = a / 10, lty = 2L)
 
@@ -67,7 +67,7 @@ plot_DRdata_3d <- function(
       y.cuts <- seq(sqrt(3.0) / 2.0, sqrt(3.0) / 6.0, length.out = 101L)
       rect(0.95, y.cuts[-101L]  , 1.0, y.cuts[-1L], col = entropy.colors, border = NA)
       rect(0.95, y.cuts[1L]     , 1.0, y.cuts[101L])
-      text(0.90, 1.0 / sqrt(3.0), srt = 90, labels = "Entropy")
+      text(0.90, 1.0 / sqrt(3.0), srt = 90.0, labels = "Entropy")
     }
   } else if(!colored) {
     if(!is.null(.col)){
@@ -78,7 +78,7 @@ plot_DRdata_3d <- function(
   } else { stop("error! specify color = TRUE or FALSE") }
 
   if(ticks){
-    tk.coo <- (1:9) / 10
+    tk.coo <- (1L:9L) / 10.0
     tk.lab <- sub("^0\\.", "\\.", tk.coo)
 
     segments(c3.grid[, 3L],
@@ -100,9 +100,9 @@ plot_DRdata_3d <- function(
   }
 
   # dimension labels
-  text( 1.0 / sqrt(3.0)                           ,  1.0 + (1.0 / 15.0), labels = dim.labels[1L], font = 2, col = colorz[1L])
-  text(-1.0 / (10.0 * sqrt(3.0))                  , -1.0 / 30.0        , labels = dim.labels[2L], font = 2, col = colorz[2L])
-  text( 2.0 / sqrt(3.0) + 1.0 / (10.0 * sqrt(3.0)), -1.0 / 30.0        , labels = dim.labels[3L], font = 2, col = colorz[3L])
+  text( 1.0 / sqrt(3.0)                           ,  1.0 + (1.0 / 15.0), labels = dim.labels[1L], font = 2L, col = colorz[1L])
+  text(-1.0 / (10.0 * sqrt(3.0))                  , -1.0 / 30.0        , labels = dim.labels[2L], font = 2L, col = colorz[2L])
+  text( 2.0 / sqrt(3.0) + 1.0 / (10.0 * sqrt(3.0)), -1.0 / 30.0        , labels = dim.labels[3L], font = 2L, col = colorz[3L])
 
   ### bounding triangle and white space
   polygon(c(0.0, 2.0 / sqrt(3.0), 1.0 / sqrt(3.0), 0.0),
