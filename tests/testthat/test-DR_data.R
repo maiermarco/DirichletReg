@@ -2,7 +2,7 @@
 ._DR_ver_0_8 <- as.numeric_version(packageDescription("DirichletReg")[["Version"]]) >= as.numeric_version("0.8-0")
 
 skip_ext_cran <- function(){
-  if(isFALSE(as.logical(Sys.getenv("NOT_CRAN", "true")))) skip("Skipping Extended Tests on CRAN")
+  if(isFALSE(as.logical(Sys.getenv("NOT_CRAN", "true")))) testthat::skip("Skipping Extended Tests on CRAN")
 }
 
 #x <- function(ooo) writeClipboard(paste(collapse = "", deparse(ooo, width.cutoff = 500L, control = "exact"))) # TODO

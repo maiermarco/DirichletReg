@@ -1,4 +1,4 @@
-DReg <- function(x, logY, X, ncolX, n, d, k, w, npar, seq_along_d, bx, NR, h_dims, h_vars){
+DReg <- function(x, logY, X, ncolX, n, d, w, npar, seq_along_d, bx, NR, h_dims, h_vars){
   
   B <- lapply(bx, function(b_ind){ x[b_ind] })
   

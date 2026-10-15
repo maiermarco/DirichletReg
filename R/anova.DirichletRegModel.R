@@ -3,7 +3,7 @@ anova.DirichletRegModel <- function(object, ..., sorted = FALSE) {
   comp.objs <- list(object, ...)
   
   if(!all(unlist(lapply(comp.objs, inherits, what = "DirichletRegModel")))){
-    stop('only models fitted using "DirichReg()" can be compared.')
+    stop("only models fitted using \"DirichReg()\" can be compared.")
   }
   for(i in seq_along(comp.objs)[-1L]){
     if(!identical(comp.objs[[i - 1L]][["Y"]], comp.objs[[i]][["Y"]])){

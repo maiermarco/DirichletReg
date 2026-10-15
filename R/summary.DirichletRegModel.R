@@ -1,5 +1,6 @@
 summary.DirichletRegModel <- function(object, ...) {
   
+  # TODO convert to warning!
   if(object$optimization$convergence > 2L) stop("\n", paste(strwrap(paste("\nOptimization did not converge in", object$optimization$bfgs.it, "+", object$optimization$iterations, "iterations and exited with code", object$optimization$convergence), getOption("width")), sep = "\n", collapse = "\n"))
   
   res <- structure(
@@ -50,7 +51,7 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   
   signif_codes <- paste0("Significance codes: ", attr(symnum(0.0, corr = FALSE, na = FALSE,
     cutpoints = c(0.0, 0.001, 0.01, 0.05, 0.1, 1.0),
-    symbols = c("***", "**", "*", ".", " ")), "legend"))
+    symbols   = c("***", "**", "*", ".", " ")), "legend"))
   sig_code_len <- nchar(signif_codes)
   
   if(interactive()) writeLines("")

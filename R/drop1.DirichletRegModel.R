@@ -42,7 +42,7 @@ drop1.DirichletRegModel <- function(
 
   if(!missing(test) && test == "Chisq"){
     test <- "LRT"
-    message('use test = "LRT" instead of "Chisq"')
+    message("use test = \"LRT\" instead of \"Chisq\"")
     test <- match.arg(test, c("LRT", "none"))
   } else if(missing(test)){
     test <- "LRT"
@@ -137,13 +137,13 @@ stop("not implemented yet!") # TODO implement
   if(all(is.na(aic))) aod <- aod[, -3L]
 
   if(test == "LRT"){
-      dev <- pmax(0.0, dev - dev[1L])
-      dev[1L] <- NA
-      nas <- !is.na(dev)
-      LRT <- "LRT"
-      aod[, LRT] <- dev
-      dev[nas] <- pchisq(dev[nas], ifelse(aod$Df[nas] <= 0.0, NA_real_, aod$Df[nas]), lower.tail = FALSE)
-      aod[, "Pr(>Chi)"] <- dev
+    dev <- pmax(0.0, dev - dev[1L])
+    dev[1L] <- NA
+    nas <- !is.na(dev)
+    LRT <- "LRT"
+    aod[, LRT] <- dev
+    dev[nas] <- pchisq(dev[nas], ifelse(aod$Df[nas] <= 0.0, NA_real_, aod$Df[nas]), lower.tail = FALSE)
+    aod[, "Pr(>Chi)"] <- dev
   }
 
   heading <- c("Single term deletions", "\nModel:", deparse_nocutoff(formula(object)))

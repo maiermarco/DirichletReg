@@ -1,16 +1,17 @@
 get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
-
+  
   ops <- options("warn" = -1L) # ignores all warnings and stores the original settings in ops # nolint
   on.exit(options(ops))        # on exiting the function, all original options are restored   # nolint
-
+  
   if(!repar){###################################################### COMMON MODEL # nolint
-
+    
     ### collinearity check begin
     exclude_par <- lapply(X.mats, function(list_el){
       lin_coef <- lm.fit(x = list_el, y = runif(nrow(list_el)))[["coefficients"]]
-      if(any(na_pos <- is.na(lin_coef))){
-        temp_names <- names(lin_coef)
-        lin_coef <- seq_along(lin_coef)
+      na_pos   <- is.na(lin_coef)
+      if(any(na_pos)){
+        temp_names      <- names(lin_coef)
+        lin_coef        <- seq_along(lin_coef)
         names(lin_coef) <- temp_names
         return(lin_coef[na_pos])
       } else {
@@ -18,7 +19,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
       }
     })
     ### collinearity check end
-
+    
     beta.LL <- function(x, y, X, w){
       b <- matrix(x, ncol = 2L)
       if(ncol(X) > 1L){
@@ -28,7 +29,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
       }
       return(LL)
     }
-
+    
     beta.LL.deriv <- function(x, y, X, w){
       b <- matrix(x, ncol = 2L)
       grad <- matrix(0.0, nrow = nrow(X), ncol = prod(dim(b)))
@@ -46,7 +47,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
       }
       return(grad)
     }
-
+    
     unidim_fit <- lapply(seq_len(ncol(Y)), function(i){
       if(is.null(exclude_par[[i]])){
         correctX <- X.mats[[i]]
@@ -63,7 +64,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
           w            = weights)$estimate[seq_len(ncol(correctX))]
       #)
     })
-
+    
     for(cmp in seq_len(ncol(Y))){
       if(is.null(exclude_par[[cmp]])){
         break
@@ -71,19 +72,19 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
         for(NA_vars in seq_along(exclude_par[[cmp]])) unidim_fit[[cmp]] <- append(unidim_fit[[cmp]], NA, exclude_par[[cmp]][NA_vars] - 1L)
       }
     }
-
+    
     unidim_fit <- unlist(unidim_fit)
-
+    
   } else {#################################################### ALTERNATIVE MODEL
-
+    
     Y_logr <- log(Y[, -base, drop = FALSE] / (Y[, base, drop = TRUE]))
     unidim_fit <- as.numeric(lm(Y_logr ~ X.mats[[1L]] - 1, weights = weights)[["coefficients"]])
-
+    
     epsilon <- matrix(1.0, nrow = nrow(Y), ncol = ncol(Y))
-
+    
     start_var <- 1L
     n_mean_par <- ncol(X.mats[[1L]])
-
+    
     for(i in seq_len(ncol(Y))){
       if(i == base){
         next
@@ -92,16 +93,15 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
         start_var <- start_var + n_mean_par
       }
     }
-
+    
     MU <- epsilon / rowSums(epsilon)
-
+    
     log_phi <- optimize(function(x){ sum(weights * ddirichlet(Y, MU * exp(x), log = TRUE)) }, c(-20.0, 20.0), maximum = TRUE)[["maximum"]]
     gammas  <- as.numeric(lm(I(rep(log_phi, nrow(Y))) ~ Z.mat - 1, weights = weights)[["coefficients"]])
-
+    
     unidim_fit <- c(unidim_fit, gammas)
-
+    
   }
-
-  return(as.numeric(unlist(unidim_fit)))
-
+  
+  as.numeric(unlist(unidim_fit))
 }

@@ -36,7 +36,8 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
   has_i <- !missing(i)
   has_j <- !missing(j)
   
-  if(any(names(syscall <- sys.call()) %notin% c("", "drop"))){ # && !isS4(x) # should be if(any(... %notin% ...)) # TODO
+  syscall <- sys.call()
+  if(any(names(syscall) %notin% c("", "drop"))){ # && !isS4(x) # should be if(any(... %notin% ...)) # TODO
     warning("named arguments other than 'drop' are discouraged") # TODO
   }
   syscall[which(names(syscall) != "")] <- NULL # remove unknown arguments and drop

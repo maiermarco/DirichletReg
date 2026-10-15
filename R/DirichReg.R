@@ -21,10 +21,8 @@ DirichReg <- function(
   }
   
   this_call <- match.call()
-#  this_call$formula <- formula # TODO this should no longer be necessary -- test
   
   if(missing(formula)) stop("specification of \"formula\" is necessary.")
-  original_formula <- as.formula(formula)
   
   model <- match.arg(model, c("common", "alternative"))
   repar <- model == "alternative"
@@ -154,7 +152,7 @@ DirichReg <- function(
   n.vars <- if(repar) c(unlist(lapply(X.mats, ncol))[-1L], ncol(Z.mat)) else unlist(lapply(X.mats, ncol))
   
   model_terms   <- .add_predvars_and_dataClasses(model_terms, model_frame)
-  model_terms_X <- lapply(model_terms_X, function(this_X){ .add_predvars_and_dataClasses(this_X, model_frame) })
+  model_terms_X <- lapply(model_terms_X, .add_predvars_and_dataClasses, model.frame = model_frame)
   model_terms_Z <- if(repar) .add_predvars_and_dataClasses(model_terms_Z, model_frame) else NULL
   
   weights <- model.weights(model_frame)
@@ -341,12 +339,12 @@ DirichReg <- function(
       # new components
       terms           = list(X = model_terms_X, Z = model_terms_Z, full = model_terms),
       levels          = list(
-                          X    = lapply(model_terms_X, function(this_X){ .getXlevels(this_X, model_frame) }),
+                          X    = lapply(model_terms_X, .getXlevels, m = model_frame),
                           Z    = if(repar) .getXlevels(model_terms_Z, model_frame) else NULL,
                           full = .getXlevels(model_terms, model_frame)
                         ),
       contrasts       = list(
-                          X = lapply(model_terms_X, function(this_X){ attr(this_X, "contrasts") }),
+                          X = lapply(model_terms_X, attr, which = "contrasts"),
                           Z = if(repar) attr(Z.mat, "contrasts") else NULL
                         )
       ),

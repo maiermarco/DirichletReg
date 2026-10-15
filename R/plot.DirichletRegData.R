@@ -1,7 +1,3 @@
-get_or_else <- function(what, or_else, where) if(any(what %in% names(where))) where[[what, exact = TRUE]] else or_else
-
-
-
 plot.DirichletRegData <- function(
   x,
   dims,                                       # which dimensions to plot
@@ -20,13 +16,13 @@ plot.DirichletRegData <- function(
   reset_par          = TRUE,
   ...
 ){
-
-## ADAPT TO THE NEW DATA STRUCTURE
+  
+  ## ADAPT TO THE NEW DATA STRUCTURE
   full_obs <- nrow(x)
   if(anyNA(x)){
     include <- which(rowSums(is.na(x)) == 0L)
     .x <- x
-
+    
     x <- as.matrix(x[include, ])
     attr(x, "Y.original") <- as.data.frame(attr(.x, "Y.original")[include, ])
     attr(x, "dims") <- attr(.x, "dims")
@@ -36,45 +32,45 @@ plot.DirichletRegData <- function(
     attr(x, "transformed") <- attr(.x, "transformed")
     attr(x, "base") <- attr(.x, "base")
     class(x) <- "DirichletRegData"
-
+    
     rm(.x)
   } else {
     include <- seq_len(nrow(x))
   }
-
+  
   nx <- x
   x <- attributes(x)
   x$Y <- as.data.frame(unclass(nx))
   x$dim.names <- x$dimnames[[2L]]
   class(x) <- "DirichletRegData"
-
+  
   if(missing(dims)) dims <- NULL
-
+  
   if(!inherits(x, "DirichletRegData")) stop("data must be prepared by 'DR_data()'")
-
-  colored <- get_or_else("colored", TRUE, a2d)
-  c.grid <- get_or_else("c.grid", TRUE, a2d)
-  col.scheme <- match.arg(get_or_else("col.scheme", "dims", a2d), c("dims", "entropy"))
-  entropy.contours <- get_or_else("entropy.contours", FALSE, a2d)
-  entropy.colors <- get_or_else("entropy.colors", FALSE, a2d)
-
+  
+  colored          <- a2d$"colored" %||% TRUE
+  c.grid           <- a2d$"c.grid"  %||% TRUE
+  col.scheme       <- match.arg(a2d$"col.scheme" %||% "dims", c("dims", "entropy"))
+  entropy.contours <- a2d$"entropy.contours" %||% FALSE
+  entropy.colors   <- a2d$"entropy.colors"   %||% FALSE
+  
   dotlist <- list(...)
-
-  .main <- get_or_else("main", NULL, dotlist)
-  .xlim <- get_or_else("xlim", NULL, dotlist)
-  .ylim <- get_or_else("ylim", NULL, dotlist)
-   .col <- get_or_else("col", NULL, dotlist)  ; if(length(.col) == full_obs) .col <- .col[include]
-   .pch <- get_or_else("pch", 16L, dotlist)   ; if(length(.pch) == full_obs) .pch <- .pch[include]
-   .cex <- get_or_else("cex", 1.0, dotlist)   ; if(length(.cex) == full_obs) .cex <- .cex[include]
-   .lwd <- get_or_else("lwd", 1.0, dotlist)
-   .lty <- get_or_else("lty", 1L, dotlist)
-
-      theta <- get_or_else("theta", NULL, dotlist)
-        phi <- get_or_else("phi", NULL, dotlist)
-  ref.lines <- get_or_else("ref.lines", NULL, dotlist)
-
+  
+  .main <- dotlist$"main" %||% NULL
+  .xlim <- dotlist$"xlim" %||% NULL
+  .ylim <- dotlist$"ylim" %||% NULL
+  .col  <- dotlist$"col"  %||% NULL; if(length(.col) == full_obs) .col <- .col[include]
+  .pch  <- dotlist$"pch"  %||% 16L ; if(length(.pch) == full_obs) .pch <- .pch[include]
+  .cex  <- dotlist$"cex"  %||% 1.0 ; if(length(.cex) == full_obs) .cex <- .cex[include]
+  .lwd  <- dotlist$"lwd"  %||% 1.0
+  .lty  <- dotlist$"lty"  %||% 1L
+  
+  theta     <- dotlist$"theta"     %||% NULL
+  phi       <- dotlist$"phi"       %||% NULL
+  ref.lines <- dotlist$"ref.lines" %||% NULL
+  
   .marginal <- FALSE
-
+  
   if(is.null(dims)){
     if(x$dims > 4L){
       x$Y         <- x$Y[, seq_len(4L)]
@@ -92,41 +88,41 @@ plot.DirichletRegData <- function(
     x$dim.names <- x$dim.names[dims]
     .marginal <- TRUE
   }
-
-
-
+  
+  
+  
   if(missing(dim.labels)){
     dim.labels <- x$dim.names
   }
-
-
-
-
-
+  
+  
+  
+  
+  
   if(x$dims == 2L){
     if(is.null(.main)) .main <- "Density Plot of a Beta-Distributed Variable"
     plot_DRdata_2d(y = x$Y[, 2L], rug = rug, main = .main, ylim = .ylim, colr = .col, lwd = .lwd, lty = .lty)
-
+    
   } else if(x$dims == 3L) {
     if(!all(is.null(c(.xlim, .ylim)))) warning("xlim and ylim not usable in a ternary plot. arguments ignored.")
     if(is.null(.main)) .main <- "Ternary Plot"
-
+    
     if(reset_par){ # reset the current pars after plotting
       old_par <- par(no.readonly = TRUE) # nolint
       on.exit(par(old_par))              # nolint
     }
-
+    
     plot_DRdata_3d(x = x, entropy.contours = entropy.contours, colored = colored, c.grid = c.grid, ticks = ticks, dim.labels = dim.labels, col.scheme = col.scheme,
     .main = .main, .col = .col, .pch = .pch, .cex = .cex, .lwd = .lwd, .lty = .lty)
-
+    
   } else if(x$dims == 4L){
     if( ("rgl" %notin% loadedNamespaces()) && ("rgl" %notin% utils::installed.packages()[, "Package"]) ){ stop("The \"rgl\" package could not be found. You can try installing it using:\ninstall.packages(\"rgl\")") }
     requireNamespace("rgl")
-
+    
     plot_DRdata_4d(x = x, dim.labels = dim.labels, ref.lines = ref.lines,
     main = .main, cex = .cex,
     args.3d = a3d, theta = theta, phi = phi
     )
   }
-
+  
 }

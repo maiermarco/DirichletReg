@@ -1,26 +1,29 @@
 summary.DirichletRegData <- function(object, ...){
   
-  if(interactive()) message()
+  if(interactive()) cat("\n")
   
-  message(sprintf("This object contains compositional data with %d dimensions.", attr(object, "dims")))
+  cat(gettextf("This object contains compositional data with %d dimensions.\n", attr(object, "dims")))
   
-  message(sprintf(
-    "Number of observations: %d of which %d (%0.2f%%) are valid.",
-    attr(object, "obs"), attr(object, "valid_obs"), 100.0 * attr(object, "valid_obs") / attr(object, "obs")
+  cat(gettextf(
+    "Number of observations: %d of which %d (%0.2f%%) are valid.\n",
+    attr(object, "obs"),
+    attr(object, "valid_obs"),
+    100.0 * attr(object, "valid_obs") / attr(object, "obs")
   ))
-
-  message()
   
-  is_normalized <- attr(object, "normalized")
+  is_normalized  <- attr(object, "normalized")
   is_transformed <- attr(object, "transformed")
   
   if(is_normalized || is_transformed){
-    message(sprintf("Note: The data were %s.",
-      paste(c("normalized", "transformed")[c(is_normalized, is_transformed)], collapse = " and ")
+    cat(gettextf("\nNote: The data were %s.\n",
+      paste(
+        c(gettext("normalized"), gettext("transformed"))[c(is_normalized, is_transformed)],
+        collapse = sprintf(" %s ", gettext("and"))
+      )
     ))
   }
   
-  if(interactive()) message()
+  if(interactive()) cat("\n")
   
   invisible(object)  
 }

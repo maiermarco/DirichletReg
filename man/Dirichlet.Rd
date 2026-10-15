@@ -33,8 +33,8 @@ ddirichlet_R(x, alpha, log = FALSE, sum.up = FALSE)
   
   The argument \code{log = TRUE} returns the logarithm of the densities (therefore the log-likelihood) and \code{sum.up = TRUE} returns the product or sum and thereby the likelihood or log-likelihood.
   
-  Dirichlet (log-)densities are by default computed using \code{C}-routines (\code{C_ddirichlet_log_vector} and \code{C_ddirichlet_log_matrix}), an implementation in \R is provided by \code{ddirichlet_R()}.
-	Caution: Although \code{.Call()} can be used to call the \code{C}-routines directly, \R will crash or produce wrong values, if, e.g., data types are not set properly.
+  Dirichlet (log-)densities are by default computed using \proglang{C}-routines (\code{C_ddirichlet_log_vector} and \code{C_ddirichlet_log_matrix}), an implementation in \R is provided by \code{ddirichlet_R()}.
+  Caution: Although \code{.Call()} can be used to call the \proglang{C}-routines directly, \R will crash or produce wrong values, if, e.g., data types are not set properly.
 }
 \value{
 \item{rdirichlet}{returns a matrix with random numbers according to the supplied alpha vector or matrix.}

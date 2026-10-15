@@ -40,16 +40,16 @@ DirichReg_fit <- function(Y, X, Z, sv, d, k, w, ctls, repar, base, vrb){
     ncolX       <- unlist(lapply(X, ncol))
     beta_x_ind  <- lapply(seq_along_d, function(i){ seq.int(cumsum(c(0L, k))[i] + 1L, cumsum(k)[i]) })
     hessian.ind <- cbind(rep(seq_along_d, k), sequence(k))
-    
+      
       bfgs <- maxBFGS(fn = DReg,
         start = sv,
-        finalHessian = FALSE, iterlim = ctls$iterlim, tol = ctls$tol1, reltol = ctls$tol1, print.level = ifelse(vrb == 0L, 0L, vrb - 1L),
-        logY = log(Y), X = X, ncolX = ncolX, n = n, d = d, k = k, w = w, npar = npar, seq_along_d = seq_along_d, bx = beta_x_ind, NR = FALSE)
+        finalHessian = FALSE, iterlim = ctls$iterlim, tol = ctls$tol1, reltol = ctls$tol1, print.level = if(vrb == 0L) 0L else vrb - 1L,
+        logY = log(Y), X = X, ncolX = ncolX, n = n, d = d, w = w, npar = npar, seq_along_d = seq_along_d, bx = beta_x_ind, NR = FALSE)
       
       res <- maxNR(fn = DReg,
         start = bfgs$estimate,
-        iterlim = ctls$iterlim, tol = ctls$tol2, reltol = ctls$tol2, print.level = ifelse(vrb == 0L, 0L, vrb - 1L),
-        logY = log(Y), X = X, ncolX = ncolX, n = n, d = d, k = k, w = w, npar = npar, seq_along_d = seq_along_d, bx = beta_x_ind, NR = TRUE, h_dims = hessian.ind[, 1L], h_vars = hessian.ind[, 2L])
+        iterlim = ctls$iterlim, tol = ctls$tol2, reltol = ctls$tol2, print.level = if(vrb == 0L) 0L else vrb - 1L,
+        logY = log(Y), X = X, ncolX = ncolX, n = n, d = d, w = w, npar = npar, seq_along_d = seq_along_d, bx = beta_x_ind, NR = TRUE, h_dims = hessian.ind[, 1L], h_vars = hessian.ind[, 2L])
   }
   
   res$bfgs.it <- bfgs$iterations
