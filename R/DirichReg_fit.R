@@ -39,7 +39,7 @@ DirichReg_fit <- function(Y, X, Z, sv, d, k, w, ctls, repar, base, vrb){
     seq_along_d <- seq_len(d)
     ncolX       <- unlist(lapply(X, ncol))
     beta_x_ind  <- lapply(seq_along_d, function(i){ seq.int(cumsum(c(0L, k))[i] + 1L, cumsum(k)[i]) })
-    hessian.ind <- cbind(rep(seq_along_d, k), unlist(lapply(k, seq_len)))
+    hessian.ind <- cbind(rep(seq_along_d, k), sequence(k))
     
       bfgs <- maxBFGS(fn = DReg,
         start = sv,

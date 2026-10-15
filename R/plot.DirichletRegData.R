@@ -120,7 +120,7 @@ plot.DirichletRegData <- function(
     .main = .main, .col = .col, .pch = .pch, .cex = .cex, .lwd = .lwd, .lty = .lty)
 
   } else if(x$dims == 4L){
-    if( !("rgl" %in% loadedNamespaces()) && !("rgl" %in% utils::installed.packages()[, "Package"]) ){ stop('The "rgl" package could not be found. You can try installing it using:\ninstall.packages("rgl")') }
+    if( ("rgl" %notin% loadedNamespaces()) && ("rgl" %notin% utils::installed.packages()[, "Package"]) ){ stop("The \"rgl\" package could not be found. You can try installing it using:\ninstall.packages(\"rgl\")") }
     requireNamespace("rgl")
 
     plot_DRdata_4d(x = x, dim.labels = dim.labels, ref.lines = ref.lines,

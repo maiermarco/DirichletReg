@@ -4,7 +4,8 @@ News for Package 'DirichletReg'
 
 Changes in Version 0.8-0:
 
-  • Bumped up the required R-version to 4.1.0.
+  • Bumped up the required R-version to 4.1.0 to safely use ‘%||%’ and
+    ‘%notin%’.
 
   • Fixed ‘print.DirichletRegModel’ which erroneously issued an error
     (convergence) when ‘maxLik’'s ‘maxNR’ returned convergence-code 8

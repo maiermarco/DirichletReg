@@ -36,7 +36,7 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
   has_i <- !missing(i)
   has_j <- !missing(j)
   
-  if(!all(names(syscall <- sys.call()) %in% c("", "drop"))){ # && !isS4(x) # should be if(any(... %notin% ...)) # TODO
+  if(any(names(syscall <- sys.call()) %notin% c("", "drop"))){ # && !isS4(x) # should be if(any(... %notin% ...)) # TODO
     warning("named arguments other than 'drop' are discouraged") # TODO
   }
   syscall[which(names(syscall) != "")] <- NULL # remove unknown arguments and drop
@@ -61,13 +61,13 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
       # if row indices are names, check and convert to index numbers
       if(is.character(i)){
         x_rownames <- rownames(x)
-        if(is.null(x_rownames)) stop("x does not have row names. Indexing by names failed.") else if(!all(i %in% x_rownames) || anyDuplicated(i) > 0L) warning("invalid or duplicated names in row index were removed.") # TODO
+        if(is.null(x_rownames)) stop("x does not have row names. Indexing by names failed.") else if(any(i %notin% x_rownames) || anyDuplicated(i) > 0L) warning("invalid or duplicated names in row index were removed.") # TODO
         i <- which(x_rownames %in% i)
       }
       # if column indices are names, check and convert to index numbers
       if(is.character(j)){
         x_colnames <- colnames(x)
-        if(is.null(x_colnames)) stop("x does not have column names. Indexing by names failed.") else if(!all(j %in% x_colnames) || anyDuplicated(i) > 0L) warning("invalid or duplicated names in column index were removed.") # TODO
+        if(is.null(x_colnames)) stop("x does not have column names. Indexing by names failed.") else if(any(j %notin% x_colnames) || anyDuplicated(i) > 0L) warning("invalid or duplicated names in column index were removed.") # TODO
         j <- which(x_colnames %in% j)
       }
       
@@ -75,7 +75,7 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
       if(missing(drop)) drop <- if(length(i) == 1L || length(j) == 1L) TRUE else FALSE
       
       # yet another warning because discarding columns is a bad idea in this case
-      if(!all(seq_len(ncol(x)) %in% j)) warning("extracting a subset of columns. Check if this was intended! If not, change the data elsewhere and use DR_data().") # TODO
+      # if(nay(seq_len(ncol(x)) %notin% j)) warning("extracting a subset of columns. Check if this was intended! If not, change the data elsewhere and use DR_data().") # TODO
       
       new_obj <- as.matrix(unclass(x))                    [i = i, j = j, drop = drop]
       new_o_o <- as.matrix(unclass(attr(x, "Y.original")))[i = i, j = j, drop = drop]

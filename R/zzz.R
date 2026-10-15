@@ -32,10 +32,10 @@ swrap <- function(text, type = c("stop", "warning", "message"), xdent){
   if(missing(xdent)) xdent <- ifelse(match.arg(type) == "message", 0L, 4L)
   width <- ifelse(getOption("width") < 40L, 40L, getOption("width")) # nolint
   
-  paste(
+  paste0(
     ifelse(match.arg(type) == "stop", "\n", ""),
-    paste(strwrap(text, width = width, indent = xdent, exdent = xdent), sep = "", collapse = "\n"),
-  sep = "", collapse = "")
+    paste0(strwrap(text, width = width, indent = xdent, exdent = xdent), collapse = "\n"),
+  collapse = "")
 }
 
 

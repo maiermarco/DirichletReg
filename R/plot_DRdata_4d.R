@@ -9,12 +9,12 @@ plot_DRdata_4d <- function(
   phi
 ){
 
-  theta     <- if(is.null(theta)) 40.0 else theta
-  phi       <- if(is.null(phi))   25.0 else phi
-  ref.lines <- if(is.null(ref.lines)) NULL else ref.lines
+  theta     <- theta     %||% 40.0
+  phi       <- phi       %||% 25.0
+  ref.lines <- ref.lines %||% NULL
 
   transp <- as.hexmode(round(255.0 * ifelse(is.null(args.3d$transp), 0.25, args.3d$transp), 0L))
-  rgl    <- if(is.null(args.3d$rgl)) TRUE else args.3d$rgl
+  rgl    <- args.3d$rgl %||% TRUE
 
   xyz <- toQuaternary(x$Y)
 
@@ -74,7 +74,7 @@ plot_DRdata_4d <- function(
       browser()
       for(i in ref.lines){
       rgl::segments3d(t3d(.ref_pts[[i]], VTrans)$x, t3d(.ref_pts[[i]], VTrans)$y,
-               t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = paste(lab.col[i], transp, sep = "", collapse = ""))
+               t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = paste0(lab.col[i], transp, collapse = ""))
     }}
 
 #    segments(.ref_xy[[2L]]$x, .ref_xy[[2L]]$y, t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = "#BF00BF40")
@@ -106,7 +106,7 @@ plot_DRdata_4d <- function(
     if(!is.null(ref.lines)){
       for(i in ref.lines){
       segments(t3d(.ref_pts[[i]], VTrans)$x, t3d(.ref_pts[[i]], VTrans)$y,
-               t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = paste(lab.col[i], transp, sep = "", collapse = ""))
+               t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = paste0(lab.col[i], transp, collapse = ""))
     }}
 
 #    segments(.ref_xy[[2L]]$x, .ref_xy[[2L]]$y, t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = "#BF00BF40")

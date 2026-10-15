@@ -4,7 +4,7 @@
 \encoding{UTF-8}
 \section{Changes in Version 0.8-0}{
   \itemize{
-    \item Bumped up the required \R-version to 4.1.0.
+    \item Bumped up the required \R-version to 4.1.0 to safely use \code{\%||\%} and \code{\%notin\%}.
     \item Fixed \code{print.DirichletRegModel} which erroneously issued an error (convergence) when \CRANpkg{maxLik}'s \code{maxNR} returned convergence-code 8 (see \code{help("maxNR", package = "maxLik")}; thanks to Nick Thieme).
           Instead of stopping with an error, a warning is now issued with more detailed diagnostic information.
     \item \code{DirichReg()} was completely rewritten and now handles formula input much more robustly and predictably.

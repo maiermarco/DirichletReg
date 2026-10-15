@@ -1,8 +1,8 @@
 anova.DirichletRegModel <- function(object, ..., sorted = FALSE) {
-
+  
   comp.objs <- list(object, ...)
-
-  if(!all("DirichletRegModel" %in% unlist(lapply(comp.objs, class)))){
+  
+  if(!all(unlist(lapply(comp.objs, inherits, what = "DirichletRegModel")))){
     stop('only models fitted using "DirichReg()" can be compared.')
   }
   for(i in seq_along(comp.objs)[-1L]){
@@ -10,7 +10,7 @@ anova.DirichletRegModel <- function(object, ..., sorted = FALSE) {
       stop("models appear not to be nested.")
     }
   }
-
+  
   n.mods  <- length(comp.objs)
   n.pars  <- unlist(lapply(comp.objs, `[[`, "npar"))
   calls   <- unlist(lapply(comp.objs, `[[`, "call"))
@@ -20,11 +20,11 @@ anova.DirichletRegModel <- function(object, ..., sorted = FALSE) {
                seq_len(n.mods)
              }
   comp.objs <- comp.objs[sorting]
-
+  
   deviances <- -2.0 * unlist(lapply(comp.objs, `[[`, "logLik"))
   dev_diffs <- abs(c(NA_real_, deviances[1L] - deviances[-1L]))
   d_f       <- abs(c(NA_real_, n.pars[1L] - n.pars[-1L]))
-
+  
   res <- structure(list(
     "Deviance"   = deviances,
     "N. par"     = n.pars,
@@ -35,9 +35,8 @@ anova.DirichletRegModel <- function(object, ..., sorted = FALSE) {
     "n.mods"     = n.mods,
     "calls"      = calls
   ), class = "anova_DirichletRegModel")
-
-  return(res)
-
+  
+  res
 }
 
 

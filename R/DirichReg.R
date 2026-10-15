@@ -10,7 +10,7 @@ DirichReg <- function(
   verbosity = getOption("verbose")
 ){
   
-  if(!(verbosity %in% (0L:4L))){ # will become (verbosity %notin% (0L:4L)) in future releases
+  if(verbosity %notin% (0L:4L)){
     verbosity <- 0L
     warning("invalid value for \"verbosity\".")
   } else verbosity <- as.integer(verbosity)
@@ -35,11 +35,12 @@ DirichReg <- function(
   if(missing(control)){
     control <- list(sv = NULL, iterlim = 10000L, tol1 = .Machine$double.eps^(1.0 / 2.0), tol2 = .Machine$double.eps^(3.0 / 4.0))
   } else {
-    if(!all(names(control) %in% c("sv", "iterlim", "tol1", "tol2")) || (anyDuplicated(names(control)) > 0L)) stop("duplicated or inadmissible elements in \"control\".")
-    if(is.null(control$sv))      control$sv       <-   NULL
-    if(is.null(control$iterlim)) control$iterlim  <- 10000L
-    if(is.null(control$tol1))    control$tol1     <- .Machine$double.eps^(1.0 / 2.0)
-    if(is.null(control$tol2))    control$tol2     <- .Machine$double.eps^(3.0 / 4.0)
+    if(!is.list(control)) stop("\"control\" must be a list object.") # TODO better message
+    if(any(names(control) %notin% c("sv", "iterlim", "tol1", "tol2")) || (anyDuplicated(names(control)) > 0L)) stop("duplicated or inadmissible elements in \"control\".")
+    control$sv      <- control$sv      %||% NULL
+    control$iterlim <- control$iterlim %||% 10000L
+    control$tol1    <- control$tol1    %||% .Machine$double.eps^(1.0 / 2.0)
+    control$tol2    <- control$tol2    %||% .Machine$double.eps^(3.0 / 4.0)
   }
   
   
@@ -91,13 +92,13 @@ DirichReg <- function(
     y_in         <- seq_len(ncol(Y))[sub.comp]
     y_out        <- seq_len(ncol(Y))[-sub.comp]
     y_in_labels  <- colnames(Y)[y_in]
-    y_out_labels <- paste(colnames(Y)[y_out], sep = "", collapse = " + ")
+    y_out_labels <- paste0(colnames(Y)[y_out], collapse = " + ")
     Y            <- cbind(rowSums(Y[, y_out]), Y[, y_in])
     colnames(Y)  <- c(y_out_labels, y_in_labels)
   }
   
   if(missing(base)) base <- attr(Y_full, "base")
-  if(!(base %in% seq_len(ncol(Y)))) stop("the base variable lies outside the number of variables")
+  if(base %notin% seq_len(ncol(Y))) stop("the base variable lies outside the number of variables")
   
   # effective components (possibly fewer than in the original Y_full due to subcompositions)
   n.dim <- ncol(Y)
@@ -157,7 +158,7 @@ DirichReg <- function(
   model_terms_Z <- if(repar) .add_predvars_and_dataClasses(model_terms_Z, model_frame) else NULL
   
   weights <- model.weights(model_frame)
-  if(is.null(weights)) weights <- 1.0
+  weights <- weights %||% 1.0
   if(length(weights) == 1L) weights <- rep(weights, n_obs)
   if(any(weights < 0.0)) stop("weights < 0 found.")
   weights <- as.vector(weights)
@@ -379,10 +380,13 @@ DirichReg <- function(
   ## associated variable labels
   ovar <- sapply(as.list(attr(rval, "variables")), deparse)[-1L]
   nvar <- sapply(as.list(attr(nval, "variables")), deparse)[-1L]
-  if(!all(ovar %in% nvar)) stop(gettextf(
-      "The following terms variables are not part of the model.frame: %s",
-      pretty_list(ovar[!(ovar %in% nvar)])
-    ), domain = NA)
+  if(any(ovar %notin% nvar)){
+    o_notin_n <- ovar[ovar %notin% nvar]
+    stop(sprintf(ngettext(length(o_notin_n),
+      "The following terms variable is not part of the model.frame: %s",
+      "The following terms variables are not part of the model.frame: %s"),
+      pretty_list(o_notin_n, quotes = TRUE)), domain = NA)
+  }
   ix <- match(ovar, nvar)
   
   ## subset predvars

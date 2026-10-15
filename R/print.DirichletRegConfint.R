@@ -2,7 +2,7 @@ print.DirichletRegConfint <- function(x, digits = 3L, ...){
 
   e <- x$e
   repar <- x$repar
-  cat("\n", paste(100.0 * x$level, collapse = "%, ", sep = ""), "% Confidence Intervals ", sep = "")
+  cat("\n", paste0(100.0 * x$level, collapse = "%, "), "% Confidence Intervals ", sep = "")
   if(e) cat("(exponentiated)\n\n") else cat("(original form)\n\n")
 
   ctab <- x$coefficients
@@ -59,8 +59,8 @@ print.DirichletRegConfint <- function(x, digits = 3L, ...){
   }
 
 
-  lo_lab <- paste(format(100.0 * (1.0 - rev(x$level)) / 2.0       , format = "f"), "%", sep = "")
-  hi_lab <- paste(format(100.0 * (x$level + (1.0 - x$level) / 2.0), format = "f"), "%", sep = "")
+  lo_lab <- paste0(format(100.0 * (1.0 - rev(x$level)) / 2.0       , format = "f"), "%")
+  hi_lab <- paste0(format(100.0 * (x$level + (1.0 - x$level) / 2.0), format = "f"), "%")
 
   if(repar){
     for(tt in 1L:2L){

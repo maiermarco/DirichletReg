@@ -9,7 +9,6 @@ DR_data <- function(
   # initialization
   force_tran     <- isTRUE(trafo)    # was transformation forced? (i.e., trafo TRUE)
   state_tran     <- FALSE            # was Y transformed?
-# force_norm_usr <- isTRUE(norm_tol) # was normalization forced by the user? (i.e., is norm_tol == TRUE)
   force_norm_gt1 <- FALSE            # normalization because some Y were > 1.0
   force_norm_su1 <- FALSE            # normalization because some row sums were != 1.0
   
@@ -82,7 +81,7 @@ DR_data <- function(
   # more checks
   if(is.null(dim(Y))) stop("\"Y\" must be either a matrix or a data.frame.") # this should not be possible
   if(ncol(Y) < 2L) stop("\"Y\" must at least have two columns.") # neither should this
-  if(((base %% 1) != 0) || (base < 1L) || (base > ncol(Y))) stop("\"base\" must be an integer in the range of variables.") # check base category
+  if(base %notin% seq_len(ncol(Y))) stop("\"base\" must be an integer in the range of variables.") # check base category
   if(is.null(colnames(Y))) colnames(Y) <- paste0("v", seq_len(ncol(Y))) # if Y has no column names, assign a sequence v1, v2, v3, ...
   
   
@@ -91,10 +90,11 @@ DR_data <- function(
   row_sums <- rowSums(Y) # na.rm is irrelevant, because rows containing NAs have been set to NA above
   if(is.numeric(norm_tol)) check_row_sum_noNA <- all.equal(na.delete(row_sums), rep(1.0, length(na.delete(row_sums))), tolerance = norm_tol, check.attributes = FALSE)
   
-# if(force_norm_usr || (force_norm_su1 <- !isTRUE(check_row_sum_noNA))){ # either forced by the user or some row sums are != 1.0
-  if(                  (force_norm_su1 <- !isTRUE(check_row_sum_noNA))){ # either forced by the user or some row sums are != 1.0
+  
+  force_norm_su1 <- !isTRUE(check_row_sum_noNA)
+  force_norm_gt1 <- any(Y > 1.0, na.rm = TRUE) # was normalization necessary because of values over 1.0
+  if(force_norm_su1 || force_norm_gt1){ # either forced by the user or some row sums are != 1.0
     Y <- Y / row_sums # normalize rows
-    force_norm_gt1 <- any(Y > 1.0, na.rm = TRUE) # was normalization necessary because of values over 1.0
   }
   
   
@@ -117,24 +117,24 @@ DR_data <- function(
   
   # Object definition
   res <- structure(
-    .Data       = as.matrix(Y),                                       # the final, possible normalized/transformed data
-    Y.original  = as.matrix(Y.original),                              # the original data --> now as a matrix (changed in 0.8-0)
-    dims        = ncol(Y),                                            # the number of dimensions/components
-    dim.names   = colnames(Y),                                        # names of dimensions/components
-    obs         = nrow(Y),                                            # number of observations (including NAs)
-    valid_obs   = length(na.delete(row_sums)),                        # number of valid observations
-    normalized  = force_norm_gt1 || force_norm_su1, # normalizations? #### force_norm_usr || 
-    transformed = force_tran || state_tran,                           # transformation?
-    base        = as.integer(base),                                   # index of the base category
-    class       = "DirichletRegData"                                  # class definition
+    .Data       = as.matrix(Y),                     # the final, possible normalized/transformed data
+    Y.original  = as.matrix(Y.original),            # the original data --> now as a matrix (changed in 0.8-0)
+    dims        = ncol(Y),                          # the number of dimensions/components
+    dim.names   = colnames(Y),                      # names of dimensions/components
+    obs         = nrow(Y),                          # number of observations (including NAs)
+    valid_obs   = length(na.delete(row_sums)),      # number of valid observations
+    normalized  = force_norm_gt1 || force_norm_su1, # normalizations?
+    transformed = force_tran || state_tran,         # transformation?
+    base        = as.integer(base),                 # index of the base category
+    class       = "DirichletRegData"                # class definition
   )
   
   
   
   # Issue warnings
-  if((force_norm_gt1 || force_norm_su1) && (force_tran || state_tran)){ ### force_norm_usr || 
+  if((force_norm_gt1 || force_norm_su1) && (force_tran || state_tran)){
     warning("not all rows sum up to 1 => normalization forced\n  some entries are 0 or 1 => transformation forced")
-  } else if(force_norm_gt1 || force_norm_su1){ ### force_norm_usr || 
+  } else if(force_norm_gt1 || force_norm_su1){
     warning("not all rows sum up to 1 => normalization forced")
   } else if(force_tran || state_tran){
     warning("some entries are 0 or 1 => transformation forced")
