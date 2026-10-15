@@ -26,14 +26,14 @@ anova.DirichletRegModel <- function(object, ..., sorted = FALSE) {
   d_f       <- abs(c(NA_real_, n.pars[1L] - n.pars[-1L]))
   
   res <- structure(list(
-    "Deviance"   = deviances,
-    "N. par"     = n.pars,
-    "Difference" = dev_diffs,
-    "df"         = d_f,
-    "Pr(>Chi)"   = pchisq(dev_diffs, ifelse(d_f <= 0.0, NA_real_, d_f), lower.tail = FALSE),
-    "sorting"    = sorting,
-    "n.mods"     = n.mods,
-    "calls"      = calls
+    Deviance   = deviances,
+   `N. par`    = n.pars,
+    Difference = dev_diffs,
+    df         = d_f,
+   `Pr(>Chi)`  = pchisq(dev_diffs, ifelse(d_f <= 0.0, NA_real_, d_f), lower.tail = FALSE),
+    sorting    = sorting,
+    n.mods     = n.mods,
+    calls      = calls
   ), class = "anova_DirichletRegModel")
   
   res
@@ -41,29 +41,30 @@ anova.DirichletRegModel <- function(object, ..., sorted = FALSE) {
 
 
 
-print.anova_DirichletRegModel <- function(x, ...){
+print.anova_DirichletRegModel <- function(x, digits = max(getOption("digits") - 2L, 3L), signif.stars = getOption("show.signif.stars"), ...){
   
-  if(interactive()) writeLines("")
+  if(interactive()) cat("\n")
   
-  writeLines("Analysis of Deviance Table\n")
+  cat(gettext("Analysis of Deviance Table"), "\n", sep = "")
   
-  model_numbers <- sprintf("Model %s", format(x$sorting))
+  if(interactive()) cat("\n")
+  
+  model_numbers <- gettextf("Model %s", format(x$sorting))
   model_names   <- unlist(lapply(x$calls[x$sorting], deparse_nocutoff))
   
   for(i in seq_len(x$n.mods)){
-    writeLines(strwrap(paste0(model_numbers[[i]], ": ", model_names[[i]]),
-      width = getOption("width") - 2L, exdent = 2L))
+    cat(strwrap(sprintf("%s: %s", model_numbers[[i]], model_names[[i]]), width = getOption("width") - 2L, exdent = 2L), "\n" , sep = "")
   }
   
-  writeLines("")
+  cat("\n")
   
   res <- as.data.frame(x[seq_len(5L)])
   colnames(res) <- names(x[seq_len(5L)])
   rownames(res) <- model_numbers
   
-  printCoefmat(res, cs.ind = 1L, tst.ind = 3L, P.values = TRUE, na.print = "")
+  printCoefmat(x = res, digits = digits, signif.stars = signif.stars, cs.ind = 1L, tst.ind = 3L, P.values = TRUE, na.print = "", ...)
   
-  if(interactive()) writeLines("")
+  if(interactive()) cat("\n")
   
   invisible(x)
 }

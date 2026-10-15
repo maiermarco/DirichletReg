@@ -27,7 +27,11 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
 
 
 `[<-.DirichletRegData` <- function(x, i, j, value){
-  stop("objects of class \"DirichletRegData\" cannot be edited manually.", "Manipulate your data in another object and use DR_data() instead.") # TODO
+  stop(
+    gettext("Objects of class \"DirichletRegData\" cannot be edited manually."), "\n  ",
+    gettext("Manipulate your data in another object and use DR_data() instead."),
+    call. = FALSE, domain = NA
+    ) # TODO
 }
 
 

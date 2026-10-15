@@ -25,12 +25,12 @@ DirichReg_fit <- function(Y, X, Z, sv, d, k, w, ctls, repar, base, vrb){
       
       bfgs <- maxBFGS(fn = DReg.repar,
         start = sv, #bfgs1$estimate,
-        finalHessian = FALSE, iterlim = ctls$iterlim, tol = ctls$tol1, reltol = ctls$tol1, print.level = ifelse(vrb == 0L, 0L, vrb - 1L),
+        finalHessian = FALSE, iterlim = ctls$iterlim, tol = ctls$tol1, reltol = ctls$tol1, print.level = if(vrb == 0L) 0L else vrb - 1L,
         logY = log(Y), X = X[[1L]], ncolX = ncolX, Z = Z, ncolZ = ncolZ, n = n, d = d, k = k, w = w, base = base, npar = npar, bi = beta_ind, bx = beta_x_ind, gi = gamma_ind, NR = FALSE)
       
       res <- maxNR(fn = DReg.repar,
         start = bfgs$estimate,
-        iterlim = ctls$iterlim, tol = ctls$tol2, reltol = ctls$tol2, print.level = ifelse(vrb == 0L, 0L, vrb - 1L),
+        iterlim = ctls$iterlim, tol = ctls$tol2, reltol = ctls$tol2, print.level = if(vrb == 0L) 0L else vrb - 1L,
         logY = log(Y), X = X[[1L]], ncolX = ncolX, Z = Z, ncolZ = ncolZ, n = n, d = d, k = k, w = w, base = base, npar = npar, bi = beta_ind, bx = beta_x_ind, gi = gamma_ind, NR = TRUE, h_dims = hessian.ind[, 1L], h_vars = hessian.ind[, 2L])
       
   ##############################################################################

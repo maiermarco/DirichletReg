@@ -16,7 +16,7 @@ DirichReg <- function(
   } else verbosity <- as.integer(verbosity)
   
   if(verbosity > 0L){
-    cat("- PREPARING DATA\n")
+    cat("- ", toupper(gettext("Preparing data")), "\n", sep = "")
     if(interactive()) flush.console()
   }
   
@@ -199,7 +199,7 @@ DirichReg <- function(
   
   
   if(verbosity > 0L){
-    cat("- COMPUTING STARTING VALUES\n")
+    cat("- ", toupper(gettext("Computing starting values")), "\n", sep = "")
     if(interactive()) flush.console()
   }
   
@@ -225,7 +225,7 @@ DirichReg <- function(
   
   
   if(verbosity > 0L){
-    cat("- ESTIMATING PARAMETERS\n")
+    cat("- ", toupper(gettext("Estimating parameters")), "\n", sep = "")
     if(interactive()) flush.console()
   }
   

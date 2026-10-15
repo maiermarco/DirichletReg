@@ -29,11 +29,11 @@ inv.logit <- function(x){
 swrap <- function(text, type = c("stop", "warning", "message"), xdent){
   .Deprecated(msg = "This function is unused and will be removed in future versions.")
   
-  if(missing(xdent)) xdent <- ifelse(match.arg(type) == "message", 0L, 4L)
-  width <- ifelse(getOption("width") < 40L, 40L, getOption("width")) # nolint
+  if(missing(xdent)) xdent <- if(match.arg(type) == "message") 0L else 4L
+  width <- if(getOption("width") < 40L) 40L else getOption("width")
   
   paste0(
-    ifelse(match.arg(type) == "stop", "\n", ""),
+    if(match.arg(type) == "stop") "\n" else "",
     paste0(strwrap(text, width = width, indent = xdent, exdent = xdent), collapse = "\n"),
   collapse = "")
 }
@@ -71,5 +71,35 @@ pretty_list <- function(x, quotes = FALSE, oxford = TRUE, ampersand = FALSE, rem
   if(length(x) == 2L) return(paste(x, collapse = et)) else {
     if(oxford) et <- sprintf(",%s", et)
     return(paste(paste(head(x, -2L), collapse = ", "), paste(tail(x, 2L), collapse = et), sep = ", "))
+  }
+}
+
+
+
+maxLik_code_msg <- function(maxLik_code){
+  msg <- switch(as.character(maxLik_code),
+    "1" = "gradient close to zero.",
+    "2" = "successive function values within tolerance limit.",
+    "3" = "last step could not find higher value - try changing \"steptol\".",
+    "4" = "iteration limit exceeded.",
+    "5" = "Infinite value.",
+    "6" = "Infinite gradient.",
+    "7" = "Infinite Hessian.",
+    "8" = "Successive function values within relative tolerance limit.",
+    "9" = "Hessian approximation cannot be improved because of gradient did not change.",
+   "10" = "Lost patience: The optimizer has hit an inferior value too many times.",
+  "100" = "Initial value out of range."
+  )
+  
+  if(maxLik_code %notin% c(1L, 2L, 8L)){
+    if(maxLik_code %in% c(seq_len(10L), 100L)){
+      warning(gettextf(
+        "Possible convergence problems!\n  Code %d: %s\n  help(\"returnCode\", package = \"maxLik\") # See \"Details\"",
+        maxLik_code,
+        dQuote(msg)
+      ), call. = FALSE, domain = NA)
+    } else {
+      warning(gettextf("Unknown maxLik-Code %d. Please report this at\n  https://github.com/maiermarco/DirichletReg/issues", maxLik_code), call. = FALSE, domain = NA)
+    }
   }
 }

@@ -1,7 +1,6 @@
 summary.DirichletRegModel <- function(object, ...) {
   
-  # TODO convert to warning!
-  if(object$optimization$convergence > 2L) stop("\n", paste(strwrap(paste("\nOptimization did not converge in", object$optimization$bfgs.it, "+", object$optimization$iterations, "iterations and exited with code", object$optimization$convergence), getOption("width")), sep = "\n", collapse = "\n"))
+  maxLik_code_msg(object$optimization$convergence)
   
   res <- structure(
     .Data = list(
@@ -49,88 +48,106 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   
   .wd <- getOption("width")
   
-  signif_codes <- paste0("Significance codes: ", attr(symnum(0.0, corr = FALSE, na = FALSE,
+  signif_codes <- gettextf("Significance codes: %s", attr(symnum(0.0, corr = FALSE, na = FALSE,
     cutpoints = c(0.0, 0.001, 0.01, 0.05, 0.1, 1.0),
     symbols   = c("***", "**", "*", ".", " ")), "legend"))
   sig_code_len <- nchar(signif_codes)
   
-  if(interactive()) writeLines("")
+  if(interactive()) cat("\n")
   
-  writeLines("Call:")
-  writeLines(paste(strwrap(deparse_nocutoff(x$call), .wd), sep = "\n", collapse = "\n"))
+  cat(gettext("Call:\n"))
+  cat(strwrap(deparse_nocutoff(getCall(x)), .wd, exdent = 4L), sep = "\n")
   
-  cat("\nStandardized Residuals:\n")
-  print(x$resid.mat, print.gap = 2L)
+  cat(gettext("\nStandardized Residuals:\n"))
+  print(x$resid.mat, digits = digits, print.gap = 2L)
   cat("\n")
   
-################################################################################
-################################################################### COMMON PARAM
+  ##############################################################################
+  ################################################################# COMMON PARAM
   
   if(x$parametrization == "common"){
     
     for(i in seq_along(x$varnames)){
-      writeLines(strrep("-", min(sig_code_len, .wd)))
-      writeLines(paste0("Beta-Coefficients for variable no. ", i, ": ", x$varnames[i]))
+      cat(strrep("-", min(sig_code_len, .wd)), "\n", sep = "")
+      cat(gettextf("Beta-Coefficients for variable no. %d: %s\n", i, x$varnames[i]))
       
-      printCoefmat(x$coef.mat[ifelse(i == 1L, 1L, x$coef.ind[i - 1L] + 1L):x$coef.ind[i], , drop = FALSE],
-                   digits = digits, cs.ind = 1L:2L, tst.ind = 3L, P.values = TRUE, signif.legend = FALSE)
-      
-      
+      printCoefmat(
+        x             = x$coef.mat[(if(i == 1L) 1L else (x$coef.ind[i - 1L] + 1L)):x$coef.ind[i], , drop = FALSE],
+        digits        = digits,
+        cs.ind        = 1L:2L,
+        tst.ind       = 3L,
+        P.values      = TRUE,
+        signif.legend = FALSE
+      )
     }
-    writeLines(strrep("-", min(sig_code_len, .wd)))
-    writeLines(signif_codes)
+    cat(strrep("-", min(sig_code_len, .wd)), "\n", sep = "")
+    cat(signif_codes, "\n", sep = "")
     
   } else {
-################################################################################
-############################################################## ALTERNATIVE PARAM
+  
+  ##############################################################################
+  ############################################################ ALTERNATIVE PARAM
+  
     printed.var <- 1L
     set.size    <- x$n.vars[1L]
     
-    cat("MEAN MODELS:\n", sep = "", collapse = "")
+    cat(toupper(gettext("Mean models:\n")))
     
     for(i in seq_along(x$varnames)){
       if(i == x$base){
-        writeLines(strrep("-", min(sig_code_len, .wd)))
-        writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
-        writeLines("- variable omitted (reference category) -")
+        cat(strrep("-", min(sig_code_len, .wd)), "\n", sep = "")
+        cat(gettextf("Coefficients for variable no. %d: %s", i, x$varnames[i]), "\n", sep = "")
+        cat("- ", gettext("variable omitted (reference category)"), " -\n", sep = "")
       } else {
-        writeLines(strrep("-", min(sig_code_len, .wd)))
-        writeLines(paste0("Coefficients for variable no. ", i, ": ", x$varnames[i]))
+        cat(strrep("-", min(sig_code_len, .wd)), "\n", sep = "")
+        cat(gettextf("Coefficients for variable no. %d: %s", i, x$varnames[i]), "\n", sep = "")
         
-        printCoefmat(x$coef.mat[printed.var:(printed.var + set.size - 1L), , drop = FALSE],
-                     digits = digits, cs.ind = 1L:2L, tst.ind = 3L, P.values = TRUE, signif.legend = FALSE)
+        printCoefmat(
+          x             = x$coef.mat[printed.var:(printed.var + set.size - 1L), , drop = FALSE],
+          digits        = digits,
+          cs.ind        = 1L:2L,
+          tst.ind       = 3L,
+          P.values      = TRUE,
+          signif.legend = FALSE
+        )
         
         printed.var <- printed.var + set.size
       }
     }
     
-    writeLines(strrep("-", min(sig_code_len, .wd)))
+    cat(strrep("-", min(sig_code_len, .wd)), "\n", sep = "")
     
-    writeLines("")
+    cat("\n")
     
-    writeLines("PRECISION MODEL:")
-    writeLines(strrep("-", min(sig_code_len, .wd)))
-    printCoefmat(x$coef.mat[printed.var:length(x$coefficients), , drop = FALSE],
-                 digits = digits, cs.ind = 1L:2L, tst.ind = 3L, P.values = TRUE, signif.legend = FALSE)
-    writeLines(strrep("-", min(sig_code_len, .wd)))
-    writeLines(signif_codes)
+    cat(toupper(gettext("Precision model")), ":\n", sep = "")
+    cat(strrep("-", min(sig_code_len, .wd)), "\n", sep = "")
+    printCoefmat(
+      x             = x$coef.mat[printed.var:length(x$coefficients), , drop = FALSE],
+      digits        = digits,
+      cs.ind        = 1L:2L,
+      tst.ind       = 3L,
+      P.values      = TRUE,
+      signif.legend = FALSE
+    )
+    cat(strrep("-", min(sig_code_len, .wd)), "\n", sep = "")
+    cat(signif_codes, "\n", sep = "")
     
   }
   
-################################################################################
-############################################################################ FIN
+  ##############################################################################
+  ########################################################################## FIN
   
-  writeLines("")
-  writeLines(paste0("Log-likelihood: ", format(x$logLik, digits = digits), " on ", x$npar, " df (", x$optimization$bfgs.it, " BFGS + ", x$optimization$iterations, " NR Iterations)"))
-  writeLines(paste0("AIC: ", format(x$aic, digits = digits), ", BIC: ", format(x$bic, digits = digits)))
-  writeLines(paste0("Number of Observations: ", x$nobs))
+  cat("\n")
+  cat(gettextf("Log-likelihood: %s on %d df (%d BFGS + %d NR Iterations)", format(x$logLik, digits = digits), x$npar, x$optimization$bfgs.it, x$optimization$iterations), "\n", sep = "")
+  cat(sprintf("AIC: %s, BIC: %s", format(x$aic, digits = digits), format(x$bic, digits = digits)), "\n", sep = "")
+  cat(gettextf("Number of Observations: %d", x$nobs), "\n", sep = "")
   if(x$parametrization == "common"){
-    writeLines(paste0("Link: Log\nParametrization: ", x$parametrization))
+    cat(gettextf("Link: Log\nParametrization: %s", dQuote(x$parametrization)), "\n", sep = "")
   } else {
-    writeLines(paste0("Links: Logit (Means) and Log (Precision)\nParametrization: ", x$parametrization))
+    cat(gettextf("Links: Logit (Means) and Log (Precision)\nParametrization: %s", dQuote(x$parametrization)), "\n", sep = "")
   }
   
-  if(interactive()) writeLines("")
+  if(interactive()) cat("\n")
   
   invisible(x)
 }
