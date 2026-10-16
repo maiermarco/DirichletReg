@@ -13,7 +13,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'windows-latest'] # , 'macos-latest'
+        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
         r-version: ['release', 'devel']
     runs-on: ${{ matrix.os }}
     env:
@@ -34,8 +34,7 @@ jobs:
       - name: Install macOS system dependencies
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
-          brew reinstall gettext
-          brew unlink gettext && brew link gettext --force
+          sudo Rscript -e "source('https://mac.R-project.org/bin/install.R'); install.libs('gettext')"
       - name: R CMD check
         uses: r-lib/actions/check-r-package@v2
         with:
