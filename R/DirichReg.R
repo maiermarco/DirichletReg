@@ -10,7 +10,6 @@ DirichReg <- function(formula,
                       ){
 
   this.call <- match.call()
-  this.call[["formula"]] <- eval(this.call[["formula"]], parent.frame()) # eval in parent frame and replace formula
 
   if(!(verbosity %in% 0:4)){
     verbosity <- 0L
@@ -22,8 +21,6 @@ if(verbosity > 0){
   cat("- PREPARING DATA\n")
   if(interactive()) flush.console()
 }
-
-  formula <- eval(formula, parent.frame()) # eval in parent frame
 
   # checks and preliminary work
   if(missing(data)) data <- environment(formula)
@@ -82,7 +79,7 @@ if(verbosity > 0){
     mf[["formula"]][[2L]] <- as.symbol("Y_full")
   }
   mf <- mf[c(1L, match(c("formula", "data", "subset", "weights"), names(mf), 0L))]
-  mf[["formula"]] <- as.Formula(eval(mf[["formula"]], parent.frame())) # eval in parent frame
+  mf[["formula"]] <- as.Formula(mf[["formula"]])
   mf[["drop.unused.levels"]] <- TRUE
   mf[[1L]] <- as.name("model.frame")
   mf_formula <- mf

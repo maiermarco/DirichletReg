@@ -1,0 +1,17 @@
+Chisq
+dataClasses
+DirichletRegData
+DirichletRegModel
+DirichReg
+LRT
+ncol
+nrow
+parametrization
+predvars
+rgl
+subcomposition
+subcompositions
+tol
+trafo
+xlim
+ylim

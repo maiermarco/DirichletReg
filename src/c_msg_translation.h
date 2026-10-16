@@ -8,7 +8,7 @@
 #ifdef ENABLE_NLS
 #include <libintl.h>
 #define _(String) dgettext("DirichletReg", String)
-#define dngettext(pkg, String, StringP, N) (N == 1 ? String : StringP)
+// #define dngettext(pkg, String, StringP, N) (N == 1 ? String : StringP) // in case plurals are needed in the future
 #else
 #define _(String) (String)
 #endif
