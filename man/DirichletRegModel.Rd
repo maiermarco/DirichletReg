@@ -48,7 +48,7 @@
 
 \method{update}{DirichletRegModel}(object, formula., \dots, evaluate = TRUE)
 
-\method{drop1}{DirichletRegModel}(object, scope, test = c("LRT", "none"), k = 2, sort = TRUE, \dots)
+\method{drop1}{DirichletRegModel}(object, scope, test = c("LRT", "none"), k = 2.0, sort = TRUE, \dots)
 }
 \arguments{
   \item{x}{an object of class \code{DirichletRegModel}}

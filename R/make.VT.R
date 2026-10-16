@@ -1,4 +1,4 @@
-D2R <- function(degrees) pi * degrees / 180.0
+D2R <- function(degrees) degrees * 0.0174532925199432957692369076849 # = degrees * pi / 180
 
 
 

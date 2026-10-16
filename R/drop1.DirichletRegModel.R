@@ -18,7 +18,7 @@ drop1.DirichletRegModel <- function(
   object,
   scope,
   test = c("LRT", "none"),
-  k    = 2,
+  k    = 2.0,
   sort = TRUE,
   ...
 ){
@@ -27,14 +27,12 @@ drop1.DirichletRegModel <- function(
   if(!exists("._DirichletReg_drop1_warning", where = ".GlobalEnv")){
     .GlobalEnv$._DirichletReg_drop1_warning <- TRUE
     
-    if(interactive()) cat(strrep("-", getOption("width")), "\n", sep = "")
-    
-    cat(
+    message(paste(c(
+      if(interactive()) strrep("-", getOption("width")) else NULL,
       strwrap(gettext("CAVEAT: drop1() is still an experimental feature."), width = getOption("width"), exdent = 8L),
-      strwrap(gettext("If you plan to use this function, please double-check results, e.g., by comparing two models using anova()."), width = getOption("width"), indent = 8L, exdent = 8L),
-      sep = "\n")
-    
-    if(interactive()) cat(strrep("-", getOption("width")), "\n", sep = "")
+      strwrap(gettext("If you plan to use this function, please double-check results, e.g., by comparing two models using anova(). This warning will only be displayed once per session."), width = getOption("width"), indent = 8L, exdent = 8L),
+      if(interactive()) strrep("-", getOption("width")) else NULL
+    ), collapse = "\n"), domain = NA)
   }
   ###
   
@@ -55,7 +53,7 @@ drop1.DirichletRegModel <- function(
   
   if(object$parametrization == "common"){
     asgn <- lapply(x[["X"]], attr, which = "assign")
-    tl <- lapply(seq_len(length(Formula)[2L]), function(f_index){ attr(terms(Formula, rhs = f_index), "term.labels") })
+    tl   <- lapply(seq_len(length(Formula)[2L]), function(f_index){ attr(terms(Formula, rhs = f_index), "term.labels") })
   } else {
     asgn <- list(
       attr(object$X[[1L]], which = "assign"),
@@ -74,12 +72,12 @@ drop1.DirichletRegModel <- function(
     })
   } else {
     stop("\"scope\" is not implemented yet!") # TODO implement
-   #if(!is.character(scope)){
-   #  scope <- attr(terms(update.formula(object, scope)), "term.labels")
-   #}
-   #if(!all(match(scope, tl, 0L) > 0L)){
-   #  stop("scope is not a subset of term labels")
-   #}
+  # if(!is.character(scope)){
+  #   scope <- attr(terms(update.formula(object, scope)), "term.labels")
+  # }
+  # if(!all(match(scope, tl, 0L) > 0L)){
+  #   stop("scope is not a subset of term labels")
+  # }
   }
   
   ndrop <- lapply(seq_along(scope), function(i){ match(scope[[i]], tl[[i]]) })
@@ -93,10 +91,10 @@ drop1.DirichletRegModel <- function(
   }
   ###
   
-  ns <- lapply(scope, length)
+  ns    <- lapply(scope, length)
   chisq <- -2.0 * object$logLik
-  dfs <- lapply(ns, numeric)
-  dev <- lapply(ns, numeric)
+  dfs   <- lapply(ns, numeric)
+  dev   <- lapply(ns, numeric)
   
 #  y <- object$Y
 #  wt <- object$weights
@@ -104,13 +102,13 @@ drop1.DirichletRegModel <- function(
 ### refit and save values
   for(comp in seq_along(ns)){
     for(subterm in seq_len(ns[[comp]])){
-#cat("\ntrying ...", comp, (tl[[comp]])[(ndrop[[comp]][subterm])]); flush.console()
+#message("trying... ", comp, " ", (tl[[comp]])[(ndrop[[comp]][subterm])])
       z <- update(object,
         as.formula(paste0(".~", paste(rep(".|", comp - 1L), collapse = ""), ".-", (tl[[comp]])[(ndrop[[comp]][subterm])]))
       )
       dfs[[comp]][subterm] <- z$npar
       dev[[comp]][subterm] <- -2.0 * z$logLik
-#cat(" - DONE!\n")
+#message(" - DONE!")
     }
   }
   
@@ -118,18 +116,18 @@ drop1.DirichletRegModel <- function(
   if(object$parametrization == "alternative"){
     if(length(scope[[1L]]) == 0L){ scope[1L] <- list(NULL) } else { scope[[1L]] <- paste("Mean:", scope[[1L]]) }
     if(length(scope[[2L]]) == 0L){ scope[2L] <- list(NULL) } else { scope[[2L]] <- paste("Prec:", scope[[2L]]) }
-  } else if(object$parametrization == "common"){
+  } else {
     for(i in seq_along(scope)){
       if(length(scope[[i]]) == 0L){ scope[i] <- list(NULL) } else { scope[[i]] <- paste0(names(asgn)[i], ": ", scope[[i]]) }
     }
-  } else { stop("unexpected error!") }
+  }
   
-  scope <- c("<none>",    unlist(scope))
-  dfs   <- c(object$npar, unlist(dfs))
-  dev   <- c(chisq,       unlist(dev))
-  aic <- dev + k * dfs
-  dfs <- dfs[1L] - dfs
-  dfs[1L] <- NA
+  scope   <- c("<none>",    unlist(scope))
+  dfs     <- c(object$npar, unlist(dfs))
+  dev     <- c(chisq,       unlist(dev))
+  aic     <- dev + k * dfs
+  dfs     <- dfs[1L] - dfs
+  dfs[1L] <- NA_real_
   
   aic <- aic + (AIC(object, k = k) - aic[1L])
   
@@ -137,16 +135,16 @@ drop1.DirichletRegModel <- function(
   if(all(is.na(aic))) aod <- aod[, -3L]
   
   if(test == "LRT"){
-    dev <- pmax(0.0, dev - dev[1L])
-    dev[1L] <- NA
-    nas <- !is.na(dev)
-    LRT <- "LRT"
-    aod[, LRT] <- dev
-    dev[nas] <- pchisq(dev[nas], ifelse(aod$Df[nas] <= 0.0, NA_real_, aod$Df[nas]), lower.tail = FALSE)
+    dev               <- pmax(0.0, dev - dev[1L])
+    dev[1L]           <- NA
+    nas               <- !is.na(dev)
+    LRT               <- "LRT"
+    aod[, LRT]        <- dev
+    dev[nas]          <- pchisq(dev[nas], ifelse(aod$Df[nas] <= 0.0, NA_real_, aod$Df[nas]), lower.tail = FALSE)
     aod[, "Pr(>Chi)"] <- dev
   }
   
-  heading <- c("Single term deletions", "\nModel:", deparse_nocutoff(formula(object)))
+  heading <- c(gettext("Single term deletions"), paste0("\n", gettext("Model"), ":"), deparse_nocutoff(formula(object)))
   
   if(sort) aod <- aod[order(aod$`Pr(>Chi)`, decreasing = TRUE, na.last = FALSE), ]
   

@@ -1,27 +1,27 @@
 anova.DirichletRegModel <- function(object, ..., sorted = FALSE) {
   
-  comp.objs <- list(object, ...)
+  comp_objs <- list(object, ...)
   
-  if(!all(unlist(lapply(comp.objs, inherits, what = "DirichletRegModel")))){
+  if(!all(unlist(lapply(comp_objs, inherits, what = "DirichletRegModel")))){
     stop("only models fitted using \"DirichReg()\" can be compared.")
   }
-  for(i in seq_along(comp.objs)[-1L]){
-    if(!identical(comp.objs[[i - 1L]][["Y"]], comp.objs[[i]][["Y"]])){
+  for(i in seq_along(comp_objs)[-1L]){
+    if(!identical(comp_objs[[i - 1L]][["Y"]], comp_objs[[i]][["Y"]])){
       stop("models appear not to be nested.")
     }
   }
   
-  n.mods  <- length(comp.objs)
-  n.pars  <- unlist(lapply(comp.objs, `[[`, "npar"))
-  calls   <- unlist(lapply(comp.objs, `[[`, "call"))
+  n.mods  <- length(comp_objs)
+  n.pars  <- unlist(lapply(comp_objs, `[[`, "npar"))
+  calls   <- unlist(lapply(comp_objs, `[[`, "call"))
   sorting <- if(sorted){
                order(n.pars, decreasing = TRUE)
              } else {
                seq_len(n.mods)
              }
-  comp.objs <- comp.objs[sorting]
+  comp_objs <- comp_objs[sorting]
   
-  deviances <- -2.0 * unlist(lapply(comp.objs, `[[`, "logLik"))
+  deviances <- -2.0 * unlist(lapply(comp_objs, `[[`, "logLik"))
   dev_diffs <- abs(c(NA_real_, deviances[1L] - deviances[-1L]))
   d_f       <- abs(c(NA_real_, n.pars[1L] - n.pars[-1L]))
   

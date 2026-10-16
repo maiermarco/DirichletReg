@@ -141,7 +141,7 @@ summary(res2)
 huge_lake <- ArcticLake[rep(seq_len(nrow(ArcticLake)), each = 1000L), ]
 huge_lake$ssc <- DR_data(huge_lake[, 1:3])
 
-system.time(big1 <- DirichReg(ssc ~ depth + I(depth^2), huge_lake))
+system.time(big1 <- DirichReg(ssc ~ depth + I(depth^2), huge_lake, verbosity = 1L))
 #  user  system elapsed
 # 15.72    0.17   15.83
 

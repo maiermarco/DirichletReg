@@ -13,6 +13,15 @@ blank.trim <- function(x){
 
 
 
+deparse_formula <- function(frml){
+  if(!inherits(frml, "formula")) stop("\"frml\" is not an instance of class \"formula\".")
+  parts <- as.character(frml)
+  if(length(parts) != 3L || parts[1L] != "~") stop("unexpected error while deparsing a formula object.")
+  sprintf("%s ~ %s", parts[2L], parts[3L])
+}
+
+
+
 deparse_nocutoff <- function(expr, width.cutoff = 500L, ...){ # similar to deparse1() but removes duplicated whitespace
   gsub("[[:space:]]{2,}", "\\ ", paste(deparse(expr, width.cutoff = width.cutoff, ...), collapse = " ")) # nolint
 }

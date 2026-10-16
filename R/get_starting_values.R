@@ -3,7 +3,9 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
   ops <- options("warn" = -1L) # ignores all warnings and stores the original settings in ops # nolint
   on.exit(options(ops))        # on exiting the function, all original options are restored   # nolint
   
-  if(!repar){###################################################### COMMON MODEL # nolint
+  if(!repar){ # nolint
+  ##############################################################################
+  ################################################################# COMMON MODEL
     
     ### collinearity check begin
     exclude_par <- lapply(X.mats, function(list_el){
@@ -54,35 +56,36 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
       } else {
         correctX <- X.mats[[i]][ , -exclude_par[[i]], drop = FALSE]
       }
-      #suppressWarnings(
-        maxBFGS(beta.LL, beta.LL.deriv,
-          start        = rep(0.0, 2L * ncol(correctX)),
-          tol          = 1e-05,
-          finalHessian = FALSE,
-          X            = correctX,
-          y            = Y[, i],
-          w            = weights)$estimate[seq_len(ncol(correctX))]
-      #)
+      maxBFGS(beta.LL, beta.LL.deriv,
+        start        = rep(0.0, 2L * ncol(correctX)),
+        tol          = 1e-05,
+        finalHessian = FALSE,
+        X            = correctX,
+        y            = Y[, i],
+        w            = weights
+        )$estimate[seq_len(ncol(correctX))]
     })
     
     for(cmp in seq_len(ncol(Y))){
       if(is.null(exclude_par[[cmp]])){
         break
       } else {
-        for(NA_vars in seq_along(exclude_par[[cmp]])) unidim_fit[[cmp]] <- append(unidim_fit[[cmp]], NA, exclude_par[[cmp]][NA_vars] - 1L)
+        for(NA_vars in seq_along(exclude_par[[cmp]])) unidim_fit[[cmp]] <- append(unidim_fit[[cmp]], NA_real_, exclude_par[[cmp]][NA_vars] - 1L)
       }
     }
     
     unidim_fit <- unlist(unidim_fit)
     
-  } else {#################################################### ALTERNATIVE MODEL
+  } else {
+  ##############################################################################
+  ############################################################ ALTERNATIVE MODEL
     
     Y_logr <- log(Y[, -base, drop = FALSE] / (Y[, base, drop = TRUE]))
     unidim_fit <- as.numeric(lm(Y_logr ~ X.mats[[1L]] - 1, weights = weights)[["coefficients"]])
     
     epsilon <- matrix(1.0, nrow = nrow(Y), ncol = ncol(Y))
     
-    start_var <- 1L
+    start_var  <- 1L
     n_mean_par <- ncol(X.mats[[1L]])
     
     for(i in seq_len(ncol(Y))){
@@ -90,7 +93,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
         next
       } else {
         epsilon[, i] <- as.numeric(exp(X.mats[[1L]] %*% unidim_fit[seq.int(start_var, start_var + n_mean_par - 1L)]))
-        start_var <- start_var + n_mean_par
+        start_var    <- start_var + n_mean_par
       }
     }
     

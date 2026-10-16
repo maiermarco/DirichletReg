@@ -1,19 +1,20 @@
 confint.DirichletRegModel <- function(
   object, 
-  parm,                 # TODO fix parameter selection
+  parm,   # TODO fix parameter selection
   level = 0.95, 
-  ..., 
+  ...,
   type  = c("all", "beta", "gamma"), 
   exp   = FALSE
 ){
+  
   e    <- exp
   type <- match.arg(type)
   
-  if(any(level <= 0.0) || any(level >= 1.0)) stop("level must be in (0, 1)")
+  if(any(level <= 0.0) || any(level >= 1.0)) stop("\"level\" must be in (0, 1)")
   level <- sort(level)
   
-  repar <- if(object$parametrization == "alternative") TRUE else FALSE
-  if(!repar && (type == "gamma")) warning("type = gamma not meaningful for the common parametrization - ignored")
+  repar <- object$parametrization == "alternative"
+  if(!repar && (type == "gamma")) warning("type = \"gamma\" not meaningful for the common parametrization - ignored")
   
   co <- object$coefficients
   se <- object$se

@@ -17,7 +17,7 @@ coef.DirichletRegModel <- function(object, type = c("both", "beta", "gamma"), ..
   } else {
     
     ind <- cumsum(c(1L, object$n.vars))
-    bb <- list()
+    bb  <- list()
     
     bb_par <- cc[-seq.int(from = length(cc) - ncol(object$Z) + 1L, to = length(cc))]
     iter <- 0L

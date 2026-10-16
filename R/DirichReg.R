@@ -11,14 +11,12 @@ DirichReg <- function(
 ){
   
   if(verbosity %notin% (0L:4L)){
-    verbosity <- 0L
     warning("invalid value for \"verbosity\".")
-  } else verbosity <- as.integer(verbosity)
-  
-  if(verbosity > 0L){
-    cat("- ", toupper(gettext("Preparing data")), "\n", sep = "")
-    if(interactive()) flush.console()
+    verbosity <- 0L
   }
+  verbosity <- as.integer(verbosity)
+  
+  if(verbosity > 0L){ message("--- ", toupper(gettext("Preparing data")), " ---", domain = NA); if(interactive()) flush.console() }
   
   this_call <- match.call()
   
@@ -122,6 +120,7 @@ DirichReg <- function(
   if(len_def_frm[2L] == 1L){                # if there is only one RHS part in def_formula
     frml_parts <- as.character(def_formula) # split def_formula into c("~", <LHS>, <RHS>)
     if(length(frml_parts) != 3L) stop("unexpected error (more than 3 formula parts as character).") # should not happen
+    if(frml_parts[1L] != "~") stop("unexpected error while deparsing a formula object.")
     if(repar){                              # if an alternative model only has predictors in the mean model, add an intercept for the precision model
       message("Only mean model specified, assuming precision model to be ~ 1.")
       def_formula <- sprintf("%s ~ %s | 1", frml_parts[2L], frml_parts[3L])
@@ -198,10 +197,7 @@ DirichReg <- function(
   
   
   
-  if(verbosity > 0L){
-    cat("- ", toupper(gettext("Computing starting values")), "\n", sep = "")
-    if(interactive()) flush.console()
-  }
+  if(verbosity > 0L){ message("--- ", toupper(gettext("Computing starting values")), " ---", domain = NA); if(interactive()) flush.console() }
   
   # compute starting values
   if(is.null(control$sv)){
@@ -224,10 +220,7 @@ DirichReg <- function(
   
   
   
-  if(verbosity > 0L){
-    cat("- ", toupper(gettext("Estimating parameters")), "\n", sep = "")
-    if(interactive()) flush.console()
-  }
+  if(verbosity > 0L){ message("--- ", toupper(gettext("Estimating parameters")), " ---", domain = NA); if(interactive()) flush.console() }
   
   # fit and store the results
   fit_res <- DirichReg_fit(Y     = Y_fit,
@@ -305,6 +298,8 @@ DirichReg <- function(
   
   se <- if(anyNA(vcov)) rep(NA_real_, length(coefs)) else sqrt(diag(vcov))
   
+  if(verbosity > 0L){ message("--- ", toupper(gettext("Finalizing the model")), " ---", domain = NA); if(interactive()) flush.console() }
+
   res <- structure(list(
       call            = this_call,
       parametrization = parametrization,
@@ -381,8 +376,8 @@ DirichReg <- function(
   if(any(ovar %notin% nvar)){
     o_notin_n <- ovar[ovar %notin% nvar]
     stop(sprintf(ngettext(length(o_notin_n),
-      "The following terms variable is not part of the model.frame: %s",
-      "The following terms variables are not part of the model.frame: %s"),
+      "The following terms variable is not part of the model.frame:\n  %s",
+      "The following terms variables are not part of the model.frame:\n  %s"),
       pretty_list(o_notin_n, quotes = TRUE)), domain = NA)
   }
   ix <- match(ovar, nvar)
