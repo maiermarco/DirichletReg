@@ -34,7 +34,8 @@ jobs:
       - name: Install macOS system dependencies
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
-          brew install gettext
+          brew reinstall gettext
+          brew unlink gettext && brew link gettext --force
       - name: R CMD check
         uses: r-lib/actions/check-r-package@v2
         with:
