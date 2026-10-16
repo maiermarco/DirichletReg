@@ -1,6 +1,6 @@
 ### from stats for drop1
 safe_pchisq <- function(q, df, ...){
-  .Deprecated("pchisq(q, ifelse(df <= 0.0, NA_real_, df), ...)")
+  .Deprecated(new = "pchisq(q, ifelse(df <= 0.0, NA_real_, df), ...)", old = "safe_pchisq(q, df, ...)")
   df[df <= 0.0] <- NA
   pchisq(q = q, df = df, ...)
 }

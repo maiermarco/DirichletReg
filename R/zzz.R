@@ -20,7 +20,7 @@ deparse_nocutoff <- function(expr, width.cutoff = 500L, ...){ # similar to depar
 
 
 inv.logit <- function(x){
-  .Deprecated(new = "qlogis()")
+  .Deprecated(new = "qlogis(p)", old = "inv.logit(x)")
   log(x) - log(1.0 - x)
 }
 

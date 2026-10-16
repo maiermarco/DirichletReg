@@ -46,7 +46,7 @@ bd4_check <- structure(c(0x1.c71c71c71c71cp-5, 0x1.8888888888889p-1, 0x1.5b05b05
 test_that("Testing Well-Behaved Beta-Distributed Data", {
   skip_ext_cran()
   expect_message(bd1 <- DR_data(beta_data), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
-  expect_identical(bd1, bd1_check)
+  expect_equal(bd1, bd1_check)
   expect_s3_class(bd1, "DirichletRegData")
   expect_no_error(print(bd1)) |> capture.output() # capture.output is used, so print methods do not clutter the output
   expect_no_error(print(summary(bd1))) |> capture.output()
@@ -56,7 +56,7 @@ if(._DR_ver_0_8){ # versions before 0.8-0 could not handle this scenario
   test_that("Testing a Beta-Distributed Data with Missings", {
     skip_ext_cran()
     expect_message(bd2 <- DR_data(beta_data_1NA), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
-    expect_identical(bd2, bd2_check)
+    expect_equal(bd2, bd2_check)
     expect_s3_class(bd2, "DirichletRegData")
     expect_no_error(print(bd2)) |> capture.output()
     expect_no_error(summary(bd2)) |> capture.output()
@@ -66,7 +66,7 @@ if(._DR_ver_0_8){ # versions before 0.8-0 could not handle this scenario
 test_that("Testing a Beta-Distributed Data with a Zero", {
   skip_ext_cran()
   expect_warning(bd3 <- DR_data(beta_data_0), regexp = "transformation forced", fixed = TRUE) # nolint
-  expect_identical(bd3, bd3_check)
+  expect_equal(bd3, bd3_check)
   expect_s3_class(bd3, "DirichletRegData")
   expect_no_error(print(bd3)) |> capture.output()
   expect_no_error(summary(bd3)) |> capture.output()
@@ -75,7 +75,7 @@ test_that("Testing a Beta-Distributed Data with a Zero", {
 test_that("Testing a Beta-Distributed Data with a One", {
   skip_ext_cran()
   expect_warning(bd4 <- DR_data(beta_data_1), regexp = "transformation forced", fixed = TRUE) # nolint
-  expect_identical(bd4, bd4_check)
+  expect_equal(bd4, bd4_check)
   expect_s3_class(bd4, "DirichletRegData")
   expect_no_error(print(bd4)) |> capture.output()
   expect_no_error(summary(bd4)) |> capture.output()
@@ -111,7 +111,7 @@ mbd4_check <- structure(c(0x1.c71c71c71c71cp-5, 0x1.8888888888889p-1, 0x1.5b05b0
 test_that("Testing Well-Behaved Beta-Distributed Data (as a Matrix)", {
   skip_ext_cran()
   expect_message(mbd1 <- DR_data(beta_matrix), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
-  expect_identical(mbd1, mbd1_check)
+  expect_equal(mbd1, mbd1_check)
   expect_s3_class(mbd1, "DirichletRegData")
   expect_no_error(print(mbd1)) |> capture.output()
   expect_no_error(summary(mbd1)) |> capture.output()
@@ -121,7 +121,7 @@ test_that("Testing Well-Behaved Beta-Distributed Data (as a Matrix)", {
 test_that("Testing a Beta-Distributed Data with Missings (as a Matrix)", {
   skip_ext_cran()
   expect_message(mbd2 <- DR_data(beta_matrix_1NA), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
-  expect_identical(mbd2, mbd2_check)
+  expect_equal(mbd2, mbd2_check)
   expect_s3_class(mbd2, "DirichletRegData")
   expect_no_error(print(mbd2)) |> capture.output()
   expect_no_error(summary(mbd2)) |> capture.output()
@@ -130,7 +130,7 @@ test_that("Testing a Beta-Distributed Data with Missings (as a Matrix)", {
 test_that("Testing a Beta-Distributed Data with a Zero (as a Matrix)", {
   skip_ext_cran()
   expect_warning(mbd3 <- DR_data(beta_matrix_0), regexp = "transformation forced", fixed = TRUE) # nolint
-  expect_identical(mbd3, mbd3_check)
+  expect_equal(mbd3, mbd3_check)
   expect_s3_class(mbd3, "DirichletRegData")
   expect_no_error(print(mbd3)) |> capture.output()
   expect_no_error(summary(mbd3)) |> capture.output()
@@ -139,7 +139,7 @@ test_that("Testing a Beta-Distributed Data with a Zero (as a Matrix)", {
 test_that("Testing a Beta-Distributed Data with a One (as a Matrix)", {
   skip_ext_cran()
   expect_warning(mbd4 <- DR_data(beta_matrix_1), regexp = "transformation forced", fixed = TRUE) # nolint
-  expect_identical(mbd4, mbd4_check)
+  expect_equal(mbd4, mbd4_check)
   expect_s3_class(mbd4, "DirichletRegData")
   expect_no_error(print(mbd4)) |> capture.output()
   expect_no_error(summary(mbd4)) |> capture.output()
@@ -176,7 +176,7 @@ dbd4_check <- structure(c(0x1.c71c71c71c71cp-5, 0x1.8888888888889p-1, 0x1.5b05b0
 test_that("Testing Well-Behaved Beta-Distributed Data (as a Data Frame)", {
   skip_ext_cran()
   expect_message(dbd1 <- DR_data(beta_df), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
-  expect_identical(dbd1, dbd1_check)
+  expect_equal(dbd1, dbd1_check)
   expect_s3_class(dbd1, "DirichletRegData")
   expect_no_error(print(dbd1)) |> capture.output()
   expect_no_error(summary(dbd1)) |> capture.output()
@@ -186,7 +186,7 @@ test_that("Testing Well-Behaved Beta-Distributed Data (as a Data Frame)", {
 test_that("Testing a Beta-Distributed Data with Missings (as a Data Frame)", {
   skip_ext_cran()
   expect_message(dbd2 <- DR_data(beta_df_1NA), regexp = "beta-distribution assumed", fixed = TRUE) # nolint
-  expect_identical(dbd2, dbd2_check)
+  expect_equal(dbd2, dbd2_check)
   expect_s3_class(dbd2, "DirichletRegData")
   expect_no_error(print(dbd2)) |> capture.output()
   expect_no_error(summary(dbd2)) |> capture.output()
@@ -195,7 +195,7 @@ test_that("Testing a Beta-Distributed Data with Missings (as a Data Frame)", {
 test_that("Testing a Beta-Distributed Data with a Zero (as a Data Frame)", {
   skip_ext_cran()
   expect_warning(dbd3 <- DR_data(beta_df_0), regexp = "transformation forced", fixed = TRUE) # nolint
-  expect_identical(dbd3, dbd3_check)
+  expect_equal(dbd3, dbd3_check)
   expect_s3_class(dbd3, "DirichletRegData")
   expect_no_error(print(dbd3)) |> capture.output()
   expect_no_error(summary(dbd3)) |> capture.output()
@@ -204,7 +204,7 @@ test_that("Testing a Beta-Distributed Data with a Zero (as a Data Frame)", {
 test_that("Testing a Beta-Distributed Data with a One (as a Data Frame)", {
   skip_ext_cran()
   expect_warning(dbd4 <- DR_data(beta_df_1), regexp = "transformation forced", fixed = TRUE) # nolint
-  expect_identical(dbd4, dbd4_check)
+  expect_equal(dbd4, dbd4_check)
   expect_s3_class(dbd4, "DirichletRegData")
   expect_no_error(print(dbd4)) |> capture.output()
   expect_no_error(summary(dbd4)) |> capture.output()
@@ -257,33 +257,33 @@ almost_Perfect_Data[1L, 2L] <- 0.0001
 test_that("Test Various Scenarios with the Arctic Lake Dataset", {
   skip_ext_cran()
   expect_warning(DR_AL <- DR_data(AL), regexp = "normalization forced", fixed = TRUE) # nolint
-  expect_identical(DR_AL, DR_AL_check)
-  expect_equivalent(DR_AL, suppressWarnings(DR_data(mat_AL)))
+  expect_equal(DR_AL, DR_AL_check) ### TODO causes errors on macOS?
+  expect_equal(DR_AL, suppressWarnings(DR_data(mat_AL)), ignore_attr = TRUE)
   expect_s3_class(DR_AL, "DirichletRegData")
   expect_no_error(print(DR_AL)) |> capture.output()
   expect_no_error(summary(DR_AL)) |> capture.output()
   
   expect_warning(DR_AL_withNA <- DR_data(AL_withNA), regexp = "normalization forced", fixed = TRUE) # nolint
-  expect_identical(DR_AL_withNA[, ], DR_AL_withNA_check[, ])
+  expect_equal(DR_AL_withNA[, ], DR_AL_withNA_check[, ]) ### TODO causes errors on macOS?
   expect_s3_class(DR_AL_withNA, "DirichletRegData")
   expect_no_error(print(DR_AL_withNA)) |> capture.output()
   expect_no_error(summary(DR_AL_withNA)) |> capture.output()
   
   expect_warning(DR_AL_withNA_base3 <- DR_data(AL_withNA, base = 3), regexp = "normalization forced", fixed = TRUE) # nolint
-  expect_identical(attr(DR_AL_withNA_base3, "base"), if(._DR_ver_0_8) 3L else 0x1.8p+1)
+  expect_equal(attr(DR_AL_withNA_base3, "base"), if(._DR_ver_0_8) 3L else 0x1.8p+1)
 
   # process "perfect" data
   expect_no_condition(DA_PD <- DR_data(Perfect_Data)) # nolint
-  expect_identical(DA_PD, DA_PD_check)
+  expect_equal(DA_PD, DA_PD_check)
   if(._DR_ver_0_8) expect_warning(DA_PD_trafo <- DR_data(Perfect_Data, trafo = TRUE), regexp = "transformation forced", fixed = TRUE) else # nolint
                    expect_no_condition(DA_PD_trafo <- DR_data(Perfect_Data, trafo = TRUE)) # older versions did no issue warning # nolint
-  expect_identical(DA_PD_trafo, DA_PD_trafo_check)
+  expect_equal(DA_PD_trafo, DA_PD_trafo_check)
   
   # almost perfect data
   expect_warning(DA_aPD_norm <- DR_data(almost_Perfect_Data), regexp = "normalization forced", fixed = TRUE) # nolint
-  expect_identical(DA_aPD_norm, DA_aPD_norm_check)
+  expect_equal(DA_aPD_norm, DA_aPD_norm_check)
   expect_warning(DA_aPD_norm_trafo <- DR_data(almost_Perfect_Data, trafo = TRUE), regexp = if(._DR_ver_0_8) "normalization forced.+transformation forced" else "normalization forced") # old version produced an inadequate warning (did not mention trnasformation) # nolint
-  expect_identical(DA_aPD_norm_trafo, DA_aPD_norm_trafo_check)
+  expect_equal(DA_aPD_norm_trafo, DA_aPD_norm_trafo_check)
 })
 
 

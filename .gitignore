@@ -9,6 +9,7 @@ src/*.dll
 NEWS.md
 *.pot
 man/macros
+revdep
 
 DirichletRegMixture.Rd
 DirichMixture.Rd

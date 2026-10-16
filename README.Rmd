@@ -9,13 +9,16 @@ output:
 # <!-- README.md is generated from README.Rmd. Please edit that file -->
 #
 knitr::opts_chunk$set(
+    width = 200L,
     collapse = TRUE,
     comment = "#>",
     fig.path = "man/figures/README-"
   )
+
+this_pkg <- read.dcf("DESCRIPTION")[1L, ]
 ```
 
-# DirichletReg
+# `r this_pkg["Package"]`: `r this_pkg["Title"]` in R
 
 ```{r, include = FALSE}
 
@@ -32,3 +35,7 @@ knitr::opts_chunk$set(
 # <!-- badges: end -->
 
 ```
+
+Version: `r this_pkg["Version"]` (`r this_pkg["Date"]`)
+
+`r format(eval(parse(text=this_pkg["Authors@R"])), style = "md")`

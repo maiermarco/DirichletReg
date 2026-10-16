@@ -6,7 +6,7 @@ print.DirichletRegConfint <- function(x, digits = 3L, ...){
   if(interactive()) cat("\n")
   
   cat(
-    sprintf("%s%% ", paste(round(100 * x$level, 3L), collapse = "%, ")), gettext("Confidence Intervals"), " (",
+    sprintf("%s%% ", paste(round(100.0 * x$level, 3L), collapse = "%, ")), gettext("Confidence Intervals"), " (",
     if(e) gettext("exponentiated") else gettext("original form"), ")\n\n", sep = ""
     )
   

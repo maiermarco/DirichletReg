@@ -1,7 +1,7 @@
 coord.trafo <- function(Y){
   
-  .Deprecated(msg = "coord.trafo() is now deprecated.\nTo plot in the new (qua)ternary coordinate systems, use toSimplex()")
+  .Deprecated(new = "toSimplex(x)", old = "coord.trafo(Y)")
   
-  return(toSimplex(Y[, c(2L, 3L, 1L)]))
+  toSimplex(Y[, c(2L, 3L, 1L)])
   
 }
