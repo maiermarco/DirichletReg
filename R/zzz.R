@@ -1,5 +1,5 @@
 .onUnload <- function(libpath){
-  library.dynam.unload("DirichletReg", libpath)
+  library.dynam.unload(chname = "DirichletReg", libpath = libpath) # unload DirichletReg's DLL
 }
 
 
@@ -11,7 +11,7 @@ blank.trim <- function(x){
 
 
 
-deparse_nocutoff <- function (expr){ # mostly identical to deparse1() (added in R 4.0.0), might be removed in subsequent releases
+deparse_nocutoff <- function (expr){
   gsub("[[:space:]]{2,}", "\\ ", paste(deparse(expr, width.cutoff = 500L), collapse = " "))
 }
 

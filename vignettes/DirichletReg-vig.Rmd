@@ -12,25 +12,28 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-    collapse = TRUE
-  , comment = "##"
-  , tidy = TRUE
-  , fig.width=7
-  , fig.height=7
+  knitr::opts_chunk$set(
+      collapse   = TRUE
+    , comment    = "##"
+    , tidy       = TRUE
+    , fig.width  = 7L
+    , fig.height = 7L
+    , tidy.opts  = list(blank = TRUE, width.cutoff = 75L, indent = 4L)
 )
 ```
 
 Full R-Code for:
 
-Maier, M. J. (2014). DirichletReg: Dirichlet Regression for Compositional Data in R. Research Report Series/Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna. [https://doi.org/10.57938/ad3142d3-2fcd-4c37-aec6-8e0bd7d077e1](https://doi.org/10.57938/ad3142d3-2fcd-4c37-aec6-8e0bd7d077e1)
+Maier, M. J. (2014). _DirichletReg: Dirichlet Regression for Compositional Data in R._
+Research Report Series/Department of Statistics and Mathematics, 125. WU Vienna University of Economics and Business, Vienna.
+[doi.org/10.57938/ad3142d3-2fcd-4c37-aec6-8e0bd7d077e1](https://doi.org/10.57938/ad3142d3-2fcd-4c37-aec6-8e0bd7d077e1)
 
 ## 4. Application examples
 
 ### 4.1. The Arctic lake (common parametrization)
 
 ```{r, message = FALSE}
-library("DirichletReg")
+library(DirichletReg)
 head(ArcticLake)
 
 AL <- DR_data(ArcticLake[,1:3])
