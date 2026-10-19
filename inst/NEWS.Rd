@@ -2,6 +2,11 @@
 \alias{NEWS}
 \title{News for Package \pkg{DirichletReg}}
 \encoding{UTF-8}
+\section{Changes in Version 0.7-4 (2026--10--19)}{
+  \itemize{
+    \item Fixed tests failing on macOS.
+  }
+}
 \section{Changes in Version 0.7-3 (2026--10--16)}{
   \itemize{
     \item \proglang{C}-Routines are now symbols prefixed with \code{C_} (e.g., \code{C_wght_LL_grad_alternative}).

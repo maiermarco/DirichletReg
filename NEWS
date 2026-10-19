@@ -2,6 +2,10 @@ NEWS               package:DirichletReg                R Documentation
 
 News for Package 'DirichletReg'
 
+Changes in Version 0.7-4 (2026-10-19):
+
+  • Fixed tests failing on macOS.
+
 Changes in Version 0.7-3 (2026-10-16):
 
   • C-Routines are now symbols prefixed with ‘C_’ (e.g.,
