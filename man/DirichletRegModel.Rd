@@ -7,6 +7,7 @@
 \alias{residuals.DirichletRegModel}
 \alias{logLik.DirichletRegModel}
 \alias{AIC.DirichletRegModel}
+\alias{extractAIC.DirichletRegModel}
 \alias{BIC.DirichletRegModel}
 \alias{nobs.DirichletRegModel}
 \alias{vcov.DirichletRegModel}
@@ -38,7 +39,9 @@
 
 \method{logLik}{DirichletRegModel}(object, \dots)
 
-\method{AIC}{DirichletRegModel}(object, \dots, k = 2)
+\method{AIC}{DirichletRegModel}(object, \dots, k = 2.0)
+
+\method{extractAIC}{DirichletRegModel}(fit, scale, k = 2.0, \dots)
 
 \method{BIC}{DirichletRegModel}(object, \dots)
 
@@ -61,6 +64,8 @@
               for \code{confint}: defines the type of parameter (\code{"all"}, \code{"beta"}, or \code{"gamma"}) for which confidence values are returned}
   \item{newdata}{a \code{data.frame} containing new observations}
   \item{k}{number for the weighting of parameters}
+	\item{fit}{an object of class \code{DirichletRegModel}}
+	\item{scale}{unused optional scale parameter, see \code{\link[stats]{extractAIC}}}
   \item{parm}{a vector containing names of the parameters to print}
   \item{level}{(a vector of) confidence level(s), defaults to \code{.95}}
   \item{exp}{logical; returns parameters in exponentiated form}

@@ -109,15 +109,16 @@ plot.DirichletRegData <- function(
     
     if(reset_par){ # reset the current pars after plotting
       old_par <- par(no.readonly = TRUE) # nolint
-      on.exit(par(old_par))              # nolint
+      on.exit(par(old_par), add = TRUE)  # nolint
     }
     
     plot_DRdata_3d(x = x, entropy.contours = entropy.contours, colored = colored, c.grid = c.grid, ticks = ticks, dim.labels = dim.labels, col.scheme = col.scheme,
     .main = .main, .col = .col, .pch = .pch, .cex = .cex, .lwd = .lwd, .lty = .lty)
     
   } else if(x$dims == 4L){
-    if( ("rgl" %notin% loadedNamespaces()) && ("rgl" %notin% utils::installed.packages()[, "Package"]) ){ stop("The \"rgl\" package could not be found. You can try installing it using:\ninstall.packages(\"rgl\")") }
-    requireNamespace("rgl")
+    if(!requireNamespace("rgl", quietly = TRUE)){
+      stop(gettext("The \"rgl\" package could not be found.\n  You can try installing it using:"), "\n  install.packages(\"rgl\")", call. = FALSE, domain = NA)
+    }
     
     plot_DRdata_4d(x = x, dim.labels = dim.labels, ref.lines = ref.lines,
     main = .main, cex = .cex,

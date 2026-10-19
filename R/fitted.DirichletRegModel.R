@@ -1,6 +1,6 @@
 fitted.DirichletRegModel <- function(object, mu = TRUE, alpha = FALSE, phi = FALSE, ...){
   
-  if((mu + alpha + phi) == 0L) stop("Either \"mu\", \"alpha\", or \"phi\" has to be requested.")
+  if(!(mu || alpha || phi)) stop("Either \"mu\", \"alpha\", or \"phi\" has to be requested.")
   
   if((mu + alpha + phi) == 1L){
     if(mu)    return(object$fitted.values$mu)

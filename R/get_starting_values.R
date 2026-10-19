@@ -1,7 +1,7 @@
 get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
   
-  ops <- options("warn" = -1L) # ignores all warnings and stores the original settings in ops # nolint
-  on.exit(options(ops))        # on exiting the function, all original options are restored   # nolint
+  ops <- options("warn" = -1L)      # ignores all warnings and stores the original settings in ops # nolint
+  on.exit(options(ops), add = TRUE) # on exiting the function, all original options are restored   # nolint
   
   if(!repar){ # nolint
   ##############################################################################

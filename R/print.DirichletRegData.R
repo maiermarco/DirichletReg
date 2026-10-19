@@ -1,4 +1,5 @@
 print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
+  
   allowed_dddots <- c("digits", "na.print", "print.gap", "max", "width") # "quote", "useSource", "right"
   chkDots(..., allowed = allowed_dddots)
   
@@ -27,6 +28,7 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
 
 
 `[<-.DirichletRegData` <- function(x, i, j, value){
+  
   stop(
     gettext("Objects of class \"DirichletRegData\" cannot be edited manually."), "\n  ",
     gettext("Manipulate your data in another object and use DR_data() instead."),
@@ -37,12 +39,13 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
 
 
 `[.DirichletRegData` <- function(x, i, j, drop){
+  
   has_i <- !missing(i)
   has_j <- !missing(j)
   
   syscall <- sys.call()
-  if(any(names(syscall) %notin% c("", "drop"))){ # && !isS4(x) # should be if(any(... %notin% ...)) # TODO
-    warning("named arguments other than 'drop' are discouraged") # TODO
+  if(any(names(syscall) %notin% c("", "drop"))){
+    warning("named arguments other than \"drop\" are discouraged.")
   }
   syscall[which(names(syscall) != "")] <- NULL # remove unknown arguments and drop
   
@@ -52,7 +55,7 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
     if(!has_i) return(x) else           # covers: x[]            --> as is
       return(unclass(x)[i])             # covers: x[vec], x[mat] --> vector (unclassed)
   } else if(len_syscall == 4L){         # call with 3 arguments (x, i, j)
-    if(!has_i && !has_j) return(x) else # covers: x[,]         --> as is
+    if(!has_i && !has_j) return(x) else # covers: x[,]           --> as is
     if((has_i && is.matrix(i)) || (has_j && is.matrix(j))) stop("attempt to index rows/columns with a matrix.") else { # covers: x[m,], x[,m] --> error! # TODO
       if(!has_i) i <- seq_len(nrow(x)) # if i is not present, set TRUE for all rows
       if(!has_j) j <- seq_len(ncol(x)) # if j is not present, set TRUE for all columns
@@ -105,5 +108,7 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
 
 
 str.DirichletRegData <- function(object, ...){
+  
   NextMethod("str", ...)
+  
 }

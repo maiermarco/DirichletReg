@@ -97,18 +97,20 @@ maxLik_code_msg <- function(maxLik_code){
     "8" = "Successive function values within relative tolerance limit.",
     "9" = "Hessian approximation cannot be improved because of gradient did not change.",
    "10" = "Lost patience: The optimizer has hit an inferior value too many times.",
-  "100" = "Initial value out of range."
+  "100" = "Initial value out of range.",
+          "UNKNOWN CODE"
   )
   
   if(maxLik_code %notin% c(1L, 2L, 8L)){
-    if(maxLik_code %in% c(seq_len(10L), 100L)){
+    if(msg != "UNKNOWN CODE"){
       warning(gettextf(
-        "Possible convergence problems!\n  Code %d: %s\n  help(\"returnCode\", package = \"maxLik\") # See \"Details\"",
+        "Possible convergence problems!\n  Code %d: %s\n  help(\"returnCode\", package = \"maxLik\") # See Section \"Details\"",
         maxLik_code,
         dQuote(msg)
       ), call. = FALSE, domain = NA)
     } else {
-      warning(gettextf("Unknown maxLik-Code %d. Please report this at\n  https://github.com/maiermarco/DirichletReg/issues", maxLik_code), call. = FALSE, domain = NA)
+      warning(gettextf("Unknown maxLik-Code %d. Please report this at", maxLik_code),
+        "\n  https://github.com/maiermarco/DirichletReg/issues", call. = FALSE, domain = NA)
     }
   }
 }

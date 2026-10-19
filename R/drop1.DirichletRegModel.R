@@ -7,7 +7,7 @@ safe_pchisq <- function(q, df, ...){
 
 
 
-extractAIC.DirichletRegModel <- function(fit, scale, k = 2, ...){
+extractAIC.DirichletRegModel <- function(fit, scale, k = 2.0, ...){
   npar <- fit$npar
   c(npar, AIC(fit) + (k - 2.0) * npar)
 }
@@ -144,7 +144,7 @@ drop1.DirichletRegModel <- function(
     aod[, "Pr(>Chi)"] <- dev
   }
   
-  heading <- c(gettext("Single term deletions"), paste0("\n", gettext("Model"), ":"), deparse_nocutoff(formula(object)))
+  heading <- c(gettext("Single term deletions"), paste0("\n", gettext("Model"), ":"), deparse_formula(formula(object)))
   
   if(sort) aod <- aod[order(aod$`Pr(>Chi)`, decreasing = TRUE, na.last = FALSE), ]
   
