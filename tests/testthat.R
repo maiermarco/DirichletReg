@@ -1,8 +1,8 @@
-library(testthat)     # nolint
-library(DirichletReg) # nolint
+library(testthat)
+library(DirichletReg)
 
-old_options <- options("warn" = 1L) # nolint
+old_options <- options("warn" = 1L)
 
 test_check("DirichletReg")
 
-options(old_options) # nolint
+options(old_options)
