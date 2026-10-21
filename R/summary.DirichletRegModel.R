@@ -142,20 +142,24 @@ print.summary_DirichletRegModel <- function(x, digits = max(3L, getOption("digit
   cat(sprintf("AIC: %s, BIC: %s", format(x$aic, digits = digits), format(x$bic, digits = digits)), "\n", sep = "")
   cat(gettextf("Number of Observations: %d", x$nobs), "\n", sep = "")
   if(x$parametrization == "common"){
-    cat(gettextf("Link: Log\nParametrization: %s", dQuote(x$parametrization)), "\n", sep = "")
+    cat(gettextf("Link: Log\nParametrization: %s", dQuote(first_cap(x$parametrization, all_lower = TRUE))), "\n", sep = "")
   } else {
-    cat(gettextf("Links: Logit (Means) and Log (Precision)\nParametrization: %s", dQuote(x$parametrization)), "\n", sep = "")
+    cat(gettextf("Links: Logit (Means) and Log (Precision)\nParametrization: %s", dQuote(first_cap(x$parametrization, all_lower = TRUE))), "\n", sep = "")
   }
   
   if(interactive()) cat("\n")
   
   invisible(x)
+
 }
 
 
 
 coef.summary_DirichletRegModel <- function(object, ...){
+  
   coefmat <- as.matrix(object$coef.mat)
   rownames(coefmat) <- names(object$coefficients)
+  
   coefmat
+
 }

@@ -4,8 +4,8 @@ News for Package 'DirichletReg'
 
 Changes in Version 0.8-0:
 
-  • Bumped up the required R-version to 4.1.0 to safely use ‘%||%’ and
-    ‘%notin%’.
+  • Bumped up the required R-version to 4.1.0 to safely use newer
+    features like ‘%||%’ and ‘%notin%’.
 
   • Fixed ‘print.DirichletRegModel’ which erroneously issued an error
     (convergence) when ‘maxLik’'s ‘maxNR’ returned convergence-code 8
@@ -19,13 +19,13 @@ Changes in Version 0.8-0:
     user-visible changes.
 
   • ‘DR_data()’ was rewritten to address some issues in the original
-    implementation.  ‘trafo’ and ‘norm_tol’ must now be in (0, .1].
-    ‘norm_tol’ must be numeric but ‘trafo’ can also be ‘TRUE’ to force
-    transformation even if it is not necessary (not ‘FALSE’ because
-    this would lead to errors when estimating the models).  If the data
-    are supplied as a single column or vector, the function tries to
-    guess and fix the new column names if ‘fix_names = TRUE’.  NB: The
-    attribute ‘attr(*, "Y.original")’ now stores the original data
+    implementation.  Numerical values for ‘trafo’ and ‘norm_tol’ must
+    now be in (0, .01].  In order to force transformation (even if
+    unnecessary), ‘trafo’ can also be ‘TRUE’.  If the data are supplied
+    as a single column or vector, the function tries to guess and fix
+    the new column names if ‘fix_names = TRUE’.  Since this version,
+    ‘NaN’ and +/-'Inf' are set to ‘NA’.  NB: The attribute ‘attr(*,
+    "Y.original")’ now stores the original data
     ‘as.matrix’-transformed.
 
   • ‘DirichReg()’ now evaluates the ‘formula’ object in the parent
@@ -65,6 +65,9 @@ Changes in Version 0.8-0:
   • Added ‘[.DirichletRegData’ and ‘[<-.DirichletRegData’ methods.
 
   • Added new return codes from ‘maxLik’.
+
+  • Added documentation on how to disable the ‘drop1()’ warning (see
+    ‘help("drop1.DirichletRegModel")’).
 
 Changes in Version 0.7-4 (2026-10-19):
 

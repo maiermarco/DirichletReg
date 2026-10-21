@@ -13,8 +13,8 @@ DirichletReg
 distribution's
 DLL
 exponentiated
-formulae
 Formulae
+formulae
 Hessians
 integrations
 Kevan's
@@ -24,7 +24,6 @@ LRT
 Maier
 multinomial
 Neto
-nonnegative
 optimizers
 Pammer
 param

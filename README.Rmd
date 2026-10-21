@@ -8,8 +8,8 @@ output:
 #
 # <!-- README.md is generated from README.Rmd. Please edit that file -->
 #
+options(width = 200L)
 knitr::opts_chunk$set(
-    width = 200L,
     collapse = TRUE,
     comment = "#>",
     fig.path = "man/figures/README-"
@@ -28,6 +28,7 @@ this_pkg <- read.dcf("DESCRIPTION")[1L, ]
 [![CRAN Version](https://www.r-pkg.org/badges/version-last-release/DirichletReg)](https://cran.r-project.org/package=DirichletReg)
 [![CRAN downloads per month](https://cranlogs.r-pkg.org/badges/DirichletReg)](https://cran.r-project.org/package=DirichletReg)
 [![CRAN grand-total](https://cranlogs.r-pkg.org/badges/grand-total/DirichletReg)](https://cran.r-project.org/package=DirichletReg)
+[![CodeFactor](https://www.codefactor.io/repository/github/maiermarco/dirichletreg/badge)](https://www.codefactor.io/repository/github/maiermarco/dirichletreg)
 [![Code coverage](https://codecov.io/gh/maiermarco/DirichletReg/branch/master/graph/badge.svg)](https://codecov.io/gh/maiermarco/DirichletReg)
 [![GitHub Actions Check and Code Coverage](https://github.com/maiermarco/DirichletReg/actions/workflows/R-CMD-check+covr.yml/badge.svg)](https://github.com/maiermarco/DirichletReg/actions/workflows/R-CMD-check+covr.yml)
 ```{r, include = FALSE}

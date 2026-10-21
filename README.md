@@ -6,6 +6,7 @@ Version](https://www.r-pkg.org/badges/version-last-release/DirichletReg)](https:
 month](https://cranlogs.r-pkg.org/badges/DirichletReg)](https://cran.r-project.org/package=DirichletReg)
 [![CRAN
 grand-total](https://cranlogs.r-pkg.org/badges/grand-total/DirichletReg)](https://cran.r-project.org/package=DirichletReg)
+[![CodeFactor](https://www.codefactor.io/repository/github/maiermarco/dirichletreg/badge)](https://www.codefactor.io/repository/github/maiermarco/dirichletreg)
 [![Code
 coverage](https://codecov.io/gh/maiermarco/DirichletReg/branch/master/graph/badge.svg)](https://codecov.io/gh/maiermarco/DirichletReg)
 [![GitHub Actions Check and Code

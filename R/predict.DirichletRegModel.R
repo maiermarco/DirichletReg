@@ -22,7 +22,7 @@ predict.DirichletRegModel <- function(object, newdata, mu = TRUE, alpha = FALSE,
   }
   
   model_formula[["drop.unused.levels"]] <- FALSE
-  mf <- eval(model_formula) # parent.frame()?
+  mf <- eval(model_formula) # TODO parent.frame()?
   
   if(!repar){ ## COMMON
     X <- lapply(seq_len(dims), function(i){ model.matrix(Formula(terms(model_formula$formula, data = newdata, rhs = i)), mf) })

@@ -16,7 +16,7 @@ DirichReg <- function(
   }
   verbosity <- as.integer(verbosity)
   
-  if(verbosity > 0L){ message("--- ", toupper(gettext("Preparing data")), " ---", domain = NA); if(interactive()) flush.console() }
+  if(verbosity > 0L){ message(f_sst(3L), " ", toupper(gettext("preparing data")), " ", f_sst(3L), domain = NA); if(interactive()) flush.console() }
   
   this_call <- match.call()
   
@@ -114,7 +114,7 @@ DirichReg <- function(
       (ncol(Y) > 2L && (len_def_frm[2L] %in% (2L:(ncol(Y) - 1L))))   #   for Y w/3 or more components: predictor sets between 2:(n_components - 1)
     )) stop("the right hand side must contain specifications for either one or all variables")
   
-  if( repar && (len_def_frm[2L] > 2L)) stop("the right hand side can only contain one or two specifications in the alternative parametrization")
+  if(repar && (len_def_frm[2L] > 2L)) stop("the right hand side can only contain one or two specifications in the alternative parametrization")
   
   # expand "shorthands"
   if(len_def_frm[2L] == 1L){                # if there is only one RHS part in def_formula
@@ -197,7 +197,7 @@ DirichReg <- function(
   
   
   
-  if(verbosity > 0L){ message("--- ", toupper(gettext("Computing starting values")), " ---", domain = NA); if(interactive()) flush.console() }
+  if(verbosity > 0L){ message(f_sst(3L), " ", toupper(gettext("computing starting values")), " ", f_sst(3L), domain = NA); if(interactive()) flush.console() }
   
   # compute starting values
   if(is.null(control$sv)){
@@ -220,7 +220,7 @@ DirichReg <- function(
   
   
   
-  if(verbosity > 0L){ message("--- ", toupper(gettext("Estimating parameters")), " ---", domain = NA); if(interactive()) flush.console() }
+  if(verbosity > 0L){ message(f_sst(3L), " ", toupper(gettext("estimating parameters")), " ", f_sst(3L), domain = NA); if(interactive()) flush.console() }
   
   # fit and store the results
   fit_res <- DirichReg_fit(Y     = Y_fit,
@@ -298,8 +298,8 @@ DirichReg <- function(
   
   se <- if(anyNA(vcov)) rep(NA_real_, length(coefs)) else sqrt(diag(vcov))
   
-  if(verbosity > 0L){ message("--- ", toupper(gettext("Finalizing the model")), " ---", domain = NA); if(interactive()) flush.console() }
-
+  if(verbosity > 0L){ message(f_sst(3L), " ", toupper(gettext("finalizing the model")), " ", f_sst(3L), domain = NA); if(interactive()) flush.console() }
+  
   res <- structure(list(
       call            = this_call,
       parametrization = parametrization,
@@ -354,6 +354,7 @@ DirichReg <- function(
   on.exit(gc(verbose = FALSE, reset = TRUE, full = TRUE), add = TRUE)
   
   res
+
 }
 
 
@@ -365,6 +366,7 @@ DirichReg <- function(
 
 # obtain correct subset of predvars/dataClasses to terms
 .add_predvars_and_dataClasses <- function(terms, model.frame){
+  
   ## original terms
   rval <- terms
   ## terms from model.frame
@@ -391,4 +393,5 @@ DirichReg <- function(
   attr(rval, "dataClasses") <- attr(nval, "dataClasses")[ix]
   
   rval
+
 }

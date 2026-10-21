@@ -64,8 +64,8 @@
               for \code{confint}: defines the type of parameter (\code{"all"}, \code{"beta"}, or \code{"gamma"}) for which confidence values are returned}
   \item{newdata}{a \code{data.frame} containing new observations}
   \item{k}{number for the weighting of parameters}
-	\item{fit}{an object of class \code{DirichletRegModel}}
-	\item{scale}{unused optional scale parameter, see \code{\link[stats]{extractAIC}}}
+  \item{fit}{an object of class \code{DirichletRegModel}}
+  \item{scale}{unused optional scale parameter, see \code{\link[stats]{extractAIC}}}
   \item{parm}{a vector containing names of the parameters to print}
   \item{level}{(a vector of) confidence level(s), defaults to \code{.95}}
   \item{exp}{logical; returns parameters in exponentiated form}
@@ -77,9 +77,10 @@
   \item{sort}{if \code{TRUE}, p-values will be sorted in decreasing order.}
   \item{\dots}{further arguments}
 }
-%\details{
-%.
-%}
+\details{
+  \code{drop1()} issues a caveat once per session (unless you save and restore all objects in your workspace).
+  This can be disabled by wrapping the function call in \code{suppressMessages(drop1(...))}, by setting \code{options(DirichletReg_drop1_NO_warning = TRUE)}, or by creating this (hidden) object \code{._DirichletReg_drop1_warning <- TRUE} in the global environment.
+}
 \value{%
   \code{\link{DirichReg}} returns an object of \code{\link{class}} \code{"DirichletRegModel"}.
   The \code{print} method displays the results and returns the object invisibly.
@@ -99,7 +100,8 @@ mod1 <- DirichReg(AL ~ depth + I(depth^2) | depth, data = ALake, model = "altern
 update(mod1, . ~ . | . + I(depth^2), evaluate = FALSE)
 mod1
 
-drop1(mod1)   ### issues a caveat when used for the first time in an R session
+# issues a caveat once per R session
+drop1(mod1)
 
 summary(mod1)
 coef(summary(mod1))

@@ -24,14 +24,15 @@ drop1.DirichletRegModel <- function(
 ){
   
   ### print caveat
-  if(!exists("._DirichletReg_drop1_warning", where = ".GlobalEnv")){
-    .GlobalEnv$._DirichletReg_drop1_warning <- TRUE
+  if(!exists("._DirichletReg_drop1_warning", where = ".GlobalEnv") && !getOption("DirichletReg_drop1_NO_warning", default = FALSE)){
+    .GlobalEnv$._DirichletReg_drop1_warning <- TRUE   # disable in this session
+    options(DirichletReg_drop1_NO_warning = TRUE)     # disable in this session
     
     message(paste(c(
-      if(interactive()) strrep("-", getOption("width")) else NULL,
+      if(interactive()) f_dst(getOption("width")) else NULL,
       strwrap(gettext("CAVEAT: drop1() is still an experimental feature."), width = getOption("width"), exdent = 8L),
       strwrap(gettext("If you plan to use this function, please double-check results, e.g., by comparing two models using anova(). This warning will only be displayed once per session."), width = getOption("width"), indent = 8L, exdent = 8L),
-      if(interactive()) strrep("-", getOption("width")) else NULL
+      if(interactive()) f_dst(getOption("width")) else NULL
     ), collapse = "\n"), domain = NA)
   }
   ###
@@ -144,13 +145,12 @@ drop1.DirichletRegModel <- function(
     aod[, "Pr(>Chi)"] <- dev
   }
   
-  heading <- c(gettext("Single term deletions"), paste0("\n", gettext("Model"), ":"), deparse_formula(formula(object)))
-  
   if(sort) aod <- aod[order(aod$`Pr(>Chi)`, decreasing = TRUE, na.last = FALSE), ]
   
   class(aod) <- c("anova", "data.frame")
   
-  attr(aod, "heading") <- heading
+  attr(aod, "heading") <- c(gettext("Single term deletions"), paste0("\n", gettext("Model"), ":"), deparse_formula(formula(object)))
   
   aod
+
 }

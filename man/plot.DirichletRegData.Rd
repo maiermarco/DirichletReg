@@ -1,7 +1,6 @@
 \encoding{UTF-8}
 \name{plot.DirichletRegData}
 \alias{plot.DirichletRegData}
-\alias{lines.DirichletRegData}
 \title{Plot Dirichlet-Distributed Data}
 \description{
 With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensions.
@@ -11,7 +10,6 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
   TRUE, c.grid = TRUE, col.scheme = c("dims", "entropy"), entropy.contours =
   FALSE, entropy.colors = FALSE), a3d = list(rgl = TRUE, ...), rug = TRUE,
   reset_par = TRUE, ...)
-%\method{lines}{DirichletRegData}(x, indep, groups, \dots, cumul = FALSE, orig.scale = FALSE)
 }
 \arguments{
   \item{x}{data prepared with \code{\link{DR_data}}}
@@ -40,10 +38,17 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 %}
 \examples{
-# plot of "Sand" in the Arctic Lake data set
-plot(DR_data(ReadingSkills[, 1]), main = "Reading Accuracy")
+# density plot of "accuracy" in the Reading Skills data set
+plot(DR_data(ReadingSkills["accuracy"]), main = "Reading Accuracy")
 
 # ternary plot of Arctic Lake data
 plot(DR_data(ArcticLake[, 1:3]), a2d = list(colored = FALSE))
+
+# 10,000 random four-dimensional data points generated with alpha = (2, 2, 2, 2)
+set.seed(2222L)
+random_4D <- rdirichlet(10000L, c(2, 2, 2, 2))
+colnames(random_4D) <- sprintf("Dim. \%s", as.roman(1:4))
+# plot the data using the static plot device (not the default "rgl")
+plot(DR_data(random_4D), cex = 2/3, a3d = list(rgl = FALSE))
 }
 \keyword{hplot}

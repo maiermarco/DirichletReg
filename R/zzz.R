@@ -49,12 +49,19 @@ swrap <- function(text, type = c("stop", "warning", "message"), xdent){
 
 
 
-na.delete <- function(x){
+na_delete <- function(x){
   if(is.null(dim(x))){
-    return( x[!is.na(x)] )
+    x[is.finite(x)]
+  } else if(length(dim(x)) == 2L){
+    x[rowSums(!is.finite(x)) == 0L, ]
   } else {
-    return( x[rowSums(is.na(x)) == 0L, ] )
+    stop("\"x\" must be a vector or matrix-like object.")
   }
+}
+
+na.delete <- function(x){
+  .Deprecated(new = "na_delete(x)", old = "na.delete(x)")
+  na_delete(x)
 }
 
 
@@ -114,3 +121,13 @@ maxLik_code_msg <- function(maxLik_code){
     }
   }
 }
+
+
+
+# fancy single stripes
+f_sst <- function(n){ strrep(if(getOption("useFancyQuotes", default = FALSE)) "\u2500" else "-", n) }
+# fancy double stripes
+f_dst <- function(n){ strrep(if(getOption("useFancyQuotes", default = FALSE)) "\u2550" else "=", n) }
+
+# all lowercase with capitalized first letter
+first_cap <- function(x, all_lower = FALSE){ gsub("^([[:alpha:]])", "\\U\\1", if(all_lower) tolower(x) else x, perl = TRUE) }

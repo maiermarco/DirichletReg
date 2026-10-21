@@ -25,10 +25,10 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1L,
 %
 \arguments{%
   \item{Y}{%
-    A \code{matrix} or \code{data.frame} with nonnegative values of all compositional variables (in some cases, a vector is also permissible, see \dQuote{Details}).
+    A \code{matrix} or \code{data.frame} with non-negative values of all compositional variables (in some cases, a vector is also permissible, see \dQuote{Details}).
   }%
   \item{trafo}{%
-    Either a small numeric value in (0, .1] or \code{TRUE} (default: \ifelse{latex}{\eqn{\sqrt{\mathtt{.Machine\$double.eps}}\approx1.49\cdot10^8}}{\code{sqrt(.Machine$double.eps) = 1.49e-08}}).
+    Either a small numeric value \eqn{\in(0,\,.01]}{in (0, .01]} or \code{TRUE} (default: \ifelse{latex}{\eqn{\sqrt{\mathtt{.Machine\$double.eps}}\approx1.49\cdot10^8}}{\code{sqrt(.Machine$double.eps) = 1.49e-08}}).
     Transformation of variables causes the values to shrink away from extreme values of 0 and 1, see \dQuote{Details}.
     \cr%
     \code{TRUE} will force transformation, \code{FALSE} results in an error.
@@ -40,7 +40,7 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1L,
   }%
   \item{norm_tol}{%
     Due to numerical precision, row sums of \eqn{\mathbf{Y}} may not be \emph{exactly} equal to 1.
-    Therefore, \code{norm_tol} is a small value in (0, .1] which represents the tolerance when testing for \dQuote{near equality} to 1 (default: \ifelse{latex}{\eqn{\sqrt{\mathtt{.Machine\$double.eps}}\approx1.49\cdot10^8}}{\code{sqrt(.Machine$double.eps) = 1.49e-08}}, see \code{\link[base]{all.equal}}).
+    Therefore, \code{norm_tol} is a small value \eqn{\in(0,\,.01]}{in (0, .01]} which represents the tolerance when testing for \dQuote{near equality} to 1 (default: \ifelse{latex}{\eqn{\sqrt{\mathtt{.Machine\$double.eps}}\approx1.49\cdot10^8}}{\code{sqrt(.Machine$double.eps) = 1.49e-08}}, see \code{\link[base]{all.equal}}).
   }%
   \item{fix_names}{%
     A logical value that determines whether \code{DR_data()} will try to infer the variable name if \code{Y} is a single column or vector.

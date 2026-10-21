@@ -9,20 +9,19 @@ plot_DRdata_4d <- function(
   phi
 ){
   
-  theta     <- theta     %||% 40.0
-  phi       <- phi       %||% 25.0
-  ref.lines <- ref.lines %||% NULL
+  theta     <- theta       %||% 40.0
+  phi       <- phi         %||% 25.0
+  ref.lines <- ref.lines   %||% NULL
+  rgl       <- args.3d$rgl %||% TRUE
   
-  transp <- as.hexmode(round(255.0 * (args.3d$transp %||% 0.25), 0L))
-  rgl    <- args.3d$rgl %||% TRUE
+  xyz       <- toQuaternary(x$Y)
   
-  xyz <- toQuaternary(x$Y)
-  
-  corners <- toQuaternary(diag(4L))
+  corners   <- toQuaternary(diag(4L))
   corner.connect <- structure(c(1L, 1L, 1L, 2L, 2L, 3L, 2L, 3L, 4L, 3L, 4L, 4L), dim = c(6L, 2L))
   
-  coo.lab <- 2.0 * corners - toQuaternary(diag(4L) * (0.9 - 0.1 / 3.0) + 0.1 / 3.0)
-  lab.col <- cmyk2rgb(diag(4L) + cbind(0.0, 0.0, 0.0, c(0.2, 0.2, 0.2, 0.0)))
+  coo.lab      <- 2.0 * corners - toQuaternary(diag(4L) * (0.9 - 0.1 / 3.0) + 0.1 / 3.0)
+  lab.col_full <- cmyk2rgb(cmyk = diag(4L) + cbind(0.0, 0.0, 0.0, c(0.2, 0.2, 0.2, 0.0)))
+  lab.col_trns <- cmyk2rgb(cmyk = diag(4L) + cbind(0.0, 0.0, 0.0, c(0.2, 0.2, 0.2, 0.0)), alpha = args.3d$transp %||% 0.25)
   
   # reference - axes
   ref_axes                      <- matrix(1.0 / 3.0, ncol = 4L, nrow = 4L)
@@ -68,13 +67,13 @@ plot_DRdata_4d <- function(
         x = as.vector(rbind(ref_axes_xyz[, 1L], corners[, 1L])),
         y = as.vector(rbind(ref_axes_xyz[, 2L], corners[, 2L])),
         z = as.vector(rbind(ref_axes_xyz[, 3L], corners[, 3L])),
-        lwd = 1.0, lty = 2L, col = rep(lab.col, each = 2L), line_antialias = TRUE)
+        lwd = 1.0, lty = 2L, col = rep(lab.col_full, each = 2L), line_antialias = TRUE)
     
     if(!is.null(ref.lines)){
       browser()
       for(i in ref.lines){
       rgl::segments3d(t3d(.ref_pts[[i]], VTrans)$x, t3d(.ref_pts[[i]], VTrans)$y,
-               t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = paste0(lab.col[i], transp, collapse = ""))
+               t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = lab.col_trns[i])
     }}
     
 #    segments(.ref_xy[[2L]]$x, .ref_xy[[2L]]$y, t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = "#BF00BF40")
@@ -83,7 +82,7 @@ plot_DRdata_4d <- function(
     
     rgl::points3d(xyz, cex = cex, col = cmyk2rgb(x$Y), point_antialias = TRUE)
     
-    rgl::text3d(x = coo.lab[, 1L], y = coo.lab[, 2L], z = coo.lab[, 3L], texts = dim.labels, font = 2L, col = lab.col, line_antialias = TRUE)
+    rgl::text3d(x = coo.lab[, 1L], y = coo.lab[, 2L], z = coo.lab[, 3L], texts = dim.labels, font = 2L, col = lab.col_full, line_antialias = TRUE)
     
   } else {
     
@@ -98,15 +97,15 @@ plot_DRdata_4d <- function(
     segments(xy.corners[corner.connect[, 1L], 1L], xy.corners[corner.connect[, 1L], 2L],
              xy.corners[corner.connect[, 2L], 1L], xy.corners[corner.connect[, 2L], 2L])
     
-    text(xy.coo.lab, labels = dim.labels, font = 2L, col = lab.col)
+    text(xy.coo.lab, labels = dim.labels, font = 2L, col = lab.col_full)
     
     ref_axes_xy <- t3d(ref_axes_xyz, VTrans)
-    for(i in 1L:4L) segments(ref_axes_xy$x[i], ref_axes_xy$y[i], xy.corners$x[i], xy.corners$y[i], lwd = 1.0, lty = 2L, col = lab.col[i])
+    for(i in 1L:4L) segments(ref_axes_xy$x[i], ref_axes_xy$y[i], xy.corners$x[i], xy.corners$y[i], lwd = 1.0, lty = 2L, col = lab.col_full[i])
     
     if(!is.null(ref.lines)){
       for(i in ref.lines){
       segments(t3d(.ref_pts[[i]], VTrans)$x, t3d(.ref_pts[[i]], VTrans)$y,
-               t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = paste0(lab.col[i], transp, collapse = ""))
+               t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = lab.col_trns[i])
     }}
     
 #    segments(.ref_xy[[2L]]$x, .ref_xy[[2L]]$y, t3d(xyz, VTrans)$x, t3d(xyz, VTrans)$y, lwd = 0.5, col = "#BF00BF40")
