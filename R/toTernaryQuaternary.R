@@ -33,9 +33,9 @@ toSimplex <- function(x){
   
   # transformations
   if(ncol(x) == 3L){
-    return(toTernary(x))
+    toTernary(x)
   } else if(ncol(x) == 4L){
-    return(toQuaternary(x))
+    toQuaternary(x)
   } else {
     stop("unexpected error")
   }

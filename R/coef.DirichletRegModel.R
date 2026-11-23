@@ -31,12 +31,12 @@ coef.DirichletRegModel <- function(object, type = c("both", "beta", "gamma"), ..
     }
     names(bb) <- c(object$varnames)
     
-    gg <- list("gamma" = cc[seq.int(from = length(cc) - ncol(object$Z) + 1L, to = length(cc))])
+    gg <- list(gamma = cc[seq.int(from = length(cc) - ncol(object$Z) + 1L, to = length(cc))])
     
     return(switch(type,
-      "both"  = list("beta" = bb, "gamma" = gg),
-      "beta"  = bb,
-      "gamma" = gg
+      both  = list(beta = bb, gamma = gg),
+      beta  = bb,
+      gamma = gg
     ))
   }
 }

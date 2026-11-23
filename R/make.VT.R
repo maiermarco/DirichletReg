@@ -63,5 +63,6 @@ make.VT <- function(
   TT[3L, 4L] <- -1.0 / d
   VT <- VT %*% TT
 
-  return(VT)
+  VT
+
 }

@@ -20,9 +20,10 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
     out <- attr(x, "Y.original")
   }
   
-  do.call("print", c(list("x" = out), list(...)[...names() %in% allowed_dddots]))
+  do.call("print", c(list(x = out), list(...)[...names() %in% allowed_dddots]))
   
   invisible(x)
+
 }
 
 
@@ -34,6 +35,7 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
     gettext("Manipulate your data in another object and use DR_data() instead."),
     call. = FALSE, domain = NA
     ) # TODO
+
 }
 
 
@@ -103,6 +105,7 @@ print.DirichletRegData <- function(x, type = c("processed", "original"), ...){
   class(new_obj) <- "DirichletRegData"
   
   new_obj
+
 }
 
 

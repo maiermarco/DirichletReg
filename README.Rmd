@@ -1,8 +1,5 @@
 ---
-title: "DirichletReg"
-output:
-  md_document:
-    variant: markdown_github
+output: github_document
 ---
 ```{r setup, include = FALSE}
 #
@@ -12,13 +9,14 @@ options(width = 200L)
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>",
-    fig.path = "man/figures/README-"
+    fig.path = "man/figures/README-",
+    out.width = "100%"
   )
 
 this_pkg <- read.dcf("DESCRIPTION")[1L, ]
 ```
 
-# `r this_pkg["Package"]`: `r this_pkg["Title"]` in R
+# ``r this_pkg["Package"]``: `r this_pkg["Title"]` in R
 
 ```{r, include = FALSE}
 

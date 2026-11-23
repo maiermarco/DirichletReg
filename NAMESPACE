@@ -24,6 +24,7 @@ export("DR_data")
 export("print.DirichletRegData")    ; S3method("print", "DirichletRegData")
 export("summary.DirichletRegData")  ; S3method("summary", "DirichletRegData")
 export("plot.DirichletRegData")     ; S3method("plot", "DirichletRegData")
+export("as.matrix.DirichletRegData"); S3method("as.matrix", "DirichletRegData")
 
 export("DirichReg")
 export("print.DirichletRegModel")     ; S3method("print", "DirichletRegModel")

@@ -1,0 +1,16 @@
+linters: {
+    if(file.exists(cl <- normalizePath("~/_custom_linter.R"))){
+      source(cl)
+      custom_linters
+    } else {
+      linters_with_defaults()
+    }
+  }
+exclusions: c(
+    list(
+      "inst/NEWSRd2txt.R"
+    , "vignettes/DirichletReg-vig.Rmd"
+    )
+  , "revdep/*"
+  , "tests/*.R", "tests/*/*.R"
+  )

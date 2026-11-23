@@ -4,7 +4,7 @@ rdirichlet <- function(
 ){
   
   # check if the sample size is an integer > 0
-  if((is.integer(n) && n < 1L) || ((n %% 1.0) != 0.0) || (n < 1.0)) stop("\"n\" must be an integer > 0")
+  if((n != is.integer(n) && n < 1L) || (n < 1.0)) stop("\"n\" must be an integer > 0")
   # check if any value in alpha is <= 0
   if(any(alpha <= 0.0)) stop("all values in \"alpha\" must be > 0")
   
@@ -45,9 +45,9 @@ ddirichlet <- function(x, alpha, log = FALSE, sum.up = FALSE){
   }
   
   if(sum.up){
-    if(log) return(sum(res)) else return(exp(sum(res)))
+    if(log) sum(res) else exp(sum(res))
   } else {
-    if(log) return(res) else return(exp(res))
+    if(log) res else exp(res)
   }
 }
 
@@ -71,8 +71,8 @@ ddirichlet_R <- function(x, alpha, log = FALSE, sum.up = FALSE){
   res <- lgamma(rowSums(alpha)) - rowSums(lgamma(alpha)) + rowSums((alpha - 1.0) * log(x))
 
   if(sum.up){
-    if(log) return(sum(res)) else return(exp(sum(res)))
+    if(log) sum(res) else exp(sum(res))
   } else {
-    if(log) return(res) else return(exp(res))
+    if(log) res else exp(res)
   }
 }

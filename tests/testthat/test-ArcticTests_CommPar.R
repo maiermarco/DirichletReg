@@ -201,9 +201,8 @@ test_that("Methods", {
   expect_equal(resC4_mathematica$PREDICT$PHI  , unname(predict(resC4, data.frame("depth" = 0.0:150.0), alpha = FALSE, phi = TRUE , mu = FALSE)))
   expect_equal(resC4_mathematica$PREDICT$MU   , unname(predict(resC4, data.frame("depth" = 0.0:150.0), alpha = FALSE, phi = FALSE, mu = TRUE )))
   
-  # 🙈
   conf_ints <- confint(resC4, level = c(0.99, 0.95))
-  conf_mat <- matrix(NA_real_, 6L, 4L); rowz <- c(1L, 2L, 1L, 2L, 3L, 1L); listz <- rep(1L:3L, c(2L, 3L, 1L))
+  conf_mat  <- matrix(NA_real_, 6L, 4L); rowz <- c(1L, 2L, 1L, 2L, 3L, 1L); listz <- rep(1L:3L, c(2L, 3L, 1L))
   for(i in 1L:6L){
     conf_mat[i,] <- c(conf_ints$ci[[2L]][[listz[i]]][rowz[i], 1L], conf_ints$ci[[1L]][[listz[i]]][rowz[i], ], conf_ints$ci[[2L]][[listz[i]]][rowz[i], 2L])
   }

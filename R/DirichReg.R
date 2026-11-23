@@ -179,7 +179,7 @@ DirichReg <- function(
   X_fit <- lapply(X.mats, function(this_mat){
     attr(this_mat, "dimnames") <- NULL
     attr(this_mat, "assign") <- NULL
-    return(this_mat)
+    this_mat
   })
   for(i in seq_along(X_fit)) storage.mode(X_fit[[i]]) <- "double"
   

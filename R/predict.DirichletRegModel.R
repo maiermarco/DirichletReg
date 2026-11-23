@@ -58,14 +58,14 @@ predict.DirichletRegModel <- function(object, newdata, mu = TRUE, alpha = FALSE,
   if(!(mu || alpha || phi)) stop("Either \"mu\", \"alpha\", or \"phi\" has to be requested.")
   
   if((mu + alpha + phi) == 1L){
-    if(mu)    return(MU)
-    if(alpha) return(ALPHA)
-    if(phi)   return(PHI)
+    if(mu)    MU
+    if(alpha) ALPHA
+    if(phi)   PHI
   } else {
     res <- list()
     if(mu)    res[["mu"]]    <- MU
     if(alpha) res[["alpha"]] <- ALPHA
     if(phi)   res[["phi"]]   <- PHI
-    return(res)
+    res
   }
 }

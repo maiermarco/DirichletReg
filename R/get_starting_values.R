@@ -15,9 +15,9 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
         temp_names      <- names(lin_coef)
         lin_coef        <- seq_along(lin_coef)
         names(lin_coef) <- temp_names
-        return(lin_coef[na_pos])
+        lin_coef[na_pos]
       } else {
-        return(NULL)
+        NULL
       }
     })
     ### collinearity check end
@@ -29,7 +29,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
       } else {
         LL <- w * dbeta(y, unlist(exp(X * x[1L])), unlist(exp(X * x[2L])), log = TRUE)
       }
-      return(LL)
+      LL
     }
     
     beta.LL.deriv <- function(x, y, X, w){
@@ -47,7 +47,7 @@ get_starting_values <- function(Y, X.mats, Z.mat, repar, base, weights){
           element <- element + 1L
         }
       }
-      return(grad)
+      grad
     }
     
     unidim_fit <- lapply(seq_len(ncol(Y)), function(i){

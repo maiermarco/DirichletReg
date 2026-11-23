@@ -11,8 +11,8 @@ NEWS.md
 man/macros
 revdep
 
-DirichletRegMixture.Rd
-DirichMixture.Rd
-AIC.DirichletRegMixture.R
-DirichMixture.R
-print.DirichletRegMixture.R
+DirichletRegMix.Rd
+DirichMix.Rd
+AIC.DirichletRegMix.R
+DirichMix.R
+print.DirichletRegMix.R

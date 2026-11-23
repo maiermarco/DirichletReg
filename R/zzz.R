@@ -23,7 +23,7 @@ deparse_formula <- function(frml){
 
 
 deparse_nocutoff <- function(expr, width.cutoff = 500L, ...){ # similar to deparse1() but removes duplicated whitespace
-  gsub("[[:space:]]{2,}", "\\ ", paste(deparse(expr, width.cutoff = width.cutoff, ...), collapse = " ")) # nolint
+  paste(gsub("^[[:space:]]+|[[:space:]]+$", "", deparse(expr, width.cutoff = width.cutoff, ...)), collapse = " ") # no#lint: paste_linter
 }
 
 
@@ -72,7 +72,7 @@ make.symmetric <- function(x){
   if(nrow(x) != ncol(x)) stop("x must be a square matrix")
   cell.ind <- which(is.na(x), arr.ind = TRUE)
   x[cell.ind] <- x[cell.ind[, 2:1]] # nolint
-  return(x)
+  x
 }
 
 
@@ -83,11 +83,15 @@ pretty_list <- function(x, quotes = FALSE, oxford = TRUE, ampersand = FALSE, rem
   if(remove_empty_NA) x <- x[!is.na(x) & nzchar(x)]
   if(quotes) x <- dQuote(x) # automatically inserts regular or fancy quotation marks according to getOption("useFancyQuotes")
   
-  if(length(x) < 2L) return(x) else
-  if(length(x) == 2L) return(paste(x, collapse = et)) else {
+  if(length(x) < 2L){
+    x
+  } else if(length(x) == 2L){
+    paste(x, collapse = et)
+  } else {
     if(oxford) et <- sprintf(",%s", et)
-    return(paste(paste(head(x, -2L), collapse = ", "), paste(tail(x, 2L), collapse = et), sep = ", "))
+    paste(paste(head(x, -2L), collapse = ", "), paste(tail(x, 2L), collapse = et), sep = ", ")
   }
+
 }
 
 
@@ -120,14 +124,15 @@ maxLik_code_msg <- function(maxLik_code){
         "\n  https://github.com/maiermarco/DirichletReg/issues", call. = FALSE, domain = NA)
     }
   }
+
 }
 
 
 
 # fancy single stripes
-f_sst <- function(n){ strrep(if(getOption("useFancyQuotes", default = FALSE)) "\u2500" else "-", n) }
+f_sst <- function(n){ strrep(if(interactive() && getOption("useFancyQuotes", default = FALSE)) "\u2500" else "-", n) }
 # fancy double stripes
-f_dst <- function(n){ strrep(if(getOption("useFancyQuotes", default = FALSE)) "\u2550" else "=", n) }
+f_dst <- function(n){ strrep(if(interactive() && getOption("useFancyQuotes", default = FALSE)) "\u2550" else "=", n) }
 
-# all lowercase with capitalized first letter
+# (optional: all lowercase with) capitalized first letter
 first_cap <- function(x, all_lower = FALSE){ gsub("^([[:alpha:]])", "\\U\\1", if(all_lower) tolower(x) else x, perl = TRUE) }

@@ -13,15 +13,16 @@ RnwWeave: knitr
 LaTeX: pdfLaTeX
 
 AutoAppendNewline: Yes
-StripTrailingWhitespace: Yes
+StripTrailingWhitespace: No
+LineEndingConversion: Windows
 
 BuildType: Package
 PackageUseDevtools: Yes
 PackageInstallArgs: --no-multiarch --with-keep.source
-PackageBuildArgs: --resave-data --compact-vignettes=gs+qpdf --md5
-PackageBuildBinaryArgs: --build
-PackageCheckArgs: --as-cran
+PackageCheckArgs: --no-multiarch
 
 UseNativePipeOperator: Yes
 
+QuitChildProcessesOnExit: Yes
+DisableExecuteRprofile: Yes
 SpellingDictionary: en_US

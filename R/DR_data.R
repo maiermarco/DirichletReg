@@ -90,7 +90,7 @@ DR_data <- function(
   # more checks
   if(is.null(dim(Y))) stop("\"Y\" must be either a matrix or a data.frame.") # this should not be possible
   if(ncol(Y) < 2L) stop("\"Y\" must at least have two columns.") # neither should this
-  if(base %notin% seq_len(ncol(Y))) stop("\"base\" must be an integer in the range of variables.") # check base category
+  if((base != as.integer(base)) || (base %notin% seq_len(ncol(Y)))) stop("\"base\" must be an integer in the range of variables.") # check base category
   if(is.null(colnames(Y))) colnames(Y) <- paste0("v", seq_len(ncol(Y))) # if Y has no column names, assign a sequence v1, v2, v3, ...
   
   
