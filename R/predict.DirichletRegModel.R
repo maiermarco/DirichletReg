@@ -9,6 +9,7 @@ predict.DirichletRegModel <- function(object, newdata, mu = TRUE, alpha = FALSE,
   model_formula$formula <- as.Formula(deparse_nocutoff(model_formula$formula)) # circumvent problems with Formula objects
   model_formula$data <- as.name("newdata")
   model_formula$lhs <- 0
+  model_formula$weights <- NULL
 
   # include intercept for repar-model w/o phi block
   if(repar && (length(model_formula$formula)[2L] == 1L)){
