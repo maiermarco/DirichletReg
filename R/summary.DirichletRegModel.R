@@ -8,7 +8,7 @@ summary.DirichletRegModel <- function(object, ...) {
 
   res <- structure(list(
     call = object[["call"]],
-    terms = terms(object$formula),
+    terms = terms(object$formula, data = object$data),
     logLik = object$logLik,
     df = object$npar,
     deviance = -2.0 * object$logLik,
