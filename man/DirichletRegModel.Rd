@@ -15,6 +15,8 @@
 \alias{confint.DirichletRegModel}
 \alias{drop1.DirichletRegModel}
 \alias{print.DirichletRegConfint}
+\alias{terms.DirichletRegModel}
+\alias{model.matrix.DirichletRegModel}
 \title{Methods for the Class \code{DirichletRegModel}}
 \description{
   These are available methods for the results of Dirichlet regression models and objects of class \code{DirichletRegModel}.
@@ -49,6 +51,10 @@
 
 \method{vcov}{DirichletRegModel}(object, \dots)
 
+\method{terms}{DirichletRegModel}(x, type = c("full", "separate"), \dots)
+
+\method{model.matrix}{DirichletRegModel}(object, \dots)
+
 \method{update}{DirichletRegModel}(object, formula., \dots, evaluate = TRUE)
 
 \method{drop1}{DirichletRegModel}(object, scope, test = c("LRT", "none"), k = 2.0, sort = TRUE, \dots)
@@ -59,9 +65,11 @@
   \item{alpha}{logical; returns alpha values}
   \item{mu}{logical; returns expected values}
   \item{phi}{logical; returns precision values}
-  \item{type}{for \code{residuals}: defines the type of residuals to be computed \code{"standardized"} (i.e., Pearson), \code{"composite"}, or \code{"raw"}
-
-              for \code{confint}: defines the type of parameter (\code{"all"}, \code{"beta"}, or \code{"gamma"}) for which confidence values are returned}
+  \item{type}{for \code{residuals}: defines the type of residuals to be computed \code{"standardized"} (i.e., Pearson), \code{"composite"}, or \code{"raw"}.
+              
+              for \code{confint}: defines the type of parameter (\code{"all"}, \code{"beta"}, or \code{"gamma"}) for which confidence values are returned
+              
+              for \code{terms}: defines which terms are returned: `"full"` contains all terms, `"separate"` returns a list with either the terms per component (common param.) or a list with terms for mean and precision (alternative param.).}
   \item{newdata}{a \code{data.frame} containing new observations}
   \item{k}{number for the weighting of parameters}
   \item{fit}{an object of class \code{DirichletRegModel}}

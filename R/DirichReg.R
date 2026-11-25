@@ -314,8 +314,8 @@ DirichReg <- function(
       weights         = weights,
       orig.resp       = Y_full,
       data            = data,
-      d               = model_frame,                                  # the model.frame
-      formula         = def_formula,                   # new def_formula instead of formula
+      d               = model_frame,
+      formula         = def_formula,   # new def_formula instead of formula
       mf_formula      = mf_formula,
       npar            = length(coefs),
       coefficients    = coefs,
@@ -332,7 +332,11 @@ DirichReg <- function(
                           message     = fit_res$message
                         ),
       # new components
-      terms           = list(X = model_terms_X, Z = model_terms_Z, full = model_terms),
+      terms           = structure(
+                          .Data           = list(X = model_terms_X, Z = model_terms_Z, full = model_terms),
+                          parametrization = parametrization,
+                          class           = "DirichletRegModel_terms"
+                        ),
       levels          = list(
                           X    = lapply(model_terms_X, .getXlevels, m = model_frame),
                           Z    = if(repar) .getXlevels(model_terms_Z, model_frame) else NULL,

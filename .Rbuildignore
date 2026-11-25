@@ -1,5 +1,5 @@
 .*(\.gitattributes|\.gitignore|\.tgitconfig)$
-.*\.(aux|log|bat|out|nb|bak)$
+.*\.(aux|log|bat|out|nb|bak|lintr)$
 ^(\.codecov\.yml|\.covrignore)$
 ^\.github$
 ^README\.R?md$
@@ -10,3 +10,5 @@
 
 .*\.pot$
 ^man\/macros$
+
+Mix\.

@@ -5,10 +5,12 @@ predict.DirichletRegModel <- function(object, newdata, mu = TRUE, alpha = FALSE,
   repar <- object$parametrization == "alternative"
   dims  <- ncol(object$Y)
   
-  model_formula         <- object$mf_formula
-  model_formula$formula <- as.Formula(deparse_formula(model_formula$formula)) # circumvent problems with Formula objects
-  model_formula$data    <- as.name("newdata")
-  model_formula$lhs     <- 0
+  model_formula                    <- object$mf_formula
+  model_formula$formula            <- as.Formula(deparse_formula(model_formula$formula)) # deparse to avoid problems with Formula-objects
+  model_formula$data               <- as.name("newdata")
+  model_formula$lhs                <- 0
+  model_formula$weights            <- NULL
+  model_formula$drop.unused.levels <- FALSE
   
   # include intercept for repar-model w/o phi block
   if(repar && (length(model_formula$formula)[2L] == 1L)){
@@ -21,7 +23,6 @@ predict.DirichletRegModel <- function(object, newdata, mu = TRUE, alpha = FALSE,
       " | ", paste0(rep(as.character(model_formula$formula)[[3L]], dims - 1L), collapse = " | ")) )
   }
   
-  model_formula[["drop.unused.levels"]] <- FALSE
   mf <- eval(model_formula) # TODO parent.frame()?
   
   if(!repar){ ## COMMON
@@ -58,14 +59,14 @@ predict.DirichletRegModel <- function(object, newdata, mu = TRUE, alpha = FALSE,
   if(!(mu || alpha || phi)) stop("Either \"mu\", \"alpha\", or \"phi\" has to be requested.")
   
   if((mu + alpha + phi) == 1L){
-    if(mu)    MU
-    if(alpha) ALPHA
-    if(phi)   PHI
+    if(mu)    return(MU)      # nolint: return_linter
+    if(alpha) return(ALPHA)   # nolint: return_linter
+    if(phi)   return(PHI)     # nolint: return_linter
   } else {
     res <- list()
     if(mu)    res[["mu"]]    <- MU
     if(alpha) res[["alpha"]] <- ALPHA
     if(phi)   res[["phi"]]   <- PHI
-    res
+    return(res)   # nolint: return_linter
   }
 }

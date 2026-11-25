@@ -4,6 +4,7 @@
 \alias{DR_data}
 \alias{print.DirichletRegData}
 \alias{summary.DirichletRegData}
+\alias{as.matrix.DirichletRegData}
 %
 %
 \title{Prepare Compositional Data}
@@ -19,6 +20,8 @@ DR_data(Y, trafo = sqrt(.Machine$double.eps), base = 1L,
 \method{print}{DirichletRegData}(x, type = c("processed", "original"), \dots)
 
 \method{summary}{DirichletRegData}(object, \dots)
+
+\method{as.matrix}{DirichletRegData}(x, \dots)
 }
 %
 %
