@@ -14,15 +14,14 @@ print(eval(str2expression(sprintf("rbind(%s)", paste(grep("^aspell\\_(R|Rd|pot|d
 
 
 # NEWS.Rd --> ../NEWS.md
-parsed_rd <- rd2markdown::get_rd(file = "NEWS.Rd")
-parsed_rd <- parsed_rd[!sapply(parsed_rd, function(x){ x[[1]] == "UTF-8" })]
-#cat(rd2markdown::rd2markdown(parsed_rd, fragments = c()), file = "../NEWS.md")
+parsed_rd <- Rd2md::read_rdfile(path = "NEWS.Rd")
+cat(Rd2md::as_markdown(parsed_rd), file = "../NEWS.md")
 
 
 
 # NEWS.Rd --> ../NEWS
 Rd2txt_options(
-  width            = 80L,
+  width            = 90L,
   minIndent        = 2L,
   extraIndent      = 2L,
   sectionIndent    = 2L,
@@ -32,7 +31,7 @@ Rd2txt_options(
   itemBullet       = "\u2022 ",
   descStyle        = "colon"
 )
-Rd2txt("NEWS.Rd", out="../NEWS", package = "DirichletReg", outputEncoding = "UTF-8")
+Rd2txt("NEWS.Rd", out="../NEWS", package = "DirichletReg", stages = c("build", "install", "render"), outputEncoding = "UTF-8")
 
 
 

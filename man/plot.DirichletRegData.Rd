@@ -30,7 +30,7 @@ With this function you can plot Dirichlet-distributed data in 2, 3 and 4 dimensi
 %\details{
 %No details yet.
 %}
-\author{Marco J. Maier}
+\authorMJM%
 %\note{
 %%  ~~further notes~~
 %}

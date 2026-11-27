@@ -28,7 +28,7 @@ The test statistic is computed \eqn{LR=-2\left[\log(L_a)-\log(L_b)\right]}{LR = 
   \item{n.mods}{number of models}
   \item{calls}{a list containing the calls of the tested models}
 }%
-\author{Marco J. Maier}
+\authorMJM%
 \examples{
 ALake <- ArcticLake
 ALake$AL <- DR_data(ArcticLake[,1:3])

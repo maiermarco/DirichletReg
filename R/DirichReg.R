@@ -137,7 +137,7 @@ DirichReg <- function(
   
   
   
-  model_terms   <- terms(def_formula, data = data)
+  model_terms   <- terms(def_formula, data = data, simplify = TRUE)   # simplify to remove duplicates across the submodels
   model_terms_X <- if(repar){
       replicate(ncol(Y), simplify = FALSE, delete.response(terms(def_formula, data = data, rhs = 1L)))
     } else {

@@ -8,11 +8,7 @@ src/*.dll
 .tgitconfig
 NEWS.md
 *.pot
-man/macros
 revdep
 
-DirichletRegMix.Rd
-DirichMix.Rd
-AIC.DirichletRegMix.R
-DirichMix.R
-print.DirichletRegMix.R
+*Mix.R
+*Mix.Rd

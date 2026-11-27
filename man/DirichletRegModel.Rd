@@ -98,7 +98,7 @@
   
   
 }
-\author{Marco J. Maier}
+\authorMJM%
 \examples{
 ALake <- ArcticLake
 ALake$AL <- DR_data(ArcticLake[, 1:3])

@@ -36,7 +36,7 @@ If you have used this in your code, you will get a message that the function is 
 Use \code{toSimplex()} instead.
 }
 \value{The function returns a \code{matrix} object with coordinates in two or three dimensions}
-\author{Marco J. Maier}
+\authorMJM%
 \examples{
 # create a DirichletRegData object from the Arctic Lake data
 "to be added"

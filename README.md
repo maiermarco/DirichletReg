@@ -1,6 +1,3 @@
----
-output: github_document
----
 
 
 # `DirichletReg`: Dirichlet Regression in R
@@ -14,6 +11,6 @@ output: github_document
 [![GitHub Actions Check and Code Coverage](https://github.com/maiermarco/DirichletReg/actions/workflows/R-CMD-check+covr.yml/badge.svg)](https://github.com/maiermarco/DirichletReg/actions/workflows/R-CMD-check+covr.yml)
 
 
-Version: 0.8-0 (2026-11-25)
+Version: 0.8-0 (2026-11-27)
 
 Marco Johannes Maier <marco_maier@posteo.de> [cre, aut] (ORCID: [ORCID 0000-0002-1715-7456](https://orcid.org/0000-0002-1715-7456))

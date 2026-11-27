@@ -110,7 +110,7 @@ DirichReg(formula, data, model = c("common", "alternative"),
 \item{se}{[\code{numeric}] vector of standard errors}
 \item{optimization}{[\code{list}] contains details about the optimization process provided by \code{\link[maxLik]{maxBFGS}} and \code{\link[maxLik]{maxNR}}}
 }
-\author{Marco J. Maier}
+\authorMJM%
 \examples{
 ALake <- ArcticLake
 # because row sums are not 1, a warning is issued that they will be normalized

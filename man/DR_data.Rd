@@ -102,7 +102,7 @@ Smithson, M. & Verkuilen, J. (2006). A Better Lemon Squeezer? Maximum-Likelihood
 
 Cribari-Neto, F. & Zeileis, A. (2010). Beta Regression in \R. \emph{Journal of Statistical Software, 34}(2), 1--24. \doi{10.18637/jss.v034.i02}
 }
-\author{Marco J. Maier}
+\authorMJM%
 \examples{
 # inspect the raw data
 head(ArcticLake[, 1:3])
